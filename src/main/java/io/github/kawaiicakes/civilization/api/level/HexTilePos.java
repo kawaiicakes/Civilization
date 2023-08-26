@@ -20,7 +20,6 @@ public class HexTilePos {
      * Tile ZERO is the tile whose global origin is equal with its local; that is, tile (0, 0, 0).
      */
     public static final HexTilePos ZERO = new HexTilePos(true, 0, 0);
-
     private boolean arrayZero;
     private int row;
     private int col;
@@ -35,7 +34,7 @@ public class HexTilePos {
      * Returns a set of <code>ChunkPos</code> using several helper methods & HECS math.
      * @return  the 12 element set of <code>ChunkPos</code> constituting this hex tile.
      */
-    public Set<ChunkPos> toCorrespondingChunkPositions() {
+    public Set<ChunkPos> toChunkPositions() {
         Set<ChunkPos> toReturn = new HashSet<>();
     }
 
@@ -56,4 +55,60 @@ public class HexTilePos {
                 ? new ChunkPos(4 * hexTilePos.row, 6 * hexTilePos.col)
                 : new ChunkPos((4 * hexTilePos.row) + 2, (6 * hexTilePos.col) + 3);
     }
+
+    /**
+     * Use this static method to determine what <code>BlockPos</code> belongs to which tile.
+     * @param blockPos the <code>BlockPos</code> inside of the returned <code>HexTilePos</code>
+     * @return  the <code>HexTilePos</code> containing the <code>BlockPos</code> instance.
+     */
+    public static HexTilePos blockToHexPos(BlockPos blockPos) {
+        ChunkPos chunk = new ChunkPos(blockPos.getX(), blockPos.getZ());
+        return HexTilePos.chunkToHexPos(chunk);
+    }
+    public static HexTilePos chunkToHexPos(ChunkPos chunkPos) {
+
+    }
+
+    /**
+     * As 010 must appear twice every two base-10 numbers, we can leverage this fact to
+     * create a pattern, then test whether a <code>ChunkPos</code>> is in array one or zero.
+     * <br><br>
+     * This method is meaningless unless used within the correct context, so it has been made
+     * private.
+     * @param xCoord an int representing the x-coordinate of a <code>ChunkPos</code>.
+     * @return  <code>true</code>
+     */
+    private static boolean isInArrayZero(int xCoord) {
+        return ((xCoord+1)&2)==2;
+    }
+
+    /* TODO
+    private static boolean inTwoByFourPattern(int n) {
+        if (((n + 7) & 8) == 8) {
+            if (((n + 7) & 10) != 10)
+        }
+    }
+     */
+
+    /*
+    0  -> 00000
+    1  -> 00001
+    2  -> 00010
+    3  -> 00011
+    4  -> 00100
+    5  -> 00101
+    6  -> 00110
+    7  -> 00111
+    8  -> 01000
+    9  -> 01001
+    10 -> 01010
+    11 -> 01011
+    12 -> 01100
+    13 -> 01101
+    14 -> 01110
+    15 -> 01111
+    16 -> 10000
+
+    0, 1, 6, 7
+     */
 }
