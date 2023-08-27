@@ -98,26 +98,25 @@ public class HexTilePos {
         // TODO: extract magic numbers to either local variables or static fields
         // true only if at this z the tile is in array zero regardless of x.
         if (zInArrayZero(chunkPos.z)) {
-            return new HexTilePos(true, (chunkPos.x + 2) >> 2, (((chunkPos.z + 2) >> 1) / 3));
+            return new HexTilePos(true, (chunkPos.x + 2) >> 2, -(((chunkPos.z + 2) >> 1) / 3));
         } else if (zInArrayOne(chunkPos.z)) {
-            return new HexTilePos(false, chunkPos.x >> 2, (((chunkPos.z - 1) >> 1) / 3));
+            return new HexTilePos(false, chunkPos.x >> 2, -(((chunkPos.z - 1) >> 1) / 3));
         } else {
-            return xInArrayZero(chunkPos.x) ? new HexTilePos(true, (chunkPos.x + 2) >> 2, (((chunkPos.z + 2) >> 1) / 3))
-                    : new HexTilePos(false, chunkPos.x >> 2, (((chunkPos.z - 1) >> 1) / 3));
+            // testAgainstPattern2Skip2 is only meaningful in this context; when it is uncertain if regardless of x, the z
+            // implies that we are in either array zero or one with certainty.
+            return testAgainstPattern2Skip2(chunkPos.x) ? new HexTilePos(true, (chunkPos.x + 2) >> 2, -(((chunkPos.z + 2) >> 1) / 3))
+                    : new HexTilePos(false, chunkPos.x >> 2, -(((chunkPos.z - 1) >> 1) / 3));
         }
     }
 
-    /**
-     * As 010 must appear twice every two base-10 numbers, we can leverage this fact to
-     * create a pattern, then test whether a <code>ChunkPos</code> is in array one or zero.
-     * <br><br>
-     * This method is only meaningful if it is uncertain whether the tile is in array zero or one
-     * at a given z-coordinate using existing methods.
-     * @param xCoord an int representing the x-coordinate of a <code>ChunkPos</code>.
-     * @return  <code>true</code> if in array zero, <code>false</code> if in array one.
+    /** FIXME
+     * Tests the row corresponding to a given x-coord
+     * @param arrayZero is the coord in array one or zero?
+     * @param xCoord the x coordinate in the level.
+     * @return  The int corresponding to the tile row.
      */
-    private static boolean xInArrayZero(int xCoord) {
-        return ((xCoord + 1) & 2) != 2;
+    public static int xCoordToTileRow(boolean arrayZero, int xCoord) {
+        return arrayZero ? xCoord >> 2 : (xCoord + 2) >> 2;
     }
 
     /**
@@ -125,33 +124,43 @@ public class HexTilePos {
      * tile (a, zCoord, c) is in array zero or array one regardless of the value of c. An elegant solution graciously
      * written by Eriksonn of the Create: Aeronautics team.
      * <br><br>
-     * A negative return does not necessarily mean the tile is not of array zero. Rather, more rigorous testing must
-     * be performed.
+     * A positive result is a certainty, but a negative return does not necessarily mean the tile is not of array zero.
+     * It is merely indicative that more rigorous testing must be performed.
      * @param zCoord any integer representing the z-value of a <code>ChunkPos</code>.
      * @return  <code>true</code> if a = 0, <code>false</code> if a = 1 in tile (a, zCoord, c)
      */
     private static boolean zInArrayZero(int zCoord) {
-        return ((zCoord >> 1) % 3) == 0;
+        return testAgainstPattern2Skip4(zCoord);
     }
 
     /**
-     * This method is identical to <code>#zInArrayZero</code> including in its caveats; although is x-shifted.
-     *
+     * This method is identical to <code>#zInArrayZero</code> including in its caveats; although is shifted left by 3.
      * @param zCoord any integer representing the z-value of a <code>ChunkPos</code>.
      * @return  <code>true</code> if a = 1, <code>false</code> if a = 0 in tile (a, zCoord, c)
      */
     private static boolean zInArrayOne(int zCoord) {
-        return (((zCoord - 3) >> 1) % 3) == 0;
+        return zInArrayZero(zCoord - 3);
     }
-    /*
-        0  -> 00000 >> 2 = 00000 < 00000
-        1  -> 00001 >> 2 = 00000 < 00000
-        2  -> 00010 >> 2 = 00000 < 00001
-        3  -> 00011 >> 2 = 00000 < 00001
-        4  -> 00100 >> 2 = 00001 < 00010
-        5  -> 00101 >> 2 = 00001 < 00010
-        6  -> 00110 >> 2 = 00001 < 00011
-        7  -> 00111 >> 2 = 00001 < 00011
-        8  -> 01000 >> 2 = 00010 < 00100
+
+    /**
+     * In regard to binary numbers, 010 must appear twice every two base-10 numbers, we can leverage this fact to
+     * create a pattern: -5, -4, -1, 0, 3, 4... This helper method tells us if the argument is in this pattern.
+     * @param n an integer.
+     * @return  <code>true</code> if integer n lies in pattern - <code>false</code> otherwise.
      */
+    private static boolean testAgainstPattern2Skip2(int n) {
+        return ((n + 1) & 2) != 2;
+    }
+
+    /**
+     * Helper method using bitwise operations to generate a simple pattern; then tests a passed
+     * integer against it. The pattern appears as follows:
+     * <br><br>
+     * -7, -6, -1, 0, 5, 6...
+     * @param n an integer.
+     * @return  <code>true</code> if n lands in a "2" cluster, <code>false</code> otherwise.
+     */
+    private static boolean testAgainstPattern2Skip4(int n) {
+        return (((n + 1) >> 1) % 3) == 0;
+    }
 }
