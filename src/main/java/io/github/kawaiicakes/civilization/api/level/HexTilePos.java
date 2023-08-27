@@ -78,6 +78,7 @@ public class HexTilePos {
      * @return
      */
     public static HexTilePos chunkToHexPos(ChunkPos chunkPos) { // TODO: local variables for bitwise operations?
+        // TODO: extract magic numbers to either local variables or static fields
         // true only if at this z the tile is in array zero regardless of x.
         if (zInArrayZero(chunkPos.z)) {
             return new HexTilePos(true, (chunkPos.x + 2) >> 2, (((chunkPos.z + 2) >> 1) / 3));
