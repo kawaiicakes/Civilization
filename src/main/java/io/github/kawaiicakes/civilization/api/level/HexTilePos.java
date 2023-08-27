@@ -105,9 +105,11 @@ public class HexTilePos {
         } else {
             // testAgainstPattern2Skip2 is only meaningful in this context; when it is uncertain if regardless of x, the z
             // implies that we are in either array zero or one with certainty.
-            return testAgainstPattern2Skip2(chunkPos.x)
-                    ? new HexTilePos(true, zDependentToTileRow(true, chunkPos.x), xDependentToTileColumn(true, chunkPos.x))
-                    : new HexTilePos(false, zDependentToTileRow(false, chunkPos.x), xDependentToTileColumn(false, chunkPos.x));
+            return new HexTilePos(
+                    testAgainstPattern2Skip2(chunkPos.x),
+                    zDependentToTileRow(testAgainstPattern2Skip2(chunkPos.x), chunkPos.z),
+                    xDependentToTileColumn(testAgainstPattern2Skip2(chunkPos.x), chunkPos.x)
+            );
         }
     }
 
@@ -124,7 +126,7 @@ public class HexTilePos {
      * @return  The int corresponding to the tile row.
      */
     private static int xDependentToTileColumn(boolean arrayZero, int xCoord) {
-        return arrayZero ? (xCoord + 1) >> 1 : (xCoord - 2) >> 1;
+        return arrayZero ? (xCoord + 1) >> 2 : (xCoord - 1) >> 2;
     }
 
     /**
@@ -135,7 +137,7 @@ public class HexTilePos {
      * @return  the tile row as int.
      */
     private static int xIndependentToTileColumn(boolean arrayZero, int xCoord) {
-        return arrayZero ? (xCoord + 2) >> 2 : (xCoord - 1) >> 2;
+        return arrayZero ? (xCoord + 2) >> 2 : xCoord >> 2;
     }
 
     /**
@@ -199,7 +201,7 @@ public class HexTilePos {
      * @return  <code>true</code> if integer n lies in pattern - <code>false</code> otherwise.
      */
     private static boolean testAgainstPattern2Skip2(int n) {
-        return ((n + 1) & 2) != 2;
+        return (((n + 1) >> 1) & 1) != 1;
     }
 
     /**
