@@ -21,9 +21,9 @@ public class HexTilePos {
      * with HECS, it is recommended you read up on it so this class and tile notation makes sense.
      */
     public static final HexTilePos ZERO = new HexTilePos(true, 0, 0);
-    private boolean arrayZero;
-    private int row;
-    private int col;
+    private final boolean arrayZero;
+    private final int row;
+    private final int col;
 
     public HexTilePos(boolean isArrayZero, int row, int col) {
         this.arrayZero = isArrayZero;
@@ -50,13 +50,24 @@ public class HexTilePos {
 
     /**
      * Returns a set of <code>ChunkPos</code> using several helper methods & HECS math.
+     * This set is NOT ordered; nor does it make guarantees as to maintaining an order over time.
      * @return  the 12 element set of <code>ChunkPos</code> constituting this hex tile.
      */
-    public Set<ChunkPos> toChunkPositions() {
+    public Set<ChunkPos> toChunkPos() {
         Set<ChunkPos> toReturn = new HashSet<>();
 
-        toReturn.add(hexToGlobalOriginChunkPos(this));
-        // TODO: continue
+        ChunkPos localOrigin = hexToGlobalOriginChunkPos(this);
+
+        for (int colNum = -2; colNum < 2; colNum++) {
+            for (int rowNum = 0; rowNum < 2; rowNum++) {
+                toReturn.add(new ChunkPos(localOrigin.x + colNum, localOrigin.z - rowNum));
+            }
+        }
+
+        toReturn.add(new ChunkPos(localOrigin.x, localOrigin.z - 2));
+        toReturn.add(new ChunkPos(localOrigin.x - 1, localOrigin.z - 2));
+        toReturn.add(new ChunkPos(localOrigin.x, localOrigin.z + 1));
+        toReturn.add(new ChunkPos(localOrigin.x - 1, localOrigin.z + 1));
 
         return toReturn;
     }
