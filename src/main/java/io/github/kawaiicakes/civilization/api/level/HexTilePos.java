@@ -85,7 +85,7 @@ public class HexTilePos {
      * @return  the <code>HexTilePos</code> containing the <code>BlockPos</code> instance.
      */
     public static HexTilePos blockToHexPos(BlockPos blockPos) {
-        ChunkPos chunk = new ChunkPos(blockPos.getX(), blockPos.getZ());
+        ChunkPos chunk = new ChunkPos(blockPos); // Is this call unnecessarily expensive? Should I just perform the bitwise shift here?
         return HexTilePos.chunkToHexPos(chunk);
     }
 
