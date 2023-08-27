@@ -18,7 +18,7 @@ import java.util.Set;
 public class HexTilePos {
     /**
      * Tile ZERO is the tile whose global origin is equal with its local; that is, tile (0, 0, 0). If you are unfamiliar
-     * with HECS, it is recommended you read up on it so this class makes sense and tile notation makes sense.
+     * with HECS, it is recommended you read up on it so this class and tile notation makes sense.
      */
     public static final HexTilePos ZERO = new HexTilePos(true, 0, 0);
     private boolean arrayZero;
@@ -29,6 +29,23 @@ public class HexTilePos {
         this.arrayZero = isArrayZero;
         this.row = row;
         this.col = col;
+    }
+
+    public boolean isArrayZero() {
+        return this.arrayZero;
+    }
+
+    public int getRow() {
+        return this.row;
+    }
+
+    public int getCol() {
+        return this.col;
+    }
+
+    public String getPrettyCoordinates() {
+        byte val = (byte) (this.arrayZero ? 0 : 1);
+        return "(" + val + ", " + this.row + ", " + this.col + ")";
     }
 
     /**
