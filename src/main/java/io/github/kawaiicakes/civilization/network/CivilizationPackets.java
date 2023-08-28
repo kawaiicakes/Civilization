@@ -1,6 +1,7 @@
 package io.github.kawaiicakes.civilization.network;
 
 import io.github.kawaiicakes.civilization.network.packets.NationC2SPacket;
+import io.github.kawaiicakes.civilization.network.packets.NationS2CPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -31,6 +32,12 @@ public class CivilizationPackets {
                 .decoder(NationC2SPacket::new)
                 .encoder(NationC2SPacket::toBytes)
                 .consumerMainThread(NationC2SPacket::handle)
+                .add();
+
+        net.messageBuilder(NationS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(NationS2CPacket::new)
+                .encoder(NationS2CPacket::toBytes)
+                .consumerMainThread(NationS2CPacket::handle)
                 .add();
     }
 
