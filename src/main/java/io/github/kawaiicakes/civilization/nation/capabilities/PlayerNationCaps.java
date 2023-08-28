@@ -2,12 +2,16 @@ package io.github.kawaiicakes.civilization.nation.capabilities;
 
 import io.github.kawaiicakes.civilization.api.utils.NamedUUID;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class PlayerNationCaps {
     private NamedUUID nation;
-    private List<NamedUUID> cities;
+    private List<NamedUUID> cities = new ArrayList<>();
     private int diplomacyScore;
 
     public NamedUUID getNation() {
@@ -40,16 +44,30 @@ public class PlayerNationCaps {
         this.setDiplomacyScore(source.getDiplomacyScore());
     }
 
-    // FIXME: NullPointerException caused by this.nation being null
     public void saveNBTData(CompoundTag nbt) {
-        nbt.putUUID("nation", this.nation.nameUUID());
-        this.cities.stream().map(NamedUUID::nameUUID).forEach(UUID -> nbt.putUUID("cities", UUID)); // FIXME: can only store one UUID at a time????
+        if (this.nation != null) {
+            nbt.putUUID("nation", this.nation.nameUUID());
+        }
+
+        ListTag uuidTag = new ListTag();
+        this.cities.stream().map(NamedUUID::nameUUID).forEach(UUID -> {
+            CompoundTag tag = new CompoundTag();
+            tag.putUUID("city", UUID);
+
+            uuidTag.add(tag);
+        });
+        nbt.put("cities", uuidTag);
+
         nbt.putInt("diplomacy_score", this.diplomacyScore);
     }
 
     public void loadNBTData(CompoundTag nbt) {
         this.nation = NamedUUID.fromUUID(nbt.getUUID("nation"));
-        // TODO: city stuff once I figure more UUID stuff out
+
+        // TODO verify this works
+        this.cities = nbt.getList("cities", Tag.TAG_COMPOUND).stream().map(tag ->
+                NamedUUID.fromUUID(UUID.fromString(tag.getAsString()))).toList();
+
         this.diplomacyScore = nbt.getInt("diplomacy_score");
     }
 }
