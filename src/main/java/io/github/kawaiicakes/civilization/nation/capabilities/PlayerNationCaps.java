@@ -40,6 +40,7 @@ public class PlayerNationCaps {
         this.setDiplomacyScore(source.getDiplomacyScore());
     }
 
+    // FIXME: NullPointerException caused by this.nation being null
     public void saveNBTData(CompoundTag nbt) {
         nbt.putUUID("nation", this.nation.nameUUID());
         this.cities.stream().map(NamedUUID::nameUUID).forEach(UUID -> nbt.putUUID("cities", UUID)); // FIXME: can only store one UUID at a time????
