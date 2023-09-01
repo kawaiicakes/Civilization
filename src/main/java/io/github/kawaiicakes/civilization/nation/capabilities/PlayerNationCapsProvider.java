@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class PlayerNationCapsProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
-    public static Capability<PlayerNationCaps> PLAYER_NATION = CapabilityManager.get(new CapabilityToken<>() {});
+    public static Capability<PlayerNationCaps> PLAYER_NATION = CapabilityManager.get(new CapabilityToken<PlayerNationCaps>() {});
 
     private PlayerNationCaps nation = null;
     private final LazyOptional<PlayerNationCaps> lazyHandler = LazyOptional.of(this::createPlayerNationCaps);

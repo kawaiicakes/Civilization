@@ -7,27 +7,22 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
-import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
 
 public class NationC2SPacket {
-    private final int diplomacyScore;
-    //private final NamedUUID nation;
+    private final UUID nation;
 
-    public NationC2SPacket(int diplomacyScore) {
-        this.diplomacyScore = diplomacyScore;
-        //this.nation = nation;
+    public NationC2SPacket(UUID nation) {
+        this.nation = nation;
     }
 
     public NationC2SPacket(FriendlyByteBuf buf) {
-        this.diplomacyScore = buf.readInt();
-        //this.nation = new NamedUUID(UUID.randomUUID(), Component.empty()); // TODO
+        this.nation = buf.readUUID();
     }
 
     public void toBytes(FriendlyByteBuf buf) {
-        buf.writeInt(this.diplomacyScore);
-        //buf.writeBlockPos(this.nation);
+        buf.writeUUID(this.nation);
     }
 
     // TODO
@@ -38,17 +33,10 @@ public class NationC2SPacket {
             ServerPlayer player = context.getSender();
             assert player != null;
             ServerLevel level = player.getLevel();
-            player.sendSystemMessage(Component.literal("EDGING"));
 
             player.getCapability(PlayerNationCapsProvider.PLAYER_NATION).ifPresent(handler -> {
-                //handler.setNation(this.nation);
-                // TEMPORARY DEBUG SHIT
-                player.sendSystemMessage(Component.literal("EDGING 2"));
-                handler.setDiplomacyScore(this.diplomacyScore);
-                List<UUID> cityList = handler.getCities();
-                cityList.add(UUID.randomUUID());
-                player.sendSystemMessage(Component.literal("added new city UUID to cap"));
-                handler.setCities(cityList);
+                handler.setNation(this.nation);
+                player.sendSystemMessage(Component.literal("added random nation to cap"));
             });
         });
         return false;
