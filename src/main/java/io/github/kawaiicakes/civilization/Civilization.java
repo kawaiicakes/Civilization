@@ -17,16 +17,12 @@ public class Civilization
     public static final String MOD_ID = "civilization";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    // sick of typing this shit lmao
-    public static void listen(Object target) {
-        MinecraftForge.EVENT_BUS.register(target);
-    }
     public Civilization()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        listen(this);
-        listen(DebugEvents.class);
-        listen(CapabilityEvents.class);
+        MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(DebugEvents.class);
+        MinecraftForge.EVENT_BUS.register(CapabilityEvents.class);
 
         modEventBus.addListener(this::commonSetup);
     }
