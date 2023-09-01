@@ -2,6 +2,8 @@ package io.github.kawaiicakes.civilization.events;
 
 import io.github.kawaiicakes.civilization.Civilization;
 import io.github.kawaiicakes.civilization.client.KeyBinds;
+import io.github.kawaiicakes.civilization.network.CivilizationPackets;
+import io.github.kawaiicakes.civilization.network.packets.NationC2SPacket;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
@@ -14,7 +16,7 @@ public class PlayerEvents {
         @SubscribeEvent
         public static void onKeyInput(InputEvent.Key event) {
             if (KeyBinds.CIV_MENU.consumeClick()) {
-
+                CivilizationPackets.sendToServer(new NationC2SPacket(10));
             }
         }
     }
