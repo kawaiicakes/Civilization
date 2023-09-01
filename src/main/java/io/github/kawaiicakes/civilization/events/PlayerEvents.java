@@ -2,10 +2,8 @@ package io.github.kawaiicakes.civilization.events;
 
 import io.github.kawaiicakes.civilization.Civilization;
 import io.github.kawaiicakes.civilization.client.KeyBinds;
-import io.github.kawaiicakes.civilization.network.CivilizationPackets;
-import io.github.kawaiicakes.civilization.network.packets.NationC2SPacket;
+import io.github.kawaiicakes.civilization.screen.MainScreen;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
@@ -18,9 +16,7 @@ public class PlayerEvents {
         @SubscribeEvent
         public static void onKeyInput(InputEvent.Key event) {
             if (KeyBinds.CIV_MENU.consumeClick()) {
-                assert Minecraft.getInstance().player != null;
-                Minecraft.getInstance().player.sendSystemMessage(Component.literal("added new city UUID to cap"));
-                CivilizationPackets.sendToServer(new NationC2SPacket(10));
+                Minecraft.getInstance().setScreen(new MainScreen());
             }
         }
     }
