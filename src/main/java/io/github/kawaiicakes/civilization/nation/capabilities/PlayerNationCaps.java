@@ -39,15 +39,17 @@ public class PlayerNationCaps {
     }
 
     public void copyFrom(PlayerNationCaps source) {
-        this.setNation(source.getNation());
+        //this.setNation(source.getNation());
         this.setCities(source.getCities());
         this.setDiplomacyScore(source.getDiplomacyScore());
     }
 
     public void saveNBTData(CompoundTag nbt) {
-        if (this.nation != null) {
+        /*if (this.nation != null) {
             nbt.putUUID("nation", this.nation.nameUUID());
-        }
+        } else {
+            nbt.putUUID("nation", UUID.randomUUID());
+        }*/
 
         ListTag uuidTag = new ListTag();
         this.cities.stream().map(NamedUUID::nameUUID).forEach(UUID -> {
@@ -62,7 +64,7 @@ public class PlayerNationCaps {
     }
 
     public void loadNBTData(CompoundTag nbt) {
-        this.nation = NamedUUID.fromUUID(nbt.getUUID("nation"));
+        //this.nation = NamedUUID.fromUUID(nbt.getUUID("nation"));
 
         // TODO verify this works
         this.cities = nbt.getList("cities", Tag.TAG_COMPOUND).stream().map(tag ->

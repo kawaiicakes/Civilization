@@ -8,21 +8,22 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
 
 public class NationC2SPacket {
     private final int diplomacyScore;
-    private final NamedUUID nation;
+    //private final NamedUUID nation;
 
-    public NationC2SPacket(int diplomacyScore, NamedUUID nation) {
+    public NationC2SPacket(int diplomacyScore) {
         this.diplomacyScore = diplomacyScore;
-        this.nation = nation;
+        //this.nation = nation;
     }
 
     public NationC2SPacket(FriendlyByteBuf buf) {
         this.diplomacyScore = buf.readInt();
-        this.nation = new NamedUUID(UUID.randomUUID(), Component.empty()); // TODO
+        //this.nation = new NamedUUID(UUID.randomUUID(), Component.empty()); // TODO
     }
 
     public void toBytes(FriendlyByteBuf buf) {
@@ -40,7 +41,12 @@ public class NationC2SPacket {
             ServerLevel level = player.getLevel();
 
             player.getCapability(PlayerNationCapsProvider.PLAYER_NATION).ifPresent(handler -> {
-                // Code and shit
+                //handler.setNation(this.nation);
+                // TEMPORARY DEBUG SHIT
+                List<NamedUUID> cityList = handler.getCities();
+                cityList.add(new NamedUUID(UUID.randomUUID(), Component.empty()));
+                player.sendSystemMessage(Component.literal("added new city UUID to cap"));
+                handler.setCities(cityList);
             });
         });
         return false;
