@@ -1,6 +1,5 @@
 package io.github.kawaiicakes.civilization.nation.capabilities;
 
-import io.github.kawaiicakes.civilization.api.utils.NamedUUID;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -10,15 +9,15 @@ import java.util.List;
 import java.util.UUID;
 
 public class PlayerNationCaps {
-    private NamedUUID nation;
-    private List<NamedUUID> cities = new ArrayList<>();
+    private UUID nation;
+    private List<UUID> cities = new ArrayList<>();
     private int diplomacyScore;
 
-    public NamedUUID getNation() {
+    public UUID getNation() {
         return this.nation;
     }
 
-    public List<NamedUUID> getCities() {
+    public List<UUID> getCities() {
         return this.cities;
     }
 
@@ -26,11 +25,11 @@ public class PlayerNationCaps {
         return this.diplomacyScore;
     }
 
-    public void setNation(NamedUUID nation) {
+    public void setNation(UUID nation) {
         this.nation = nation;
     }
 
-    public void setCities(List<NamedUUID> cities) {
+    public void setCities(List<UUID> cities) {
         this.cities = cities;
     }
 
@@ -52,7 +51,7 @@ public class PlayerNationCaps {
         }*/
 
         ListTag uuidTag = new ListTag();
-        this.cities.stream().map(NamedUUID::nameUUID).forEach(UUID -> {
+        this.cities.forEach(UUID -> {
             CompoundTag tag = new CompoundTag();
             tag.putUUID("city", UUID);
 
@@ -64,11 +63,11 @@ public class PlayerNationCaps {
     }
 
     public void loadNBTData(CompoundTag nbt) {
-        //this.nation = NamedUUID.fromUUID(nbt.getUUID("nation"));
+        //this.nation = UUID.fromUUID(nbt.getUUID("nation"));
 
         // TODO verify this works
         this.cities = nbt.getList("cities", Tag.TAG_COMPOUND).stream().map(tag ->
-                NamedUUID.fromUUID(UUID.fromString(tag.getAsString()))).toList();
+                ((CompoundTag) tag).getUUID("city")).toList();
 
         this.diplomacyScore = nbt.getInt("diplomacy_score");
     }

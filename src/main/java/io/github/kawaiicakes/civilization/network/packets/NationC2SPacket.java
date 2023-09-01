@@ -1,6 +1,5 @@
 package io.github.kawaiicakes.civilization.network.packets;
 
-import io.github.kawaiicakes.civilization.api.utils.NamedUUID;
 import io.github.kawaiicakes.civilization.nation.capabilities.PlayerNationCapsProvider;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -39,12 +38,15 @@ public class NationC2SPacket {
             ServerPlayer player = context.getSender();
             assert player != null;
             ServerLevel level = player.getLevel();
+            player.sendSystemMessage(Component.literal("EDGING"));
 
             player.getCapability(PlayerNationCapsProvider.PLAYER_NATION).ifPresent(handler -> {
                 //handler.setNation(this.nation);
                 // TEMPORARY DEBUG SHIT
-                List<NamedUUID> cityList = handler.getCities();
-                cityList.add(new NamedUUID(UUID.randomUUID(), Component.empty()));
+                player.sendSystemMessage(Component.literal("EDGING 2"));
+                handler.setDiplomacyScore(this.diplomacyScore);
+                List<UUID> cityList = handler.getCities();
+                cityList.add(UUID.randomUUID());
                 player.sendSystemMessage(Component.literal("added new city UUID to cap"));
                 handler.setCities(cityList);
             });
