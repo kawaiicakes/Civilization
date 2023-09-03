@@ -73,6 +73,14 @@ public class HexTilePos {
     }
 
     /**
+     * Returns the <code>ChunkPos</code> of the global origin of this tile.
+     * @return  the <code>ChunkPos</code> of the global origin of this tile.
+     */
+    public ChunkPos toOriginChunkPos() {
+        return hexToGlobalOriginChunkPos(this);
+    }
+
+    /**
      * Static utility method calculating the global origin of the hex in terms of a <code>ChunkPos</code>. We know that
      * the <code>ChunkPos</code> is always some multiple of 4 on the x-axis and 6 on the z-axis within the same array.
      * Given that tile ZERO is defined at (0, 0, 0) in terms of both global and local origin, the global origin in
