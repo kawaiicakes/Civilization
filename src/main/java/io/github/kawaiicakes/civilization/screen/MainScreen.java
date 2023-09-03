@@ -23,6 +23,9 @@ public class MainScreen extends Screen {
     private static final short tabSelectedBottomVOffset = 132;
     private static final short tabUnselectedVOffset = 76;
     private static final byte tabCount = 4;
+    private static final short logoWidth = 132;
+    private static final byte logoHeight = 64;
+    private static final byte logoVOffset = 8;
 
     private static final Component MAIN_SCREEN_NAME = Component.translatable("menu.civilization.main_menu");
     private static final Component BUTTON_INFO = Component.translatable("menu.button.civilization.player_info");
@@ -70,9 +73,12 @@ public class MainScreen extends Screen {
         RenderSystem.setShaderTexture(0, TEXTURE);
         RenderSystem.enableBlend();
 
-        //blit(pPoseStack, this.leftPos, this.topPos, 0, 0, bgWidth, bgHeight, 1024, 256);
+        // Renders background
         blit(pPoseStack, this.leftPos, this.topPos, 0, 0, bgWidth, bgHeight, textureWidth, textureHeight);
         this.renderTabs(pPoseStack);
+        // Renders logo
+        blit(pPoseStack, this.leftPos + bgWidth + ((tabWidth - logoWidth - 4) / 2), this.topPos + 20, tabUOffset, logoVOffset,
+                logoWidth, logoHeight, textureWidth, textureHeight);
     }
 
     private void renderTabs(PoseStack poseStack) {
