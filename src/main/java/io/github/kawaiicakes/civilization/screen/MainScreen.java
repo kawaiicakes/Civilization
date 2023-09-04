@@ -10,6 +10,9 @@ import net.minecraft.resources.ResourceLocation;
 
 import static io.github.kawaiicakes.civilization.Civilization.MOD_ID;
 
+/**
+ * Jesus this code is messy.
+ */
 public class MainScreen extends Screen {
     private static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/gui/menu/main.png");
     private static final short textureWidth = 800;
@@ -28,14 +31,13 @@ public class MainScreen extends Screen {
     private static final byte logoVOffset = 8;
 
     private static final Component MAIN_SCREEN_NAME = Component.translatable("menu.civilization.main_menu");
-    private static final Component BUTTON_INFO = Component.translatable("menu.button.civilization.player_info");
+    private static final Component TAB_PLAYER_INFO = Component.translatable("menu.button.civilization.player_info");
     private int leftPos;
     private int topPos;
     private byte activeTab = 0;
 
     public MainScreen() {
         super(MAIN_SCREEN_NAME);
-
     }
 
     @Override
@@ -44,15 +46,17 @@ public class MainScreen extends Screen {
         this.leftPos = (this.width - (bgWidth + tabWidth - 4)) / 2;
         this.topPos = (this.height - bgHeight) / 2;
 
+        // TODO: make a new GUI component for this...
         // this.addRenderableWidget(new Button(leftPos, topPos, Button.SMALL_WIDTH, Button.DEFAULT_HEIGHT, BUTTON_INFO, pButton -> // TODO: make this send a C2S packet Civilization.LOGGER.info("Click!")));
     }
 
+    // Check L785 in CreativeModeInventoryScreen
     @Override
     public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
         this.renderBackground(pPoseStack);
-        renderBgTexture(pPoseStack);
+        renderBgTexture(pPoseStack, pMouseX, pMouseY);
 
-        renderTabs(pPoseStack);
+        renderTabs(pPoseStack, pMouseX, pMouseY);
 
         super.render(pPoseStack, pMouseX, pMouseY, pPartialTick); //call last?
     }
@@ -67,7 +71,7 @@ public class MainScreen extends Screen {
         }
     }
 
-    private void renderBgTexture(PoseStack pPoseStack) {
+    private void renderBgTexture(PoseStack pPoseStack, int xMouse, int yMouse) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, TEXTURE);
@@ -75,20 +79,30 @@ public class MainScreen extends Screen {
 
         // Renders background
         blit(pPoseStack, this.leftPos, this.topPos, 0, 0, bgWidth, bgHeight, textureWidth, textureHeight);
-        this.renderTabs(pPoseStack);
+        this.renderTabs(pPoseStack, xMouse, yMouse);
         // Renders logo
         blit(pPoseStack, this.leftPos + bgWidth + ((tabWidth - logoWidth - 4) / 2), this.topPos + 20, tabUOffset, logoVOffset,
                 logoWidth, logoHeight, textureWidth, textureHeight);
     }
 
-    private void renderTabs(PoseStack poseStack) {
+    // FIXME hovering works but causes other rendered elements to disappear
+    private void renderTabs(PoseStack poseStack, int xMouse, int yMouse) {
         for (byte i = 0; i < tabCount; i++) {
             if (this.activeTab == 0 && i == 0) {
                 this.renderTab(poseStack, i, tabSelectedBottomVOffset);
+                if (this.isHoveringTab(i, xMouse, yMouse)) {
+                    this.renderTooltip(poseStack, TAB_PLAYER_INFO, xMouse, yMouse);
+                }
             } else if (this.activeTab == i) {
                 this.renderTab(poseStack, i, tabSelectedVOffset);
+                if (this.isHoveringTab(i, xMouse, yMouse)) {
+                    this.renderTooltip(poseStack, TAB_PLAYER_INFO, xMouse, yMouse);
+                }
             } else {
                 this.renderTab(poseStack, i, tabUnselectedVOffset);
+                if (this.isHoveringTab(i, xMouse, yMouse)) {
+                    this.renderTooltip(poseStack, TAB_PLAYER_INFO, xMouse, yMouse);
+                }
             }
         }
     }
@@ -96,5 +110,28 @@ public class MainScreen extends Screen {
     private void renderTab(PoseStack poseStack, int tab, int vOffset) {
         blit(poseStack, this.leftPos + bgWidth - 4, (this.topPos + bgHeight - tabHeight) - (tab * (tabHeight + 1)),
                 tabUOffset, vOffset, tabWidth, tabHeight, textureWidth, textureHeight);
+    }
+
+    private boolean isHoveringTab(byte tab, int xMouse, int yMouse) {
+        return this.isHovering(this.leftPos + bgWidth - 4, (this.topPos + bgHeight - tabHeight) - (tab * (tabHeight + 1)),
+                tabWidth, tabHeight, xMouse, yMouse);
+    }
+
+    /**
+     * Use this method to determine if the cursor is hovering over a defined rectangle.
+     * @param pX The int defining the leftmost part of the area to check.
+     * @param pY The int defining the topmost part of the area to check.
+     * @param pWidth    The int defining the width of the rectangle.
+     * @param pHeight   The int defining the height of the rectangle.
+     * @param pMouseX   The double describing the mouse's x position.
+     * @param pMouseY   The double describing the mouse's y position.
+     * @return  <code>true</code> if the given mouse coordinates are inside the rectangle. <code>false</code> otherwise.
+     */
+    private boolean isHovering(int pX, int pY, int pWidth, int pHeight, double pMouseX, double pMouseY) {
+        int i = this.leftPos;
+        int j = this.topPos;
+        pMouseX -= i;
+        pMouseY -= j;
+        return pMouseX >= (double)(pX - 1) && pMouseX < (double)(pX + pWidth + 1) && pMouseY >= (double)(pY - 1) && pMouseY < (double)(pY + pHeight + 1);
     }
 }
