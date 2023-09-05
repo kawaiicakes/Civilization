@@ -54,9 +54,8 @@ public class MainScreen extends Screen {
     @Override
     public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
         this.renderBackground(pPoseStack);
-        renderBgTexture(pPoseStack, pMouseX, pMouseY);
-
-        renderTabs(pPoseStack, pMouseX, pMouseY);
+        this.renderBgTexture(pPoseStack, pMouseX, pMouseY);
+        this.renderTabs(pPoseStack, pMouseX, pMouseY);
 
         super.render(pPoseStack, pMouseX, pMouseY, pPartialTick); //call last?
     }
@@ -79,31 +78,23 @@ public class MainScreen extends Screen {
 
         // Renders background
         blit(pPoseStack, this.leftPos, this.topPos, 0, 0, bgWidth, bgHeight, textureWidth, textureHeight);
-        this.renderTabs(pPoseStack, xMouse, yMouse);
         // Renders logo
         blit(pPoseStack, this.leftPos + bgWidth + ((tabWidth - logoWidth - 4) / 2), this.topPos + 20, tabUOffset, logoVOffset,
                 logoWidth, logoHeight, textureWidth, textureHeight);
     }
 
-    // FIXME hovering works but causes other rendered elements to disappear
     private void renderTabs(PoseStack poseStack, int xMouse, int yMouse) {
         for (byte i = 0; i < tabCount; i++) {
             if (this.activeTab == 0 && i == 0) {
                 this.renderTab(poseStack, i, tabSelectedBottomVOffset);
-                if (this.isHoveringTab(i, xMouse, yMouse)) {
-                    this.renderTooltip(poseStack, TAB_PLAYER_INFO, xMouse, yMouse);
-                }
             } else if (this.activeTab == i) {
                 this.renderTab(poseStack, i, tabSelectedVOffset);
-                if (this.isHoveringTab(i, xMouse, yMouse)) {
-                    this.renderTooltip(poseStack, TAB_PLAYER_INFO, xMouse, yMouse);
-                }
             } else {
                 this.renderTab(poseStack, i, tabUnselectedVOffset);
-                if (this.isHoveringTab(i, xMouse, yMouse)) {
-                    this.renderTooltip(poseStack, TAB_PLAYER_INFO, xMouse, yMouse);
-                }
             }
+        }
+        for (byte i = 0; i < tabCount; i++) {
+            this.isHoveringTab(poseStack, i, xMouse, yMouse);
         }
     }
 
@@ -112,9 +103,12 @@ public class MainScreen extends Screen {
                 tabUOffset, vOffset, tabWidth, tabHeight, textureWidth, textureHeight);
     }
 
-    private boolean isHoveringTab(byte tab, int xMouse, int yMouse) {
-        return this.isHovering(this.leftPos + bgWidth - 4, (this.topPos + bgHeight - tabHeight) - (tab * (tabHeight + 1)),
-                tabWidth, tabHeight, xMouse, yMouse);
+    private void isHoveringTab(PoseStack poseStack, byte tab, int xMouse, int yMouse) {
+        int y = (this.height - bgHeight) / 2; // Why is this necessary? Why isn't x necessary?
+        if (this.isHovering(this.leftPos + bgWidth - 4, (this.topPos + bgHeight - tabHeight) - (tab * (tabHeight + 1)) - y,
+                tabWidth, tabHeight, xMouse, yMouse)) {
+            this.renderTooltip(poseStack, TAB_PLAYER_INFO, xMouse, yMouse);
+        };
     }
 
     /**
