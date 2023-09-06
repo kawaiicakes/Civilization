@@ -13,6 +13,8 @@ import static io.github.kawaiicakes.civilization.Civilization.MOD_ID;
 /**
  * Jesus this code is messy.
  */
+// FIXME: hover areas change when changing window size.
+// FIXME: relative v. absolute screen coordinates causing weird fuck shit? store conversions as fields?
 public class MainScreen extends Screen {
     private static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/gui/menu/main.png");
     private static final short textureWidth = 800;
