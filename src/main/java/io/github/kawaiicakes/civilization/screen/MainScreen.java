@@ -39,6 +39,7 @@ public class MainScreen extends Screen {
     private byte activeTab = 0;
 
     public MainScreen() {
+        // Screen title is used for narration!
         super(MAIN_SCREEN_NAME);
     }
 
@@ -55,6 +56,7 @@ public class MainScreen extends Screen {
     // Check L785 in CreativeModeInventoryScreen
     @Override
     public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+        // TODO: Text may be rendered using this.font
         this.renderBackground(pPoseStack);
         this.renderBgTexture(pPoseStack, pMouseX, pMouseY);
         this.renderTabs(pPoseStack, pMouseX, pMouseY);
