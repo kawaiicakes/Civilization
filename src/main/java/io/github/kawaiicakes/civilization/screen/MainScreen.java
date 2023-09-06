@@ -3,6 +3,8 @@ package io.github.kawaiicakes.civilization.screen;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import io.github.kawaiicakes.civilization.Civilization;
+import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -48,6 +50,9 @@ public class MainScreen extends Screen {
         super.init();
         this.leftPos = (this.width - (bgWidth + tabWidth - 4)) / 2;
         this.topPos = (this.height - bgHeight) / 2;
+
+        this.addRenderableWidget(new ImageButton(30, 30, tabWidth, tabHeight, textureWidth, textureHeight, TEXTURE, pButton -> {
+            Civilization.LOGGER.info("CLICKING");}));
 
         // TODO: make a new GUI component for this...
         // this.addRenderableWidget(new Button(leftPos, topPos, Button.SMALL_WIDTH, Button.DEFAULT_HEIGHT, BUTTON_INFO, pButton -> // TODO: make this send a C2S packet Civilization.LOGGER.info("Click!")));
