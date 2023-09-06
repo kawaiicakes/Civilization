@@ -70,6 +70,19 @@ public class MainScreen extends Screen {
         }
     }
 
+    @Override
+    public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
+        if (this.isHovering(this.leftPos + bgWidth - 4, (this.topPos + bgHeight - tabHeight), tabWidth, tabHeight, pMouseX, pMouseY)) {
+            if (this.activeTab == 3) {
+                this.activeTab = 0;
+            } else {
+                this.activeTab++;
+            }
+            return true;
+        }
+        return super.mouseClicked(pMouseX, pMouseY, pButton);
+    }
+
     private void renderBgTexture(PoseStack pPoseStack, int xMouse, int yMouse) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
