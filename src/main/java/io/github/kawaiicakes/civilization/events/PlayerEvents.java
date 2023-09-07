@@ -2,7 +2,7 @@ package io.github.kawaiicakes.civilization.events;
 
 import io.github.kawaiicakes.civilization.Civilization;
 import io.github.kawaiicakes.civilization.client.KeyBinds;
-import io.github.kawaiicakes.civilization.screen.MainScreen;
+import io.github.kawaiicakes.civilization.screen.MainPlayerScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
@@ -16,7 +16,7 @@ public class PlayerEvents {
         @SubscribeEvent
         public static void onKeyInput(InputEvent.Key event) {
             if (KeyBinds.CIV_MENU.consumeClick()) {
-                Minecraft.getInstance().setScreen(new MainScreen());
+                Minecraft.getInstance().setScreen(new MainPlayerScreen());
             }
         }
     }
