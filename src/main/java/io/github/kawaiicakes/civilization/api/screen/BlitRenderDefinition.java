@@ -24,14 +24,14 @@ public record BlitRenderDefinition(
 
     /**
      * This method is handy when rendering things that change appearance based on some action.
-     * @param blitStartY    the int representing the new blit start y-position.
+     * @param blitNewVOffset    the int representing the new blit start y-position.
      * @return  a new <code>BlitRenderDefinition</code> identical to the calling instance,
      * save for the blit start y-position.
      */
-    public BlitRenderDefinition blitFromNewY(int blitStartY) {
+    public BlitRenderDefinition blitFromNewY(int blitNewVOffset) {
         return new BlitRenderDefinition(
                 this.blitUOffset,
-                blitStartY,
+                blitNewVOffset,
                 this.blitUWidth,
                 this.blitVHeight,
                 this.textureWidth,

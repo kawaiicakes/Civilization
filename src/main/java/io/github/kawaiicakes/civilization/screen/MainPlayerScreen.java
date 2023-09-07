@@ -2,6 +2,7 @@ package io.github.kawaiicakes.civilization.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.kawaiicakes.civilization.api.screen.AbstractGUI;
+import io.github.kawaiicakes.civilization.api.screen.BlitRenderDefinition;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
@@ -12,15 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import static io.github.kawaiicakes.civilization.Civilization.MOD_ID;
 
 public class MainPlayerScreen extends AbstractGUI {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/gui/menu/main.png");
     private static final Component MAIN_SCREEN = Component.translatable("menu.civilization.main_menu");
-
-    /**
-     * The area on the png to draw pixels from when blitting the background
-     */
-    private static final short bgBlitWidth = 277;
-    private static final short bgBlitHeight = 218;
-    private static final byte bgBlitXYPos = 0;
 
     /**
      * Characteristics of tabs in this screen
@@ -33,25 +26,12 @@ public class MainPlayerScreen extends AbstractGUI {
     private static final short tabUnselectedBlitVOffset = 76;
 
     public MainPlayerScreen() {
-        super(MAIN_SCREEN, 800, 256);
-    }
+        // This call to the super constructor essentially establishes the background texture and blitting info
+        super(
+                MAIN_SCREEN,
+                new ResourceLocation(MOD_ID, "textures/gui/menu/main.png"),
+                new BlitRenderDefinition(0, 0, 277, 218, 800, 256)
+        );
 
-    @Override
-    public void init() {
-        this.leftPos = (this.width - this.bgWidth) / 2;
-        this.topPos = (this.height - this.bgHeight) / 2;
-
-        this.addWidget()
-    }
-
-    @Override
-    public void render(@NotNull PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-        this.renderBackground(pPoseStack);
-
-        // Stuff that is rendered before widgets goes here
-
-        super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
-
-        // Tooltips go here
     }
 }
