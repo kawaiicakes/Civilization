@@ -30,8 +30,10 @@ public class MainPlayerScreen extends AbstractGUI {
         super(
                 MAIN_SCREEN,
                 new ResourceLocation(MOD_ID, "textures/gui/menu/main.png"),
-                new BlitRenderDefinition(0, 0, 277, 218, 800, 256)
+                800,
+                256,
+                new BlitRenderDefinition(null, null,
+                        0, 0, 277, 218)
         );
-
     }
 }
