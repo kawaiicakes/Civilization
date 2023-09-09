@@ -14,7 +14,7 @@ public class MainPlayerScreen extends AbstractGUI {
 
     /**
      * Characteristics of tabs in this screen. leftPos and topPos left null as this is only here for convenience in
-     * accessing blit info.
+     * accessing blit info; not for defining render coordinates.
      */
     private static final BlitRenderDefinition TAB_UNSELECTED = new BlitRenderDefinition(null, null,
             277, 76, 155, 28);
@@ -42,5 +42,26 @@ public class MainPlayerScreen extends AbstractGUI {
         // Renders background texture + tabs to the centre of the screen.
         this.leftPos = (this.width - (this.background.blitUWidth() + TAB_UNSELECTED.blitUWidth())) / 2;
         this.topPos = (this.height - this.background.blitVHeight()) / 2;
+
+        int tabLeftPos = this.leftPos + this.background.blitUWidth() - 4;
+
+        this.BLIT_RENDER_LIST.put("player_profile", TAB_SELECTED_BOTTOM
+                .renderAtNewPos(tabLeftPos, this.tabTopPosHelper(0)));
+        this.BLIT_RENDER_LIST.put("city_info", TAB_UNSELECTED
+                .renderAtNewPos(tabLeftPos, this.tabTopPosHelper(1)));
+        this.BLIT_RENDER_LIST.put("nation_info", TAB_UNSELECTED
+                .renderAtNewPos(tabLeftPos, this.tabTopPosHelper(2)));
+        this.BLIT_RENDER_LIST.put("reputation_info", TAB_UNSELECTED
+                .renderAtNewPos(tabLeftPos, this.tabTopPosHelper(3)));
+    }
+
+    /**
+     * All this does is return the correct position to render at based on which 'tab' is calling it
+     * @param tab   the arbitrary tab number
+     * @return  the int representing a screen-relative y-coordinate
+     */
+    private int tabTopPosHelper(int tab) {
+        return (this.topPos + this.background.blitVHeight() - TAB_UNSELECTED.blitVHeight())
+                - (tab * (TAB_UNSELECTED.blitVHeight() + 1));
     }
 }

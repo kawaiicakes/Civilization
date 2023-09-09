@@ -81,7 +81,8 @@ public abstract class AbstractGUI extends Screen {
      * must be made in here.
      * <br><br>
      * Bearing this in mind, <code>#init</code> is responsible for 'setting up' the
-     * initial settings of the screen.
+     * initial settings of the screen. Rendering blit info using <code>#addToRenderList</code>
+     * will probably mostly take place in here.
      */
     @Override
     public void init() {
@@ -128,8 +129,12 @@ public abstract class AbstractGUI extends Screen {
         RenderSystem.enableBlend();
 
         BlitRenderDefinition bg = this.background;
+
+        pPoseStack.pushPose();
+        pPoseStack.translate(0, 0, -30); // Ensures the background is drawn behind everything
         blit(pPoseStack, this.leftPos, this.topPos, bg.blitUOffset(), bg.blitVOffset(), bg.blitUWidth(), bg.blitVHeight(),
                 this.TEXTURE_WIDTH, this.TEXTURE_HEIGHT);
+        pPoseStack.popPose();
     }
 
     /**
