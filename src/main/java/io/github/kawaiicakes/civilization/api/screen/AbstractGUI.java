@@ -87,6 +87,7 @@ public abstract class AbstractGUI extends Screen {
      */
     @Override
     public void init() {
+        // This is the default. It will render the background texture in the centre of the screen.
         this.leftPos = (this.width - this.background.blitUWidth()) / 2;
         this.topPos = (this.height - this.background.blitVHeight()) / 2;
     }
