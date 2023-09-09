@@ -1,14 +1,11 @@
 package io.github.kawaiicakes.civilization.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.kawaiicakes.civilization.api.screen.AbstractGUI;
 import io.github.kawaiicakes.civilization.api.screen.BlitRenderDefinition;
-import net.minecraft.client.gui.components.AbstractButton;
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
 
 import static io.github.kawaiicakes.civilization.Civilization.MOD_ID;
 
@@ -16,24 +13,34 @@ public class MainPlayerScreen extends AbstractGUI {
     private static final Component MAIN_SCREEN = Component.translatable("menu.civilization.main_menu");
 
     /**
-     * Characteristics of tabs in this screen
+     * Characteristics of tabs in this screen. leftPos and topPos left null as this is only here for convenience in
+     * accessing blit info.
      */
-    private static final short tabWidth = 155;
-    private static final byte tabHeight = 28;
-    private static final short tabBlitUOffset = 277;
-    private static final short tabSelectedBlitVOffset = 104;
-    private static final short tabSelectedBottomBlitVOffset = 132; // Renders 'flush' with the background
-    private static final short tabUnselectedBlitVOffset = 76;
+    private static final BlitRenderDefinition TAB_UNSELECTED = new BlitRenderDefinition(null, null,
+            277, 76, 155, 28);
+    private static final BlitRenderDefinition TAB_SELECTED = TAB_UNSELECTED.blitFromNewY(104);
+    private static final BlitRenderDefinition TAB_SELECTED_BOTTOM = TAB_UNSELECTED.blitFromNewY(132);
 
     public MainPlayerScreen() {
-        // This call to the super constructor essentially establishes the background texture and blitting info
+        // This call to the super constructor essentially establishes the texture location and the blitting info
+        // for the main part of the background
         super(
                 MAIN_SCREEN,
                 new ResourceLocation(MOD_ID, "textures/gui/menu/main.png"),
                 800,
                 256,
+                // leftPos and topPos are declared null as where to render the background can only be determined in #init
                 new BlitRenderDefinition(null, null,
                         0, 0, 277, 218)
         );
+
+        this.BLIT_RENDER_LIST = new HashMap<>();
+    }
+
+    @Override
+    public void init() {
+        // Renders background texture + tabs to the centre of the screen.
+        this.leftPos = (this.width - (this.background.blitUWidth() + TAB_UNSELECTED.blitUWidth())) / 2;
+        this.topPos = (this.height - this.background.blitVHeight()) / 2;
     }
 }
