@@ -170,6 +170,10 @@ public abstract class AbstractGUI extends Screen {
         });
     }
 
+    public final void repositionBlit(String name, int leftPos, int topPos) {
+        this.BLIT_RENDER_LIST.put(name, this.BLIT_RENDER_LIST.get(name).renderAtNewPos(leftPos, topPos));
+    }
+
     // TODO: wtf are scan codes and modifiers???
     /**
      * Automatically called every time a key is pressed inside the screen.

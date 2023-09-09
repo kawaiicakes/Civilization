@@ -21,6 +21,8 @@ public class MainPlayerScreen extends AbstractGUI {
     private static final BlitRenderDefinition TAB_SELECTED = TAB_UNSELECTED.blitFromNewY(104);
     private static final BlitRenderDefinition TAB_SELECTED_BOTTOM = TAB_UNSELECTED.blitFromNewY(132);
 
+    public byte activeTab;
+
     public MainPlayerScreen() {
         // This call to the super constructor essentially establishes the texture location and the blitting info
         // for the main part of the background
@@ -34,7 +36,13 @@ public class MainPlayerScreen extends AbstractGUI {
                         0, 0, 277, 218)
         );
 
-        this.BLIT_RENDER_LIST = new HashMap<>();
+        this.BLIT_RENDER_LIST = new HashMap<>(); // FIXME unselected texture on bottom tab
+        this.addToRenderList("player_profile", TAB_UNSELECTED);
+        this.addToRenderList("city_info", TAB_UNSELECTED);
+        this.addToRenderList("nation_info", TAB_UNSELECTED);
+        this.addToRenderList("reputation_info", TAB_UNSELECTED);
+
+        this.setActiveTab((byte) 0);
     }
 
     @Override
@@ -45,14 +53,15 @@ public class MainPlayerScreen extends AbstractGUI {
 
         int tabLeftPos = this.leftPos + this.background.blitUWidth() - 4;
 
-        this.BLIT_RENDER_LIST.put("player_profile", TAB_SELECTED_BOTTOM
-                .renderAtNewPos(tabLeftPos, this.tabTopPosHelper(0)));
-        this.BLIT_RENDER_LIST.put("city_info", TAB_UNSELECTED
-                .renderAtNewPos(tabLeftPos, this.tabTopPosHelper(1)));
-        this.BLIT_RENDER_LIST.put("nation_info", TAB_UNSELECTED
-                .renderAtNewPos(tabLeftPos, this.tabTopPosHelper(2)));
-        this.BLIT_RENDER_LIST.put("reputation_info", TAB_UNSELECTED
-                .renderAtNewPos(tabLeftPos, this.tabTopPosHelper(3)));
+        this.repositionBlit("player_profile", tabLeftPos, this.tabTopPosHelper(0));
+        this.repositionBlit("city_info", tabLeftPos, this.tabTopPosHelper(1));
+        this.repositionBlit("nation_info", tabLeftPos, this.tabTopPosHelper(2));
+        this.repositionBlit("reputation_info", tabLeftPos, this.tabTopPosHelper(3));
+    }
+
+    public void setActiveTab(byte tab) {
+        this.activeTab = tab;
+        this.tabHelper();
     }
 
     /**
@@ -63,5 +72,35 @@ public class MainPlayerScreen extends AbstractGUI {
     private int tabTopPosHelper(int tab) {
         return (this.topPos + this.background.blitVHeight() - TAB_UNSELECTED.blitVHeight())
                 - (tab * (TAB_UNSELECTED.blitVHeight() + 1));
+    }
+
+    private void tabHelper() {
+        switch (this.activeTab) {
+            case 0 -> {
+                this.reRender("player_profile", TAB_SELECTED_BOTTOM.blitVOffset());
+                this.reRender("city_info", TAB_UNSELECTED.blitVOffset());
+                this.reRender("nation_info", TAB_UNSELECTED.blitVOffset());
+                this.reRender("reputation_info", TAB_UNSELECTED.blitVOffset());
+            }
+            case 1 -> {
+                this.reRender("player_profile", TAB_UNSELECTED.blitVOffset());
+                this.reRender("city_info", TAB_SELECTED.blitVOffset());
+                this.reRender("nation_info", TAB_UNSELECTED.blitVOffset());
+                this.reRender("reputation_info", TAB_UNSELECTED.blitVOffset());
+            }
+            case 2 -> {
+                this.reRender("player_profile", TAB_UNSELECTED.blitVOffset());
+                this.reRender("city_info", TAB_UNSELECTED.blitVOffset());
+                this.reRender("nation_info", TAB_SELECTED.blitVOffset());
+                this.reRender("reputation_info", TAB_UNSELECTED.blitVOffset());
+            }
+            case 3 -> {
+                this.reRender("player_profile", TAB_UNSELECTED.blitVOffset());
+                this.reRender("city_info", TAB_UNSELECTED.blitVOffset());
+                this.reRender("nation_info", TAB_UNSELECTED.blitVOffset());
+                this.reRender("reputation_info", TAB_SELECTED.blitVOffset());
+            }
+            default -> throw new IllegalStateException("Active tab does not exist!");
+        }
     }
 }
