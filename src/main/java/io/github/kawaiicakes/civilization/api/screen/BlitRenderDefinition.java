@@ -45,7 +45,7 @@ public record BlitRenderDefinition(
      * @param topPos    the int representing the new topmost position to render to in screen relative terms.
      * @return          an identical instance of this, but with a new leftPos and topPos.
      */
-    public BlitRenderDefinition renderFromNewPos(int leftPos, int topPos) {
+    public BlitRenderDefinition renderAtNewPos(int leftPos, int topPos) {
         return new BlitRenderDefinition(
                 leftPos,
                 topPos,
