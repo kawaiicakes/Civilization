@@ -157,8 +157,8 @@ public abstract class AbstractGUI extends Screen {
     protected void renderBlitList(PoseStack poseStack) {
         this.BLIT_RENDER_LIST.forEach((_name, blit) -> {
             if (blit.leftPos() != null && blit.topPos() != null) {
-                this.blit(poseStack, blit.leftPos(), blit.topPos(), blit.blitUOffset(),
-                        blit.blitVOffset(), blit.blitUWidth(), blit.blitVHeight());
+                blit(poseStack, blit.leftPos(), blit.topPos(), blit.blitUOffset(),
+                        blit.blitVOffset(), blit.blitUWidth(), blit.blitVHeight(), TEXTURE_WIDTH, TEXTURE_HEIGHT);
             } else {
                 throw new IllegalArgumentException("leftPos and topPos may not be null!");
             }
