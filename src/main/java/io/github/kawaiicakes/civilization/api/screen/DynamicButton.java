@@ -16,6 +16,10 @@ import java.util.Map;
  */
 public class DynamicButton extends Button {
     private final ResourceLocation textureLocation;
+    private final int textureWidth;
+    private final int textureHeight;
+
+
     protected final Map<String, Integer> possibleStates;
 
     protected BlitRenderDefinition renderDefinition;
@@ -24,16 +28,24 @@ public class DynamicButton extends Button {
     @ParametersAreNonnullByDefault
     public DynamicButton(BlitRenderDefinition renderDefinition, ResourceLocation textureLocation,
                          Map<String, Integer> possibleStates, OnPress onPress) {
-        this(renderDefinition, textureLocation, possibleStates, Component.empty(), onPress, NO_TOOLTIP);
+        this(renderDefinition, textureLocation, possibleStates, Component.empty(), onPress, NO_TOOLTIP, 256, 256);
     }
 
     @ParametersAreNonnullByDefault
     public DynamicButton(BlitRenderDefinition renderDefinition, ResourceLocation textureLocation,
-                         Map<String, Integer> possibleStates, Component title, OnPress onPress, OnTooltip onTooltip) {
+                         Map<String, Integer> possibleStates, OnPress onPress, int textureWidth, int textureHeight) {
+        this(renderDefinition, textureLocation, possibleStates, Component.empty(), onPress, NO_TOOLTIP, textureWidth, textureHeight);
+    }
+
+    @ParametersAreNonnullByDefault
+    public DynamicButton(BlitRenderDefinition renderDefinition, ResourceLocation textureLocation,
+                         Map<String, Integer> possibleStates, Component title, OnPress onPress, OnTooltip onTooltip, int textureWidth, int textureHeight) {
         super(renderDefinition.leftPos(), renderDefinition.topPos(), renderDefinition.blitUWidth(),
                 renderDefinition.blitVHeight(), title, onPress, onTooltip);
         this.textureLocation = textureLocation;
         this.possibleStates = possibleStates;
+        this.textureWidth = textureWidth;
+        this.textureHeight = textureHeight;
     }
 
     public void setPosition(int leftPos, int topPos) {
@@ -45,15 +57,14 @@ public class DynamicButton extends Button {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, this.textureLocation);
 
-        int i = this.yTexStart;
-        if (!this.isActive()) {
-            i += this.yDiffTex * 2;
+        int i = renderDefinition.blitVOffset();
+        if (!this.isActive()) { // TODO this clause should determine what to blit at based on active state
         } else if (this.isHoveredOrFocused()) {
-            i += this.yDiffTex;
         }
 
         RenderSystem.enableDepthTest();
-        blit(pPoseStack, this.x, this.y, (float)this.xTexStart, (float)i, this.width, this.height, this.textureWidth, this.textureHeight);
+        blit(pPoseStack, this.x, this.y, (float) this.renderDefinition.blitUOffset(), (float) i, this.width,
+                this.height, this.textureWidth, this.textureHeight);
 
         if (this.isHovered) {
             this.renderToolTip(pPoseStack, pMouseX, pMouseY);
