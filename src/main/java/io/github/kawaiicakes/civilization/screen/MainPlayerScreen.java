@@ -1,5 +1,6 @@
 package io.github.kawaiicakes.civilization.screen;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.kawaiicakes.civilization.api.screen.AbstractGUI;
 import io.github.kawaiicakes.civilization.api.screen.BlitRenderDefinition;
 import net.minecraft.network.chat.Component;
@@ -61,20 +62,7 @@ public class MainPlayerScreen extends AbstractGUI {
 
     public void setActiveTab(byte tab) {
         this.activeTab = tab;
-        this.tabHelper();
-    }
 
-    /**
-     * All this does is return the correct position to render at based on which 'tab' is calling it
-     * @param tab   the arbitrary tab number
-     * @return  the int representing a screen-relative y-coordinate
-     */
-    private int tabTopPosHelper(int tab) {
-        return (this.topPos + this.background.blitVHeight() - TAB_UNSELECTED.blitVHeight())
-                - (tab * (TAB_UNSELECTED.blitVHeight() + 1));
-    }
-
-    private void tabHelper() {
         switch (this.activeTab) {
             case 0 -> {
                 this.reRender("player_profile", TAB_SELECTED_BOTTOM.blitVOffset());
@@ -102,5 +90,15 @@ public class MainPlayerScreen extends AbstractGUI {
             }
             default -> throw new IllegalStateException("Active tab does not exist!");
         }
+    }
+
+    /**
+     * All this does is return the correct position to render at based on which 'tab' is calling it
+     * @param tab   the arbitrary tab number
+     * @return  the int representing a screen-relative y-coordinate
+     */
+    private int tabTopPosHelper(int tab) {
+        return (this.topPos + this.background.blitVHeight() - TAB_UNSELECTED.blitVHeight())
+                - (tab * (TAB_UNSELECTED.blitVHeight() + 1));
     }
 }
