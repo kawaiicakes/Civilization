@@ -31,6 +31,7 @@ public abstract class AbstractGUI extends Screen {
 
     /**
      * This field stores blitting info to ease rendering all of them. Blit info may be named to keep track of them.
+     * Anything 'static' you need to render may go here.
      */
     protected Map<String, BlitRenderDefinition> BLIT_RENDER_LIST;
 
@@ -161,12 +162,8 @@ public abstract class AbstractGUI extends Screen {
      */
     protected void renderBlitList(PoseStack poseStack) {
         this.BLIT_RENDER_LIST.forEach((_name, blit) -> {
-            if (blit.leftPos() != null && blit.topPos() != null) {
                 blit(poseStack, blit.leftPos(), blit.topPos(), blit.blitUOffset(),
                         blit.blitVOffset(), blit.blitUWidth(), blit.blitVHeight(), TEXTURE_WIDTH, TEXTURE_HEIGHT);
-            } else {
-                throw new IllegalArgumentException("leftPos and topPos may not be null!");
-            }
         });
     }
 
