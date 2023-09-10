@@ -17,7 +17,7 @@ public class MainPlayerScreen extends AbstractGUI {
      * Characteristics of tabs in this screen. leftPos and topPos left null as this is only here for convenience in
      * accessing blit info; not for defining render coordinates.
      */
-    private static final BlitRenderDefinition TAB_UNSELECTED = new BlitRenderDefinition(null, null,
+    private static final BlitRenderDefinition TAB_UNSELECTED = new BlitRenderDefinition(0, 0,
             277, 76, 155, 28);
     private static final BlitRenderDefinition TAB_SELECTED = TAB_UNSELECTED.blitFromNewY(104);
     private static final BlitRenderDefinition TAB_SELECTED_BOTTOM = TAB_UNSELECTED.blitFromNewY(132);
@@ -33,7 +33,7 @@ public class MainPlayerScreen extends AbstractGUI {
                 800,
                 256,
                 // leftPos and topPos are declared null as where to render the background can only be determined in #init
-                new BlitRenderDefinition(null, null,
+                new BlitRenderDefinition(0, 0,
                         0, 0, 277, 218)
         );
 
