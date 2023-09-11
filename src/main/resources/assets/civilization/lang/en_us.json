@@ -1,6 +1,15 @@
 {
   "key.category.civilization.keys": "Civilization",
   "key.category.civilization.keys.civ_menu": "Open Menu",
+
   "menu.civilization.main_menu": "Civilization",
-  "menu.button.civilization.player_info": "Player Info"
+
+  "menu.civilization.player_info": "Player Info",
+  "menu.civilization.player_info.tooltip": "General overview of your information.",
+  "menu.civilization.city_info": "City Info",
+  "menu.civilization.city_info.tooltip": "Information on cities you are in",
+  "menu.civilization.nation_info": "Nation Info",
+  "menu.civilization.nation_info.tooltip": "Information on your nation",
+  "menu.civilization.reputation_info": "Reputation Info",
+  "menu.civilization.reputation_info.tooltip": "See what the world thinks of you."
 }

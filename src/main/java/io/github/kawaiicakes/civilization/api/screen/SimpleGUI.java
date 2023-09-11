@@ -9,10 +9,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
-
 /**
- * Simple abstract class offering the ability to easily construct GUIs used for networking.
+ * Simple class offering the ability to easily construct GUIs used for networking.
  * These GUIs are designed to be opened using a keybind setting the screen of the client
  * Minecraft instance to this.
  *<br><br>
@@ -21,19 +19,13 @@ import java.util.Map;
  * Coordinates are defined relative to the primary background; which in turn has its
  * coordinates defined accounting for screen size among other variables.
  */
-public abstract class AbstractGUI extends Screen {
+public class SimpleGUI extends Screen {
     /**
      * The texture to blit from.
      */
-    protected final ResourceLocation TEXTURE;
-    protected final int TEXTURE_WIDTH;
-    protected final int TEXTURE_HEIGHT;
-
-    /**
-     * This field stores blitting info to ease rendering all of them. Blit info may be named to keep track of them.
-     * Anything 'static' you need to render may go here.
-     */
-    protected Map<String, BlitRenderDefinition> BLIT_RENDER_LIST;
+    protected final ResourceLocation textureLocation;
+    protected final int textureWidth;
+    protected final int textureHeight;
 
     /**
      * <code>leftPos</code> and <code>topPos</code> are fields defining the coordinate
@@ -65,15 +57,25 @@ public abstract class AbstractGUI extends Screen {
      * @param backgroundTexture the <code>BlitRenderDefinition</code> representing the placement and blit info of the
      *                          background texture.
      */
-    protected AbstractGUI(Component pTitle, ResourceLocation textureLocation, int textureWidth,
-                       int textureHeight, BlitRenderDefinition backgroundTexture) {
+    protected SimpleGUI(Component pTitle, ResourceLocation textureLocation, int textureWidth,
+                        int textureHeight, BlitRenderDefinition backgroundTexture) {
         super(pTitle);
 
-        this.TEXTURE = textureLocation;
-        this.TEXTURE_WIDTH = textureWidth;
-        this.TEXTURE_HEIGHT = textureHeight;
+        this.textureLocation = textureLocation;
+        this.textureWidth = textureWidth;
+        this.textureHeight = textureHeight;
 
         this.background = backgroundTexture;
+    }
+
+    /**
+     * Blit method which takes a <code>BlitRenderDefinition</code>. Convenient!
+     * @param poseStack the <code>PoseStack</code>.
+     * @param blit  the <code>BlitRenderDefinition</code> to blit
+     */
+    protected void blit(PoseStack poseStack, BlitRenderDefinition blit) {
+        blit(poseStack, blit.leftPos(), blit.topPos(), blit.blitUOffset(), blit.blitVOffset(),
+                blit.blitUWidth(), blit.blitVHeight(), this.textureWidth, this.textureHeight);
     }
 
     /**
@@ -102,14 +104,12 @@ public abstract class AbstractGUI extends Screen {
     @Override
     public void render(@NotNull PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
         // Since rendering may be dependent on a few criteria, 'check' methods should be called first.
+        // That is, generally implementing subclasses should call super after they put their own stuff in.
 
         // Background second
         this.renderBackground(pPoseStack);
 
-        // Other stuff third
-        this.renderBlitList(pPoseStack);
-
-        // Widgets go fourth
+        // Widgets go third
         super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
 
         // Tooltips last
@@ -126,49 +126,18 @@ public abstract class AbstractGUI extends Screen {
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, TEXTURE);
+        RenderSystem.setShaderTexture(0, textureLocation);
         RenderSystem.enableBlend();
 
         BlitRenderDefinition bg = this.background;
 
         pPoseStack.pushPose();
-        pPoseStack.translate(0, 0, -30); // Ensures the background is drawn behind everything
+        // Ensures the background is drawn behind everything
+        pPoseStack.translate(0, 0, -30);
+        // "Main" part of the background
         blit(pPoseStack, this.leftPos, this.topPos, bg.blitUOffset(), bg.blitVOffset(), bg.blitUWidth(), bg.blitVHeight(),
-                this.TEXTURE_WIDTH, this.TEXTURE_HEIGHT);
+                this.textureWidth, this.textureHeight);
         pPoseStack.popPose();
-    }
-
-    /**
-     * Add an identifiable blit to be rendered to the render list. This really only exists for convenience.
-     * @param name  the String representing the name of the render.
-     * @param blitInfo  the <code>BlitRenderDefinition</code> of the render.
-     */
-    public final void addToRenderList(String name, BlitRenderDefinition blitInfo) {
-        this.BLIT_RENDER_LIST.put(name, blitInfo);
-    }
-
-    /**
-     * Convenience method for changing solely the appearance of an existing blit.
-     * @param name  the String representing the name of the blit to re-render.
-     * @param newVOffset    the int representing the new V offset to draw from.
-     */
-    public final void reRender(String name, int newVOffset) {
-        this.BLIT_RENDER_LIST.put(name, this.BLIT_RENDER_LIST.get(name).blitFromNewY(newVOffset));
-    }
-
-    /**
-     * When called, blits the contents of <code>BLIT_RENDER_LIST</code> to the screen.
-     * @param poseStack don't worry about this lmao
-     */
-    protected void renderBlitList(PoseStack poseStack) {
-        this.BLIT_RENDER_LIST.forEach((_name, blit) -> {
-                blit(poseStack, blit.leftPos(), blit.topPos(), blit.blitUOffset(),
-                        blit.blitVOffset(), blit.blitUWidth(), blit.blitVHeight(), TEXTURE_WIDTH, TEXTURE_HEIGHT);
-        });
-    }
-
-    public final void repositionBlit(String name, int leftPos, int topPos) {
-        this.BLIT_RENDER_LIST.put(name, this.BLIT_RENDER_LIST.get(name).renderAtNewPos(leftPos, topPos));
     }
 
     // TODO: wtf are scan codes and modifiers???
