@@ -1,6 +1,7 @@
 package io.github.kawaiicakes.civilization.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import io.github.kawaiicakes.civilization.Civilization;
 import io.github.kawaiicakes.civilization.api.screen.BlitRenderDefinition;
 import io.github.kawaiicakes.civilization.api.screen.DynamicButton;
 import io.github.kawaiicakes.civilization.api.screen.SimpleGUI;
@@ -8,6 +9,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 import static io.github.kawaiicakes.civilization.Civilization.MOD_ID;
 
@@ -46,6 +49,14 @@ public class MainPlayerScreen extends SimpleGUI {
         this.setActiveTab("player_info");
     }
 
+    public void setActiveTab(String tab) {
+        this.activeTab = tab;
+    }
+
+    public String getActiveTab() {
+        return activeTab;
+    }
+
     @Override
     public void init() {
         // Renders background texture + tabs to the centre of the screen.
@@ -56,8 +67,6 @@ public class MainPlayerScreen extends SimpleGUI {
 
         this.initializeTabs();
     }
-
-
 
     @Override
     public void renderBackground(@NotNull PoseStack pPoseStack) {
@@ -74,15 +83,16 @@ public class MainPlayerScreen extends SimpleGUI {
 
     @Override
     public void render(@NotNull PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+        this.renderTabs();
         super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
     }
 
     /**
      * The tabs of this screen and what they do are defined here.
-     * <code>$blitVOffset</code> of the <code>BlitRenderDefinition</code> is irrelevant here
-     * as the tab has not been rendered yet. The correct v-offset will be assigned elsewhere.
+     * <code>$blitVOffset</code> of the <code>BlitRenderDefinition</code> is technically irrelevant here
+     * as the tab has not been rendered yet. The correct v-offset may be assigned elsewhere.
      */
-    public void initializeTabs() {
+    private void initializeTabs() {
         int tabTopPosDefault = (this.topPos + this.background.blitVHeight() - TAB_UNSELECTED.blitVHeight());
         String[] tabNames = {"player_info", "city_info", "nation_info", "reputation_info"};
 
@@ -93,21 +103,18 @@ public class MainPlayerScreen extends SimpleGUI {
         }
     }
 
-    @Override
-    protected void renderTooltip(PoseStack pPoseStack, ItemStack pItemStack, int pMouseX, int pMouseY) {
-        super.renderTooltip(pPoseStack, pItemStack, pMouseX, pMouseY);
-    }
+    private void renderTabs() {
+        String[] tabNames = {"player_info", "city_info", "nation_info", "reputation_info"};
 
-    public void renderTabs(PoseStack poseStack) {
-
-    }
-
-    public void setActiveTab(String tab) {
-        this.activeTab = tab;
-    }
-
-    public String getActiveTab() {
-        return activeTab;
+        for (int tab = 0; tab < 4; tab++) {
+            if (Objects.equals(this.activeTab, tabNames[tab]) && tab == 0) {
+                ((DynamicButton) this.renderables.get(tab)).setState("selected_bottom");
+            } else if (Objects.equals(this.activeTab, tabNames[tab]) && tab != 0) {
+                ((DynamicButton) this.renderables.get(tab)).setState("selected");
+            } else {
+                ((DynamicButton) this.renderables.get(tab)).setState("unselected");
+            }
+        }
     }
 
     /**
@@ -130,7 +137,29 @@ public class MainPlayerScreen extends SimpleGUI {
                         ),
                         this.textureWidth,
                         this.textureHeight
-                )
+                ) {
+                    @Override
+                    public void renderButton(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+                        switch (this.getState()) {
+                            case "selected" -> {
+                                this.renderDefinition = this.renderDefinition.blitFromNewY(TAB_SELECTED_OFFSET);
+                                super.renderButton(pPoseStack, pMouseX, pMouseY, pPartialTick);
+                            }
+                            case "selected_bottom" -> {
+                                this.renderDefinition = this.renderDefinition.blitFromNewY(TAB_SELECTED_BOTTOM_OFFSET);
+                                pPoseStack.pushPose();
+                                pPoseStack.translate(0, 0, -29); // TODO: put background blit offset in a field?
+                                super.renderButton(pPoseStack, pMouseX, pMouseY, pPartialTick);
+                                pPoseStack.popPose();
+                            }
+                            case "unselected" -> {
+                                this.renderDefinition = this.renderDefinition.blitFromNewY(TAB_UNSELECTED.blitVOffset());
+                                super.renderButton(pPoseStack, pMouseX, pMouseY, pPartialTick);
+                            }
+                            default -> super.renderButton(pPoseStack, pMouseX, pMouseY, pPartialTick);
+                        }
+                    }
+                }
         );
     }
 }
