@@ -1,12 +1,9 @@
 package io.github.kawaiicakes.civilization.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import io.github.kawaiicakes.civilization.api.screen.BlitRenderDefinition;
 import io.github.kawaiicakes.civilization.api.screen.DynamicButton;
 import io.github.kawaiicakes.civilization.api.screen.SimpleGUI;
-import io.github.kawaiicakes.civilization.api.screen.BlitRenderDefinition;
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Widget;
-import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -15,9 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import static io.github.kawaiicakes.civilization.Civilization.MOD_ID;
 
 public class MainPlayerScreen extends SimpleGUI {
-    protected static final Component MAIN_SCREEN = Component.translatable("menu.civilization.main_menu");
-    protected static final Component PLAYER_INFO = Component.translatable("menu.civilization.player_info");
-
     protected static final BlitRenderDefinition LOGO = new BlitRenderDefinition(
             0, 0,
             277, 8, 132, 64
@@ -40,7 +34,7 @@ public class MainPlayerScreen extends SimpleGUI {
         // This call to the super constructor essentially establishes the texture location and the blitting info
         // for the main part of the background
         super(
-                MAIN_SCREEN,
+                Component.translatable("menu.civilization.main_menu"),
                 new ResourceLocation(MOD_ID, "textures/gui/menu/main.png"),
                 800,
                 256,
