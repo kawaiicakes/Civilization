@@ -44,13 +44,20 @@ public class DynamicButton extends Button {
                          Component title, OnPress onPress, OnTooltip onTooltip, int textureWidth, int textureHeight) {
         super(renderDefinition.leftPos(), renderDefinition.topPos(), renderDefinition.blitUWidth(),
                 renderDefinition.blitVHeight(), title, onPress, onTooltip);
+
+        this.renderDefinition = renderDefinition;
+
         this.textureLocation = textureLocation;
         this.textureWidth = textureWidth;
         this.textureHeight = textureHeight;
     }
 
     public void setPosition(int leftPos, int topPos) {
+        // This is written in a roundabout fashion to reinforce the idea that $renderDefinition is in charge
         this.renderDefinition.renderAtNewPos(leftPos, topPos);
+
+        super.x = this.renderDefinition.leftPos();
+        super.y = this.renderDefinition.topPos();
     }
 
     public void setState(String state) {
