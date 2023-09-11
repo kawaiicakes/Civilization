@@ -4,12 +4,12 @@
 
   "menu.civilization.main_menu": "Civilization",
 
-  "menu.civilization.player_info": "Player Info",
+  "menu.civilization.player_info": "Overview",
   "menu.civilization.player_info.tooltip": "General overview of your information.",
-  "menu.civilization.city_info": "City Info",
-  "menu.civilization.city_info.tooltip": "Information on cities you are in",
-  "menu.civilization.nation_info": "Nation Info",
-  "menu.civilization.nation_info.tooltip": "Information on your nation",
-  "menu.civilization.reputation_info": "Reputation Info",
+  "menu.civilization.city_info": "Cities",
+  "menu.civilization.city_info.tooltip": "Information on cities you are in.",
+  "menu.civilization.nation_info": "Nation",
+  "menu.civilization.nation_info.tooltip": "Information on your nation.",
+  "menu.civilization.reputation_info": "Reputation",
   "menu.civilization.reputation_info.tooltip": "See what the world thinks of you."
 }

@@ -1,11 +1,15 @@
 package io.github.kawaiicakes.civilization.screen;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.kawaiicakes.civilization.api.screen.BlitRenderDefinition;
 import io.github.kawaiicakes.civilization.api.screen.DynamicButton;
 import io.github.kawaiicakes.civilization.api.screen.SimpleGUI;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -95,7 +99,7 @@ public class MainPlayerScreen extends SimpleGUI {
         String[] tabNames = {"player_info", "city_info", "nation_info", "reputation_info"};
 
         for (int tab = 0; tab < 4; tab++) {
-            int topPos = tabTopPosDefault - (tab * (TAB_UNSELECTED.blitVHeight()));
+            int topPos = tabTopPosDefault - (tab * (TAB_UNSELECTED.blitVHeight() + 1));
 
             this.createTab(topPos, tabNames[tab]);
         }
@@ -119,6 +123,8 @@ public class MainPlayerScreen extends SimpleGUI {
      * Small helper method to cut down on repeatedly typing the same arguments.
      */
     private void createTab(int topPos, String tabName) {
+        Font pFont = Minecraft.getInstance().font;
+
         this.addRenderableWidget(
                 new DynamicButton(
                         TAB_UNSELECTED.renderAtNewPos(this.tabLeftPos, topPos),
@@ -136,33 +142,31 @@ public class MainPlayerScreen extends SimpleGUI {
                         this.textureWidth,
                         this.textureHeight
                 ) {
+                    // TODO: consider extracting this to a new subclass.
                     @Override
                     public void renderButton(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-                        pPoseStack.pushPose();
-
+                        RenderSystem.enableDepthTest();
                         switch (this.getState()) {
-                            case "selected" -> {
-                                this.renderDefinition = this.renderDefinition.blitFromNewY(TAB_SELECTED_OFFSET);
-                                pPoseStack.translate(0, 0, 5);
-                                super.renderButton(pPoseStack, pMouseX, pMouseY, pPartialTick);
-                            }
-                            case "selected_bottom" -> {
-                                this.renderDefinition = this.renderDefinition.blitFromNewY(TAB_SELECTED_BOTTOM_OFFSET);
-                                pPoseStack.translate(0, 0, 5);
-                                super.renderButton(pPoseStack, pMouseX, pMouseY, pPartialTick);
-                            }
-                            case "unselected" -> {
-                                this.renderDefinition = this.renderDefinition.blitFromNewY(TAB_UNSELECTED.blitVOffset());
-                                pPoseStack.translate(0, 0, -1);
-                                super.renderButton(pPoseStack, pMouseX, pMouseY, pPartialTick);
-                            }
-                            default -> {
-                                pPoseStack.translate(0, 0, -1);
-                                super.renderButton(pPoseStack, pMouseX, pMouseY, pPartialTick);
-                            }
+                            case "selected" ->
+                                    this.renderSexyTab(pPoseStack, pMouseX, pMouseY, pPartialTick, TAB_SELECTED_OFFSET, 5, tabName, "d9fa75");
+                            case "selected_bottom" ->
+                                    this.renderSexyTab(pPoseStack, pMouseX, pMouseY, pPartialTick, TAB_SELECTED_BOTTOM_OFFSET, 5, tabName, "d9fa75");
+                            case "unselected" ->
+                                    this.renderSexyTab(pPoseStack, pMouseX, pMouseY, pPartialTick, TAB_UNSELECTED.blitVOffset(), -1, tabName, "747474");
+                            default ->
+                                    this.renderSexyTab(pPoseStack, pMouseX, pMouseY, pPartialTick, 0, -1, tabName, "747474");
                         }
+                        RenderSystem.disableDepthTest();
+                    }
 
-                        pPoseStack.popPose();
+                    public void renderSexyTab(PoseStack poseStack, int xMouse, int yMouse, float tickDelta, int blitVOffset, int blitOffset, String tabName, String hexColor) {
+                        poseStack.pushPose();
+                        this.renderDefinition = this.renderDefinition.blitFromNewY(blitVOffset);
+                        poseStack.translate(0, 0, blitOffset);
+                        super.renderButton(poseStack, xMouse, yMouse, tickDelta);
+                        drawString(poseStack, pFont, Component.translatable("menu.civilization." + tabName),
+                                this.x + (this.renderDefinition.blitUWidth() / 2) - 6, this.y + (this.renderDefinition.blitVHeight() / 2) - 5, Integer.parseInt(hexColor, 16));
+                        poseStack.popPose();
                     }
                 }
         );
