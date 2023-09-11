@@ -1,13 +1,11 @@
 package io.github.kawaiicakes.civilization.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.kawaiicakes.civilization.Civilization;
 import io.github.kawaiicakes.civilization.api.screen.BlitRenderDefinition;
 import io.github.kawaiicakes.civilization.api.screen.DynamicButton;
 import io.github.kawaiicakes.civilization.api.screen.SimpleGUI;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -140,24 +138,31 @@ public class MainPlayerScreen extends SimpleGUI {
                 ) {
                     @Override
                     public void renderButton(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+                        pPoseStack.pushPose();
+
                         switch (this.getState()) {
                             case "selected" -> {
                                 this.renderDefinition = this.renderDefinition.blitFromNewY(TAB_SELECTED_OFFSET);
+                                pPoseStack.translate(0, 0, 5);
                                 super.renderButton(pPoseStack, pMouseX, pMouseY, pPartialTick);
                             }
                             case "selected_bottom" -> {
                                 this.renderDefinition = this.renderDefinition.blitFromNewY(TAB_SELECTED_BOTTOM_OFFSET);
-                                pPoseStack.pushPose();
-                                pPoseStack.translate(0, 0, -29); // TODO: put background blit offset in a field?
+                                pPoseStack.translate(0, 0, 5);
                                 super.renderButton(pPoseStack, pMouseX, pMouseY, pPartialTick);
-                                pPoseStack.popPose();
                             }
                             case "unselected" -> {
                                 this.renderDefinition = this.renderDefinition.blitFromNewY(TAB_UNSELECTED.blitVOffset());
+                                pPoseStack.translate(0, 0, -1);
                                 super.renderButton(pPoseStack, pMouseX, pMouseY, pPartialTick);
                             }
-                            default -> super.renderButton(pPoseStack, pMouseX, pMouseY, pPartialTick);
+                            default -> {
+                                pPoseStack.translate(0, 0, -1);
+                                super.renderButton(pPoseStack, pMouseX, pMouseY, pPartialTick);
+                            }
                         }
+
+                        pPoseStack.popPose();
                     }
                 }
         );

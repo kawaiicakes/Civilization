@@ -128,16 +128,19 @@ public class SimpleGUI extends Screen {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, textureLocation);
         RenderSystem.enableBlend();
+        RenderSystem.enableDepthTest();
 
         BlitRenderDefinition bg = this.background;
 
         pPoseStack.pushPose();
-        // Ensures the background is drawn behind everything
-        pPoseStack.translate(0, 0, -30);
+        // Explicitly positions the background
+        pPoseStack.translate(0, 0, 0);
         // "Main" part of the background
         blit(pPoseStack, this.leftPos, this.topPos, bg.blitUOffset(), bg.blitVOffset(), bg.blitUWidth(), bg.blitVHeight(),
                 this.textureWidth, this.textureHeight);
         pPoseStack.popPose();
+
+        RenderSystem.disableDepthTest();
     }
 
     // TODO: wtf are scan codes and modifiers???
