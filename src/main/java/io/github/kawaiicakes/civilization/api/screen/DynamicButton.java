@@ -6,9 +6,9 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Map;
 
 /**
  * Similar to <code>ImageButton</code>, but allows for more flexible rendering. Also works with
@@ -19,31 +19,32 @@ public class DynamicButton extends Button {
     private final int textureWidth;
     private final int textureHeight;
 
-
-    protected final Map<String, Integer> possibleStates;
-
     protected BlitRenderDefinition renderDefinition;
-    public String activeState;
+    /**
+     * This field describes the active "state" of the button. The state may be tied to the value of
+     * <code>$blitVOffset</code> in this object's <code>$renderDefinition</code>. This will in turn
+     * change the appearance of the rendered object.
+     */
+    private String state;
 
     @ParametersAreNonnullByDefault
     public DynamicButton(BlitRenderDefinition renderDefinition, ResourceLocation textureLocation,
-                         Map<String, Integer> possibleStates, OnPress onPress) {
-        this(renderDefinition, textureLocation, possibleStates, Component.empty(), onPress, NO_TOOLTIP, 256, 256);
+                         OnPress onPress) {
+        this(renderDefinition, textureLocation, Component.empty(), onPress, NO_TOOLTIP, 256, 256);
     }
 
     @ParametersAreNonnullByDefault
     public DynamicButton(BlitRenderDefinition renderDefinition, ResourceLocation textureLocation,
-                         Map<String, Integer> possibleStates, OnPress onPress, int textureWidth, int textureHeight) {
-        this(renderDefinition, textureLocation, possibleStates, Component.empty(), onPress, NO_TOOLTIP, textureWidth, textureHeight);
+                         OnPress onPress, int textureWidth, int textureHeight) {
+        this(renderDefinition, textureLocation, Component.empty(), onPress, NO_TOOLTIP, textureWidth, textureHeight);
     }
 
     @ParametersAreNonnullByDefault
     public DynamicButton(BlitRenderDefinition renderDefinition, ResourceLocation textureLocation,
-                         Map<String, Integer> possibleStates, Component title, OnPress onPress, OnTooltip onTooltip, int textureWidth, int textureHeight) {
+                         Component title, OnPress onPress, OnTooltip onTooltip, int textureWidth, int textureHeight) {
         super(renderDefinition.leftPos(), renderDefinition.topPos(), renderDefinition.blitUWidth(),
                 renderDefinition.blitVHeight(), title, onPress, onTooltip);
         this.textureLocation = textureLocation;
-        this.possibleStates = possibleStates;
         this.textureWidth = textureWidth;
         this.textureHeight = textureHeight;
     }
@@ -52,18 +53,25 @@ public class DynamicButton extends Button {
         this.renderDefinition.renderAtNewPos(leftPos, topPos);
     }
 
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getState() {
+        return this.state;
+    }
+
+    public void reRender(int newBlitVOffset) {
+        this.renderDefinition = this.renderDefinition.blitFromNewY(newBlitVOffset);
+    }
+
     @Override
     public void renderButton(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, this.textureLocation);
 
-        int i = renderDefinition.blitVOffset();
-        if (!this.isActive()) { // TODO this clause should determine what to blit at based on active state
-        } else if (this.isHoveredOrFocused()) {
-        }
-
         RenderSystem.enableDepthTest();
-        blit(pPoseStack, this.x, this.y, (float) this.renderDefinition.blitUOffset(), (float) i, this.width,
+        blit(pPoseStack, this.x, this.y, (float) this.renderDefinition.blitUOffset(), (float) renderDefinition.blitVOffset(), this.width,
                 this.height, this.textureWidth, this.textureHeight);
 
         if (this.isHovered) {
