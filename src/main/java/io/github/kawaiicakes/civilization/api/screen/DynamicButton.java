@@ -78,7 +78,7 @@ public class DynamicButton extends Button {
         RenderSystem.setShaderTexture(0, this.textureLocation);
 
         RenderSystem.enableDepthTest();
-        blit(pPoseStack, this.x, this.y, (float) this.renderDefinition.blitUOffset(), (float) renderDefinition.blitVOffset(), this.width,
+        blit(pPoseStack, this.x, this.y, (float) this.renderDefinition.blitUOffset(), (float) this.renderDefinition.blitVOffset(), this.width,
                 this.height, this.textureWidth, this.textureHeight);
 
         if (this.isHovered) {
