@@ -1,6 +1,6 @@
 package io.github.kawaiicakes.civilization.events;
 
-import io.github.kawaiicakes.civilization.nation.capabilities.PlayerNationCapsProvider;
+import io.github.kawaiicakes.civilization.capabilities.PlayerNationCapsProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;

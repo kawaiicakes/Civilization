@@ -1,4 +1,4 @@
-package io.github.kawaiicakes.civilization.nation.capabilities;
+package io.github.kawaiicakes.civilization.capabilities;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;

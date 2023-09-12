@@ -1,6 +1,6 @@
 package io.github.kawaiicakes.civilization.network.packets;
 
-import io.github.kawaiicakes.civilization.nation.capabilities.PlayerNationCapsProvider;
+import io.github.kawaiicakes.civilization.capabilities.PlayerNationCapsProvider;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
