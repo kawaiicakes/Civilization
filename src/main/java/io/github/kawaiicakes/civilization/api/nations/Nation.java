@@ -1,8 +1,9 @@
 package io.github.kawaiicakes.civilization.api.nations;
 
 import io.github.kawaiicakes.civilization.api.level.HexTilePos;
+import net.minecraft.core.NonNullList;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -14,5 +15,12 @@ import java.util.UUID;
  * as a data 'shipping' class, the contents should be immutable such as to discourage changing it as it's passed
  * around.
  */
-public record Nation(UUID nationUUID, String nationName, List<UUID> players, List<UUID> cities, List<HexTilePos> territory, int diplomacy) {
+public record Nation(
+        @NotNull UUID nationUUID,
+        @NotNull String nationName,
+        @NotNull NonNullList<UUID> players,
+        @NotNull NonNullList<UUID> cities,
+        @NotNull NonNullList<HexTilePos> territory,
+        int diplomacy
+) {
 }
