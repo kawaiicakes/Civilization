@@ -48,6 +48,20 @@ public class HexTilePos {
         return "(" + val + ", " + this.row + ", " + this.col + ")";
     }
 
+    public int[] asIntArray() {
+        return new int[]{this.arrayZero ? 1 : 0, this.row, this.col};
+    }
+
+    public static HexTilePos fromIntArray(int[] arr) {
+        if (arr.length != 3) {
+            throw new IllegalArgumentException("Argument length must be 3!");
+        } else if (arr[0] > 2 || arr[0] < 0) {
+            throw new IllegalArgumentException("HECS array may only be 0 or 1!");
+        } else {
+            return new HexTilePos(arr[0] == 0, arr[1], arr[2]);
+        }
+    }
+
     /**
      * Returns a set of <code>ChunkPos</code> using several helper methods & HECS math.
      * This set is NOT ordered; nor does it make guarantees as to maintaining an order over time.
