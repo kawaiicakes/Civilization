@@ -8,7 +8,7 @@ import java.util.UUID;
  * The actual data to store in the capability representing nation info, as well as methods surrounding management of it
  */
 public class PlayerNationCaps {
-    private UUID nation = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
+    private UUID nation;
 
     public UUID getNation() {
         return this.nation;
@@ -23,6 +23,9 @@ public class PlayerNationCaps {
     }
 
     public void saveNBTData(CompoundTag nbt) {
+        if (this.nation == null) {
+            // NationManager#createNation or somethin?
+        }
         nbt.putUUID("nation", this.nation);
     }
 
