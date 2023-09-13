@@ -5,24 +5,24 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PlayerNationCapsProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
-    public static Capability<PlayerNationCaps> PLAYER_NATION = CapabilityManager.get(new CapabilityToken<PlayerNationCaps>() {});
+public class PlayerNationCapsProvider implements ICapabilitySerializable<CompoundTag> {
+    public static Capability<PlayerNationCaps> PLAYER_NATION = CapabilityManager.get(new CapabilityToken<>(){});
 
-    private PlayerNationCaps nation = null;
+    private PlayerNationCaps civInfo = null;
+
     private final LazyOptional<PlayerNationCaps> lazyHandler = LazyOptional.of(this::createPlayerNationCaps);
 
     private PlayerNationCaps createPlayerNationCaps() {
-        if (this.nation == null) {
-            this.nation = new PlayerNationCaps();
+        if (this.civInfo == null) {
+            this.civInfo = new PlayerNationCaps();
         }
 
-        return this.nation;
+        return this.civInfo;
     }
 
     @Override

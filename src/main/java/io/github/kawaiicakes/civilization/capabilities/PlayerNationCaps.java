@@ -8,7 +8,7 @@ import java.util.UUID;
  * The actual data to store in the capability representing nation info, as well as methods surrounding management of it
  */
 public class PlayerNationCaps {
-    private UUID nation;
+    private UUID nation = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
 
     public UUID getNation() {
         return this.nation;
