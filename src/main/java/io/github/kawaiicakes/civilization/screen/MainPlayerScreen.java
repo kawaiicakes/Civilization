@@ -17,7 +17,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import static io.github.kawaiicakes.civilization.Civilization.MOD_ID;
 
@@ -37,6 +39,10 @@ public class MainPlayerScreen extends SimpleGUI {
     protected static final short TAB_SELECTED_BOTTOM_OFFSET = 132;
 
     protected String activeTab;
+
+    protected UUID nation;
+    protected List<UUID> cities;
+    protected int reputation;
 
     protected int tabLeftPos;
 
@@ -100,6 +106,12 @@ public class MainPlayerScreen extends SimpleGUI {
         this.xMouse = pMouseX;
         this.yMouse = pMouseY;
         super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
+    }
+
+    public void renderNationTab(PoseStack poseStack, int xMouse, int yMouse, float tickDelta) {
+        if (this.nation == null) {
+            // TODO
+        }
     }
 
     public static void renderEntityInInventory(int pPosX, int pPosY, int pScale, float pMouseX, float pMouseY, LivingEntity pLivingEntity) {
