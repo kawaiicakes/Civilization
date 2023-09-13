@@ -1,10 +1,13 @@
 package io.github.kawaiicakes.civilization.events;
 
+import io.github.kawaiicakes.civilization.capabilities.CivLevelCapabilityProvider;
 import io.github.kawaiicakes.civilization.capabilities.PlayerNationCaps;
 import io.github.kawaiicakes.civilization.capabilities.PlayerNationCapsProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
@@ -20,6 +23,15 @@ public class CapabilityEvents {
         if (event.getObject() instanceof Player player) {
             if(!player.getCapability(PlayerNationCapsProvider.PLAYER_NATION).isPresent()) {
                 event.addCapability(new ResourceLocation(MOD_ID, "properties"), new PlayerNationCapsProvider());
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onAttachCapabilitiesLevel(AttachCapabilitiesEvent<Level> event) {
+        if (event.getObject() instanceof ServerLevel server && !event.getObject().isClientSide()) {
+            if (!server.getCapability(CivLevelCapabilityProvider.CIV_LEVEL_CAP).isPresent()) {
+                event.addCapability(new ResourceLocation(MOD_ID, "level_data"), new CivLevelCapabilityProvider());
             }
         }
     }
