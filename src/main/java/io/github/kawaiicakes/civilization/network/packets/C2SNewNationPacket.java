@@ -39,7 +39,7 @@ public class C2SNewNationPacket extends SimplePacket {
     @Override
     public void onReceipt(NetworkEvent.Context context) {
         ServerLevel level = Objects.requireNonNull(context.getSender()).getLevel();
-        context.getSender().sendSystemMessage(Component.literal("DEBUG/TESTING"));
+        context.getSender().sendSystemMessage(Component.literal(this.nation.nationName()));
         //NationManager.createNation(level, this.nation);
     }
 }
