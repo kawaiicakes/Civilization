@@ -1,20 +1,13 @@
 package io.github.kawaiicakes.civilization.capabilities;
 
-import io.github.kawaiicakes.civilization.api.level.HexTilePos;
 import io.github.kawaiicakes.civilization.api.nations.Nation;
 import io.github.kawaiicakes.civilization.api.utils.CivNBT;
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class CivLevelCapability {
     // TODO: consider replacing list with collection. Order isn't vital; at least it's not thought to be rn.
