@@ -22,6 +22,9 @@ public abstract class SimplePacket {
      * <code>#toBytes</code>, sent to the recipient, then decoded using the constructor accepting
      * a <code>FriendlyByteBuf</code> as its argument. This creates an instance of this object on
      * the recipient's end, which is then executed on its main thread with <code>#handle</code>.
+     * <br><br>
+     * Naturally, the implementation of this behaviour is up to you. This is just here to inform
+     * you about how to actually send a packet using this constructor.
      */
     public SimplePacket() {
 
