@@ -3,7 +3,7 @@ package io.github.kawaiicakes.civilization;
 import com.mojang.logging.LogUtils;
 import io.github.kawaiicakes.civilization.events.CapabilityEvents;
 import io.github.kawaiicakes.civilization.events.DebugEvents;
-import io.github.kawaiicakes.civilization.network.CivilizationPackets;
+import io.github.kawaiicakes.civilization.network.CivPacketHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -28,6 +28,6 @@ public class Civilization
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
-        CivilizationPackets.register();
+        CivPacketHandler.register();
     }
 }
