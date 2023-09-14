@@ -3,6 +3,7 @@ package io.github.kawaiicakes.civilization.api.network;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
@@ -48,7 +49,7 @@ public abstract class SimplePacket {
      * @return  the <code>NetworkDirection</code> indicating to which side this
      *          packet will be sent.
      */
-    public abstract NetworkDirection getRecipient();
+    public abstract @NotNull NetworkDirection getRecipient();
 
     /**
      * This is the encoder and is called as soon as the packet is sent; it runs on the main thread.
