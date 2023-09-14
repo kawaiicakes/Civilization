@@ -44,14 +44,6 @@ public abstract class SimplePacket {
     }
 
     /**
-     * Used when registering this packet in <code>#messageBuilder</code>. Override
-     * this and return the side this packet is intended to be sent to.
-     * @return  the <code>NetworkDirection</code> indicating to which side this
-     *          packet will be sent.
-     */
-    public abstract @NotNull NetworkDirection getRecipient();
-
-    /**
      * This is the encoder and is called as soon as the packet is sent; it runs on the main thread.
      * Do not try to access sided stuff from here. Its job is to take some data, write it
      * in to the <code>FriendlyByteBuf</code>, then pass it over the network.
