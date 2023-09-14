@@ -1,5 +1,6 @@
 package io.github.kawaiicakes.civilization.network;
 
+import io.github.kawaiicakes.civilization.network.packets.C2STestPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -26,10 +27,10 @@ public class CivPacketHandler {
 
         INSTANCE = net;
 
-        net.messageBuilder(.class, id(), .getRecipient())
-                .decoder(::new)
-                .encoder(::toBytes)
-                .consumerMainThread(::handle)
+        net.messageBuilder(C2STestPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2STestPacket::new)
+                .encoder(C2STestPacket::toBytes)
+                .consumerMainThread(C2STestPacket::handle)
                 .add();
     }
 
