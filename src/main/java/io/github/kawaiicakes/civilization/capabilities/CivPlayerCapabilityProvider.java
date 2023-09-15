@@ -10,16 +10,16 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PlayerNationCapsProvider implements ICapabilitySerializable<CompoundTag> {
-    public static Capability<PlayerNationCaps> PLAYER_NATION = CapabilityManager.get(new CapabilityToken<>(){});
+public class CivPlayerCapabilityProvider implements ICapabilitySerializable<CompoundTag> {
+    public static Capability<CivPlayerCapability> PLAYER_NATION = CapabilityManager.get(new CapabilityToken<>(){});
 
-    private PlayerNationCaps civInfo = null;
+    private CivPlayerCapability civInfo = null;
 
-    private final LazyOptional<PlayerNationCaps> lazyHandler = LazyOptional.of(this::createPlayerNationCaps);
+    private final LazyOptional<CivPlayerCapability> lazyHandler = LazyOptional.of(this::createPlayerNationCaps);
 
-    private PlayerNationCaps createPlayerNationCaps() {
+    private CivPlayerCapability createPlayerNationCaps() {
         if (this.civInfo == null) {
-            this.civInfo = new PlayerNationCaps();
+            this.civInfo = new CivPlayerCapability();
         }
 
         return this.civInfo;

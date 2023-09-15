@@ -7,8 +7,9 @@ import java.util.UUID;
 /**
  * The actual data to store in the capability representing nation info, as well as methods surrounding management of it
  */
-public class PlayerNationCaps {
+public class CivPlayerCapability {
     private UUID nation;
+
 
     public UUID getNation() {
         return this.nation;
@@ -18,7 +19,7 @@ public class PlayerNationCaps {
         this.nation = nation;
     }
 
-    public void copyFrom(PlayerNationCaps source) {
+    public void copyFrom(CivPlayerCapability source) {
         this.nation = source.nation;
     }
 
