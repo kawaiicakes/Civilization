@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 import static io.github.kawaiicakes.civilization.capabilities.CivLevelCapabilityProvider.CIV_LEVEL_CAP;
 
 /**
- * Central hub for easily accessing nation info.
+ * Central hub for easily accessing nation info. Also exists as a security checkpoint for packets received from clients.
  */
 public class NationManager {
     public static Nation NULLARIA = new Nation(
@@ -23,6 +23,16 @@ public class NationManager {
             NonNullList.create(),
             0
     );
+
+    public static List<Nation> getNations(ServerLevel level) {
+        if (!level.isClientSide()) {
+            AtomicReference<List<Nation>> listAtomicReference = new AtomicReference<>();
+            level.getCapability(CIV_LEVEL_CAP).ifPresent(levelCap -> listAtomicReference.set(levelCap.getNations()));
+            return listAtomicReference.get();
+        } else {
+            return null;
+        }
+    }
 
     /**
      * This should only ever be called from the server's end.
@@ -63,9 +73,7 @@ public class NationManager {
     public static boolean nationCreationValid(ServerLevel level, Nation nation) {
         if (level.isClientSide()) return false;
 
-        AtomicReference<List<Nation>> listAtomicReference = new AtomicReference<>();
-        level.getCapability(CIV_LEVEL_CAP).ifPresent(levelCap -> listAtomicReference.set(levelCap.getNations()));
-        final List<Nation> nationList = listAtomicReference.get();
+        List<Nation> nationList = getNations(level);
         final Stream<Nation> nationStream = nationList.stream();
 
         if (nationList.contains(nation)) return false;
