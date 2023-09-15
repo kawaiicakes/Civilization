@@ -1,6 +1,7 @@
 package io.github.kawaiicakes.civilization.network.packets;
 
 import io.github.kawaiicakes.civilization.api.nations.Nation;
+import io.github.kawaiicakes.civilization.api.nations.NationManager;
 import io.github.kawaiicakes.civilization.api.network.SimplePacket;
 import io.github.kawaiicakes.civilization.api.utils.CivNBT;
 import net.minecraft.network.FriendlyByteBuf;
@@ -39,7 +40,12 @@ public class C2SNewNationPacket extends SimplePacket {
     @Override
     public void onReceipt(NetworkEvent.Context context) {
         ServerLevel level = Objects.requireNonNull(context.getSender()).getLevel();
-        context.getSender().sendSystemMessage(Component.literal(this.nation.nationName()));
-        //NationManager.createNation(level, this.nation);
+
+        if (NationManager.createNation(level, this.nation)) {
+            context.getSender().sendSystemMessage(Component.literal("Successfully founded nation " + this.nation.nationName()
+                    + " with UUID " + this.nation.nationUUID()));
+        } else {
+            context.getSender().sendSystemMessage(Component.literal("Invalid nation!"));
+        }
     }
 }
