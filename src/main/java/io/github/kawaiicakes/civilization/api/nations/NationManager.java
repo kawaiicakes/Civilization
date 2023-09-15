@@ -74,6 +74,7 @@ public class NationManager {
         if (level.isClientSide()) return false;
 
         List<Nation> nationList = getNations(level);
+        if (nationList == null) return false;
         final Stream<Nation> nationStream = nationList.stream();
 
         if (nationList.contains(nation)) return false;
