@@ -1,11 +1,11 @@
 package io.github.kawaiicakes.civilization.api.nations;
 
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
@@ -18,10 +18,10 @@ import static io.github.kawaiicakes.civilization.capabilities.CivLevelCapability
  * Central hub for easily accessing nation info. Also exists as a security checkpoint for packets received from clients.
  */
 public class NationManager {
-    public static LevelNation NULLARIA = new LevelNation(
+    public static CivLevelNation NULLARIA = new CivLevelNation(
             UUID.randomUUID(),
             "Nullaria",
-            new HashSet<>(),
+            new HashMap<>(),
             new HashSet<>(),
             new HashSet<>(),
             0
@@ -43,9 +43,9 @@ public class NationManager {
         return null;
     }
 
-    public static List<LevelNation> getNations(ServerLevel level) {
+    public static List<CivLevelNation> getNations(ServerLevel level) {
         if (!level.isClientSide()) {
-            AtomicReference<List<LevelNation>> listAtomicReference = new AtomicReference<>();
+            AtomicReference<List<CivLevelNation>> listAtomicReference = new AtomicReference<>();
             level.getCapability(CIV_LEVEL_CAP).ifPresent(levelCap -> listAtomicReference.set(levelCap.getNations()));
             return listAtomicReference.get();
         } else {
@@ -57,22 +57,22 @@ public class NationManager {
      * This should only ever be called from the server's end.
      * @param level the <code>ServerLevel</code> this is occurring on. You must ensure that the argument is passed from
      *              exclusively the server.
-     * @param levelNation    the <code>LevelNation</code> instance to query for creation. Since this argument may be passed from
+     * @param civLevelNation    the <code>CivLevelNation</code> instance to query for creation. Since this argument may be passed from
      *                  the client, a security check is done.
-     * @return      the result of attempting to create a levelNation. <code>true</code> indicates success,
+     * @return      the result of attempting to create a civLevelNation. <code>true</code> indicates success,
      */
-    public static boolean createNation(ServerLevel level, LevelNation levelNation) {
+    public static boolean createNation(ServerLevel level, CivLevelNation civLevelNation) {
         if (!level.isClientSide()) {
-            if (nationCreationValid(level, levelNation)) {
+            if (nationCreationValid(level, civLevelNation)) {
                 level.getCapability(CIV_LEVEL_CAP).ifPresent(civ -> {
                     level.players().forEach(serverPlayer -> serverPlayer.sendSystemMessage(
                             Component.literal("Successfully passed validity test!")));
-                    civ.addNation(levelNation);
+                    civ.addNation(civLevelNation);
                 });
                 return true;
             } else {
                 level.players().forEach(serverPlayer -> serverPlayer.sendSystemMessage(
-                        Component.literal("Invalid levelNation!")));
+                        Component.literal("Invalid civLevelNation!")));
                 return false;
             }
         } else {
@@ -81,29 +81,29 @@ public class NationManager {
     }
 
     /**
-     * This method exists to check, from the server, whether a levelNation is valid to
+     * This method exists to check, from the server, whether a civLevelNation is valid to
      * create. Done for security reasons as a malicious client would otherwise be able
-     * to submit any LevelNation instance to the server for creation.
+     * to submit any CivLevelNation instance to the server for creation.
      * @param level the <code>ServerLevel</code> to check validity against.
-     * @param levelNation    the <code>LevelNation</code> to check.
-     * @return  <code>true</code> if the given levelNation may be created. <code>false</code>
+     * @param civLevelNation    the <code>CivLevelNation</code> to check.
+     * @return  <code>true</code> if the given civLevelNation may be created. <code>false</code>
      *          otherwise.
      */
-    public static boolean nationCreationValid(ServerLevel level, LevelNation levelNation) {
+    public static boolean nationCreationValid(ServerLevel level, CivLevelNation civLevelNation) {
         if (level.isClientSide()) return false;
 
-        List<LevelNation> levelNationList = getNations(level);
-        if (levelNationList == null) return false;
-        final Stream<LevelNation> nationStream = levelNationList.stream();
+        List<CivLevelNation> civLevelNationList = getNations(level);
+        if (civLevelNationList == null) return false;
+        final Stream<CivLevelNation> nationStream = civLevelNationList.stream();
 
-        if (levelNationList.contains(levelNation)) return false;
+        if (civLevelNationList.contains(civLevelNation)) return false;
 
         return (
-                nationStream.noneMatch(nat -> nat.nationUUID() == levelNation.nationUUID())
-                && levelNation.territory().isEmpty()
-                && levelNation.players().isEmpty()
-                && levelNation.cities().isEmpty()
-                && levelNation.diplomacy() == 0
+                nationStream.noneMatch(nat -> nat.nationUUID() == civLevelNation.nationUUID())
+                && civLevelNation.tiles().isEmpty()
+                && civLevelNation.players().isEmpty()
+                && civLevelNation.cities().isEmpty()
+                && civLevelNation.diplomacy() == 0
         );
     }
 }
