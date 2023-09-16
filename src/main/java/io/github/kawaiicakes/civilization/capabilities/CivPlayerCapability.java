@@ -2,6 +2,8 @@ package io.github.kawaiicakes.civilization.capabilities;
 
 import net.minecraft.nbt.CompoundTag;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -9,7 +11,8 @@ import java.util.UUID;
  */
 public class CivPlayerCapability {
     private UUID nation;
-
+    private final List<UUID> cities = new ArrayList<>();
+    private int reputation;
 
     public UUID getNation() {
         return this.nation;
@@ -17,6 +20,26 @@ public class CivPlayerCapability {
 
     public void setNation(UUID nation) {
         this.nation = nation;
+    }
+
+    public List<UUID> getCities() {
+        return this.cities;
+    }
+
+    public void addCity(UUID cityUUID) {
+        this.cities.add(cityUUID);
+    }
+
+    public void removeCity(UUID cityUUID) {
+        this.cities.remove(cityUUID);
+    }
+
+    public int getReputation() {
+        return this.reputation;
+    }
+
+    public void setReputation(int reputation) {
+        this.reputation = reputation;
     }
 
     public void copyFrom(CivPlayerCapability source) {
