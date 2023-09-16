@@ -6,6 +6,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
@@ -20,9 +21,9 @@ public class NationManager {
     public static LevelNation NULLARIA = new LevelNation(
             UUID.randomUUID(),
             "Nullaria",
-            NonNullList.create(),
-            NonNullList.create(),
-            NonNullList.create(),
+            new HashSet<>(),
+            new HashSet<>(),
+            new HashSet<>(),
             0
     );
 

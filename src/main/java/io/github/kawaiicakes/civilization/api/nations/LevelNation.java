@@ -4,6 +4,7 @@ import io.github.kawaiicakes.civilization.api.level.HexTilePos;
 import net.minecraft.core.NonNullList;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -14,13 +15,16 @@ import java.util.UUID;
  * Originally written to pass data back and forth with NBT. The choice to make it a record was made because
  * as a data 'shipping' class, the contents should be immutable such as to discourage changing it as it's passed
  * around.
+ * <br><br>
+ * Despite the nature of UUIDs, sets are used to ensure the same city/player is added to the list again
+ * on account of another part of the code.
  */
 public record LevelNation(
         @NotNull UUID nationUUID,
         @NotNull String nationName,
-        @NotNull NonNullList<UUID> players,
-        @NotNull NonNullList<UUID> cities,
-        @NotNull NonNullList<HexTilePos> territory,
+        @NotNull Set<UUID> players,
+        @NotNull Set<UUID> cities,
+        @NotNull Set<HexTilePos> territory,
         int diplomacy
 ) {
 }

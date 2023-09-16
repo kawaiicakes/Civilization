@@ -2,13 +2,14 @@ package io.github.kawaiicakes.civilization.api.utils;
 
 import io.github.kawaiicakes.civilization.api.level.HexTilePos;
 import io.github.kawaiicakes.civilization.api.nations.LevelNation;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -44,20 +45,20 @@ public class CivNBT {
      * Helper methods below
      */
 
-    private static ListTag uuidListToTag(NonNullList<UUID> list) {
+    private static ListTag uuidListToTag(Set<UUID> list) {
         ListTag listTag = new ListTag();
         list.forEach(uuid -> listTag.add(new IntArrayTag(UUIDUtil.uuidToIntArray(uuid))));
         return listTag;
     }
 
-    private static ListTag hexTileListTag(NonNullList<HexTilePos> list) {
+    private static ListTag hexTileListTag(Set<HexTilePos> list) {
         ListTag listTag = new ListTag();
         list.forEach(hexTilePos -> listTag.add(new IntArrayTag(hexTilePos.asIntArray())));
         return listTag;
     }
 
-    private static NonNullList<UUID> uuidTagToList(ListTag nationNBT) {
-        NonNullList<UUID> returnList = NonNullList.createWithCapacity(nationNBT.size());
+    private static Set<UUID> uuidTagToList(ListTag nationNBT) {
+        Set<UUID> returnList = new HashSet<>(nationNBT.size());
 
         nationNBT.stream()
                 .map(arr -> UUIDUtil.uuidFromIntArray(((IntArrayTag) arr).getAsIntArray()))
@@ -66,8 +67,8 @@ public class CivNBT {
         return returnList;
     }
 
-    private static NonNullList<HexTilePos> hexTagToList(ListTag nationNBT) {
-        NonNullList<HexTilePos> returnList = NonNullList.createWithCapacity(nationNBT.size());
+    private static Set<HexTilePos> hexTagToList(ListTag nationNBT) {
+        Set<HexTilePos> returnList = new HashSet<>(nationNBT.size());
 
         nationNBT.stream()
                 .map(arr -> HexTilePos.fromIntArray(((IntArrayTag) arr).getAsIntArray()))
