@@ -1,7 +1,7 @@
 package io.github.kawaiicakes.civilization.api.utils;
 
 import io.github.kawaiicakes.civilization.api.level.HexTilePos;
-import io.github.kawaiicakes.civilization.api.nations.Nation;
+import io.github.kawaiicakes.civilization.api.nations.LevelNation;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
@@ -16,21 +16,21 @@ import java.util.UUID;
  * and networking. Methods are self-explanatory.
  */
 public class CivNBT {
-    public static CompoundTag fromNation(Nation nation) {
+    public static CompoundTag fromNation(LevelNation levelNation) {
         CompoundTag nationNBT = new CompoundTag();
 
-        nationNBT.putUUID("uuid", nation.nationUUID());
-        nationNBT.putString("name", nation.nationName());
-        nationNBT.put("players", uuidListToTag(nation.players()));
-        nationNBT.put("cities", uuidListToTag(nation.cities()));
-        nationNBT.put("tiles", hexTileListTag(nation.territory()));
-        nationNBT.putInt("diplomacy", nation.diplomacy());
+        nationNBT.putUUID("uuid", levelNation.nationUUID());
+        nationNBT.putString("name", levelNation.nationName());
+        nationNBT.put("players", uuidListToTag(levelNation.players()));
+        nationNBT.put("cities", uuidListToTag(levelNation.cities()));
+        nationNBT.put("tiles", hexTileListTag(levelNation.territory()));
+        nationNBT.putInt("diplomacy", levelNation.diplomacy());
 
         return nationNBT;
     }
 
-    public static Nation fromNBT(CompoundTag nationNBT) {
-        return new Nation(
+    public static LevelNation fromNBT(CompoundTag nationNBT) {
+        return new LevelNation(
                 nationNBT.getUUID("uuid"),
                 nationNBT.getString("name"),
                 uuidTagToList(nationNBT.getList("players", Tag.TAG_LIST)),

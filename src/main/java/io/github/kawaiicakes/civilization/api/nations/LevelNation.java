@@ -15,7 +15,7 @@ import java.util.UUID;
  * as a data 'shipping' class, the contents should be immutable such as to discourage changing it as it's passed
  * around.
  */
-public record Nation(
+public record LevelNation(
         @NotNull UUID nationUUID,
         @NotNull String nationName,
         @NotNull NonNullList<UUID> players,

@@ -1,6 +1,6 @@
 package io.github.kawaiicakes.civilization.capabilities;
 
-import io.github.kawaiicakes.civilization.api.nations.Nation;
+import io.github.kawaiicakes.civilization.api.nations.LevelNation;
 import io.github.kawaiicakes.civilization.api.utils.CivNBT;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -12,18 +12,18 @@ import java.util.List;
 public class CivLevelCapability {
     // TODO: consider replacing list with collection. Order isn't vital; at least it's not thought to be rn.
     @NotNull
-    private List<Nation> nations = new ArrayList<>();
+    private List<LevelNation> levelNations = new ArrayList<>();
 
-    public @NotNull List<Nation> getNations() {
-        return this.nations;
+    public @NotNull List<LevelNation> getNations() {
+        return this.levelNations;
     }
 
-    public void setNations(@NotNull List<Nation> nations) {
-        this.nations = nations;
+    public void setNations(@NotNull List<LevelNation> levelNations) {
+        this.levelNations = levelNations;
     }
 
-    public void addNation(Nation nation) {
-        this.nations.add(nation);
+    public void addNation(LevelNation levelNation) {
+        this.levelNations.add(levelNation);
     }
 
     public void saveNBT(CompoundTag nbt) {
@@ -37,26 +37,26 @@ public class CivLevelCapability {
     private void saveNationsNBT(CompoundTag nbt) {
         ListTag nationsNBTList = new ListTag();
 
-        this.nations.forEach(nation -> {
-            if (nation != null) nationsNBTList.add(CivNBT.fromNation(nation));
+        this.levelNations.forEach(levelNation -> {
+            if (levelNation != null) nationsNBTList.add(CivNBT.fromNation(levelNation));
         });
 
-        nbt.put("nations", nationsNBTList);
+        nbt.put("levelNations", nationsNBTList);
     }
 
     private void loadNationsNBT(CompoundTag nbt) {
-        if (nbt != null && nbt.get("nations") != null) {
-            if (nbt.get("nations") instanceof ListTag nationNBTList) {
+        if (nbt != null && nbt.get("levelNations") != null) {
+            if (nbt.get("levelNations") instanceof ListTag nationNBTList) {
 
-                List<Nation> nationList = new ArrayList<>(nationNBTList.size());
+                List<LevelNation> levelNationList = new ArrayList<>(nationNBTList.size());
 
                 nationNBTList.forEach(n -> {
                     CompoundTag nationNBT = (CompoundTag) n;
 
-                    nationList.add(CivNBT.fromNBT(nationNBT));
+                    levelNationList.add(CivNBT.fromNBT(nationNBT));
                 });
 
-                this.setNations(nationList);
+                this.setNations(levelNationList);
             }
         }
     }
