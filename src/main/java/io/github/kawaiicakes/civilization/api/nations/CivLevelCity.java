@@ -18,17 +18,17 @@ import java.util.UUID;
  * They are records for a reason, after all.
  */
 public class CivLevelCity implements NBTSerializable<CompoundTag> {
-    public UUID cityId;
-    public String cityName;
-    public Set<HexTilePos> tiles;
-    public Set<CivLevelPlayer> citizens;
+    public @NotNull UUID cityId;
+    public @NotNull String cityName;
+    public @NotNull Set<HexTilePos> tiles;
+    public @NotNull Set<CivLevelPlayer> citizens;
     public int diplomacy;
 
     public CivLevelCity(
-            UUID cityId,
-            String cityName,
-            Set<HexTilePos> tiles,
-            Set<CivLevelPlayer> citizens,
+            @NotNull UUID cityId,
+            @NotNull String cityName,
+            @NotNull Set<HexTilePos> tiles,
+            @NotNull Set<CivLevelPlayer> citizens,
             int diplomacy
     ) {
         this.cityId = cityId;
@@ -39,7 +39,7 @@ public class CivLevelCity implements NBTSerializable<CompoundTag> {
     }
 
     public CivLevelCity(CompoundTag nbt) {
-        new CivLevelCity(
+        this(
                 nbt.getUUID("city_id"),
                 nbt.getString("city_name"),
                 CivNBT.listTagToSet(nbt.getList("tiles", Tag.TAG_INT_ARRAY),

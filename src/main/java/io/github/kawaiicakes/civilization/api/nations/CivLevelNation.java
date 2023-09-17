@@ -45,8 +45,8 @@ public final class CivLevelNation implements NBTSerializable<CompoundTag> {
 
     public CivLevelNation(CompoundTag nationNBT) {
         this(
-                nationNBT.getUUID("uuid"),
-                nationNBT.getString("name"),
+                nationNBT.getUUID("nation_id"),
+                nationNBT.getString("nation_name"),
                 CivNBT.listTagToSet(nationNBT.getList("players", Tag.TAG_COMPOUND),
                         tag -> new CivLevelPlayer(((CompoundTag) tag))),
                 CivNBT.listTagToSet(nationNBT.getList("tiles", Tag.TAG_LIST),

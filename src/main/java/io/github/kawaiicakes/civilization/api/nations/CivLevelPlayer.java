@@ -2,21 +2,22 @@ package io.github.kawaiicakes.civilization.api.nations;
 
 import io.github.kawaiicakes.civilization.api.utils.NBTSerializable;
 import net.minecraft.nbt.CompoundTag;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.UUID;
 
 public final class CivLevelPlayer implements NBTSerializable<CompoundTag> {
-    public UUID playerId;
+    public @NotNull UUID playerId;
 
     public CivLevelPlayer(
-            UUID playerId
+            @NotNull UUID playerId
     ) {
         this.playerId = playerId;
     }
 
     public CivLevelPlayer(CompoundTag tag) {
-        this.playerId = tag.getUUID("player_id");
+        this(tag.getUUID("player_id"));
     }
 
     @Override

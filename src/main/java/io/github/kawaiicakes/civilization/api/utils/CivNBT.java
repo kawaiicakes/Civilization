@@ -27,9 +27,7 @@ public class CivNBT {
         ListTag listTag = new ListTag();
 
         tCollection.forEach(t -> {
-            if (t == null) {
-                listTag.add(IntTag.valueOf(0));
-            } else {
+            if (t != null) {
                 listTag.add(t.serializeNBT());
             }
         });

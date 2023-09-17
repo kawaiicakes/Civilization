@@ -28,7 +28,7 @@ public class C2SNewNationPacket extends SimplePacket {
 
     public C2SNewNationPacket(FriendlyByteBuf buf) {
         super(buf);
-        this.civLevelNation = new CivLevelNation(Objects.requireNonNull(buf.readNbt()));
+        this.civLevelNation = new CivLevelNation(Objects.requireNonNull(buf.readAnySizeNbt()));
     }
 
     @Override

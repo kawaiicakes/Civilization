@@ -3,6 +3,7 @@ package io.github.kawaiicakes.civilization.capabilities;
 import io.github.kawaiicakes.civilization.api.nations.CivLevelNation;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -39,23 +40,23 @@ public class CivLevelCapability {
             if (levelNation != null) nationsNBTList.add(levelNation.serializeNBT());
         });
 
+
         nbt.put("civLevelNations", nationsNBTList);
     }
 
     private void loadNationsNBT(CompoundTag nbt) {
         if (nbt != null && nbt.get("civLevelNations") != null) {
-            if (nbt.get("civLevelNations") instanceof ListTag nationNBTList) {
+            ListTag nationNBTList = nbt.getList("civLevelNations", Tag.TAG_COMPOUND);
 
-                List<CivLevelNation> civLevelNationList = new ArrayList<>(nationNBTList.size());
+            List<CivLevelNation> civLevelNationList = new ArrayList<>(nationNBTList.size());
 
-                nationNBTList.forEach(n -> {
-                    CompoundTag nationNBT = (CompoundTag) n;
+            nationNBTList.forEach(n -> {
+                CompoundTag nationNBT = (CompoundTag) n;
 
-                    civLevelNationList.add(new CivLevelNation(nationNBT));
-                });
+                civLevelNationList.add(new CivLevelNation(nationNBT));
+            });
 
-                this.setNations(civLevelNationList);
-            }
+            this.setNations(civLevelNationList);
         }
     }
 }
