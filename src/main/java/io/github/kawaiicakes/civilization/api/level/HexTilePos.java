@@ -1,6 +1,8 @@
 package io.github.kawaiicakes.civilization.api.level;
 
+import io.github.kawaiicakes.civilization.api.utils.NBTSerializable;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.world.level.ChunkPos;
 
 import java.util.HashSet;
@@ -15,7 +17,7 @@ import java.util.Set;
  * the bottom right chunk bordering the center is arbitrarily defined as the tile's local origin;
  * (0, 0). Accordingly, the global origin is the <code>ChunkPos</code> of the tile's local origin.
  */
-public class HexTilePos {
+public class HexTilePos implements NBTSerializable<IntArrayTag> {
     /**
      * Tile ZERO is the tile whose global origin is equal with its local; that is, tile (0, 0, 0). If you are unfamiliar
      * with HECS, it is recommended you read up on it so this class and tile notation makes sense.
@@ -29,6 +31,22 @@ public class HexTilePos {
         this.arrayZero = isArrayZero;
         this.row = row;
         this.col = col;
+    }
+
+    public HexTilePos(int[] arr) {
+        if (arr.length != 3) {
+            throw new IllegalArgumentException("Argument length must be 3!");
+        } else if (arr[0] > 2 || arr[0] < 0) {
+            throw new IllegalArgumentException("HECS array may only be 0 or 1!");
+        } else {
+            this.arrayZero = arr[0] == 0;
+            this.row = arr[1];
+            this.col = arr[2];
+        }
+    }
+
+    public HexTilePos(IntArrayTag tag) {
+        this(tag.getAsIntArray());
     }
 
     public boolean isArrayZero() {
@@ -50,16 +68,6 @@ public class HexTilePos {
 
     public int[] asIntArray() {
         return new int[]{this.arrayZero ? 1 : 0, this.row, this.col};
-    }
-
-    public static HexTilePos fromIntArray(int[] arr) {
-        if (arr.length != 3) {
-            throw new IllegalArgumentException("Argument length must be 3!");
-        } else if (arr[0] > 2 || arr[0] < 0) {
-            throw new IllegalArgumentException("HECS array may only be 0 or 1!");
-        } else {
-            return new HexTilePos(arr[0] == 0, arr[1], arr[2]);
-        }
     }
 
     /**
@@ -247,6 +255,11 @@ public class HexTilePos {
      */
     private static boolean testAgainstPattern2Skip4(int n) {
         return (((n + 1) >> 1) % 3) == 0;
+    }
+
+    @Override
+    public IntArrayTag serializeNBT() {
+        return new IntArrayTag(this.asIntArray());
     }
 
     /*  8-BIT BINARY REFERENCE SHEET

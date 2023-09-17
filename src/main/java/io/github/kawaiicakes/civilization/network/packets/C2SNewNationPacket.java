@@ -3,7 +3,6 @@ package io.github.kawaiicakes.civilization.network.packets;
 import io.github.kawaiicakes.civilization.api.nations.CivLevelNation;
 import io.github.kawaiicakes.civilization.api.nations.NationManager;
 import io.github.kawaiicakes.civilization.api.network.SimplePacket;
-import io.github.kawaiicakes.civilization.api.utils.CivNBT;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -29,7 +28,7 @@ public class C2SNewNationPacket extends SimplePacket {
 
     public C2SNewNationPacket(FriendlyByteBuf buf) {
         super(buf);
-        this.civLevelNation = CivNBT.fromNBT(Objects.requireNonNull(buf.readNbt()));
+        this.civLevelNation = new CivLevelNation(Objects.requireNonNull(buf.readNbt()));
     }
 
     @Override
@@ -42,8 +41,8 @@ public class C2SNewNationPacket extends SimplePacket {
         ServerLevel level = Objects.requireNonNull(context.getSender()).getLevel();
 
         if (NationManager.createNation(level, this.civLevelNation)) {
-            context.getSender().sendSystemMessage(Component.literal("Successfully founded civLevelNation " + this.civLevelNation.nationName()
-                    + " with UUID " + this.civLevelNation.nationUUID()));
+            context.getSender().sendSystemMessage(Component.literal("Successfully founded civLevelNation " + this.civLevelNation.nationName
+                    + " with UUID " + this.civLevelNation.nationUUID));
         } else {
             context.getSender().sendSystemMessage(Component.literal("Invalid civLevelNation!"));
         }

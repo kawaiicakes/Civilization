@@ -5,7 +5,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
@@ -21,7 +20,7 @@ public class NationManager {
     public static CivLevelNation NULLARIA = new CivLevelNation(
             UUID.randomUUID(),
             "Nullaria",
-            new HashMap<>(),
+            new HashSet<>(),
             new HashSet<>(),
             new HashSet<>(),
             0
@@ -99,11 +98,11 @@ public class NationManager {
         if (civLevelNationList.contains(civLevelNation)) return false;
 
         return (
-                nationStream.noneMatch(nat -> nat.nationUUID() == civLevelNation.nationUUID())
-                && civLevelNation.tiles().isEmpty()
-                && civLevelNation.players().isEmpty()
-                && civLevelNation.cities().isEmpty()
-                && civLevelNation.diplomacy() == 0
+                nationStream.noneMatch(nat -> nat.nationUUID == civLevelNation.nationUUID)
+                && civLevelNation.tiles.isEmpty()
+                && civLevelNation.players.isEmpty()
+                && civLevelNation.cities.isEmpty()
+                && civLevelNation.diplomacy == 0
         );
     }
 }

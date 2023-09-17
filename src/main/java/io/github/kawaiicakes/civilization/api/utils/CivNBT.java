@@ -1,79 +1,53 @@
 package io.github.kawaiicakes.civilization.api.utils;
 
-import io.github.kawaiicakes.civilization.api.level.HexTilePos;
-import io.github.kawaiicakes.civilization.api.nations.LevelNation;
-import net.minecraft.core.UUIDUtil;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntArrayTag;
+import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.Set;
-import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Utility class for writing classes to and from NBT data. Especially useful for easy capability shit
  * and networking. Methods are self-explanatory.
  */
 public class CivNBT {
-    public static CompoundTag fromNation(LevelNation levelNation) {
-        CompoundTag nationNBT = new CompoundTag();
-
-        nationNBT.putUUID("uuid", levelNation.nationUUID());
-        nationNBT.putString("name", levelNation.nationName());
-        nationNBT.put("players", uuidListToTag(levelNation.players()));
-        nationNBT.put("cities", uuidListToTag(levelNation.cities()));
-        nationNBT.put("tiles", hexTileListTag(levelNation.territory()));
-        nationNBT.putInt("diplomacy", levelNation.diplomacy());
-
-        return nationNBT;
-    }
-
-    public static LevelNation fromNBT(CompoundTag nationNBT) {
-        return new LevelNation(
-                nationNBT.getUUID("uuid"),
-                nationNBT.getString("name"),
-                uuidTagToList(nationNBT.getList("players", Tag.TAG_LIST)),
-                uuidTagToList(nationNBT.getList("cities", Tag.TAG_LIST)),
-                hexTagToList(nationNBT.getList("tiles", Tag.TAG_LIST)),
-                nationNBT.getInt("diplomacy")
-        );
-    }
-
-    /*
-     * Helper methods below
+    /**
+     *  Simple utility method to easily return a <code>ListTag</code> containing the elements of
+     *  a <code>Collection</code>. Bear in mind that no precautions are taken to prevent duplicate
+     *  entries. Use accordingly.
+     * @param tCollection Any <code>Collection</code> of type <code>T</code>.
+     * @return  a <code>ListTag</code> containing the nbt-serialized instances of <code>T</code>.
+     * @param <T>   the type extending <code>NBTSerializable</code>. Any instance of <code>T</code>
+     *              may call <code>#serializeNBT</code> to return a subclass of <code>Tag</code>.
      */
-
-    private static ListTag uuidListToTag(Set<UUID> list) {
+    public static <T extends NBTSerializable<?>> ListTag collectionToListTag(Collection<T> tCollection) {
         ListTag listTag = new ListTag();
-        list.forEach(uuid -> listTag.add(new IntArrayTag(UUIDUtil.uuidToIntArray(uuid))));
+
+        tCollection.forEach(t -> {
+            if (t == null) {
+                listTag.add(IntTag.valueOf(0));
+            } else {
+                listTag.add(t.serializeNBT());
+            }
+        });
+
         return listTag;
     }
 
-    private static ListTag hexTileListTag(Set<HexTilePos> list) {
-        ListTag listTag = new ListTag();
-        list.forEach(hexTilePos -> listTag.add(new IntArrayTag(hexTilePos.asIntArray())));
-        return listTag;
-    }
-
-    private static Set<UUID> uuidTagToList(ListTag nationNBT) {
-        Set<UUID> returnList = new HashSet<>(nationNBT.size());
-
-        nationNBT.stream()
-                .map(arr -> UUIDUtil.uuidFromIntArray(((IntArrayTag) arr).getAsIntArray()))
-                .forEach(returnList::add);
-
-        return returnList;
-    }
-
-    private static Set<HexTilePos> hexTagToList(ListTag nationNBT) {
-        Set<HexTilePos> returnList = new HashSet<>(nationNBT.size());
-
-        nationNBT.stream()
-                .map(arr -> HexTilePos.fromIntArray(((IntArrayTag) arr).getAsIntArray()))
-                .forEach(returnList::add);
-
-        return returnList;
+    /**
+     * Easily turn a <code>ListTag</code> into a <code>Set</code> of type <code>T</code>. Mainly exists for convenience
+     * and formality.
+     * @param listTag   the <code>ListTag</code> to convert. Ensure <code>pTagType</code> corresponds to the type
+     *                  parameter of <code>NBTSerializable</code> in <code>T</code>.
+     * @param mapper    the <code>Function</code> corresponding to the deserialization of <code>T</code>.
+     * @return          a <code>Set</code> of type <code>T</code> constructed to the given mapper.
+     * @param <T>       a class implementing <code>NBTSerializable</code>.
+     */
+    public static <T extends NBTSerializable<?>> Set<T> listTagToSet(ListTag listTag,
+                                                                     Function<? super Tag, ? extends T> mapper) {
+        return listTag.stream().map(mapper).collect(Collectors.toSet());
     }
 }

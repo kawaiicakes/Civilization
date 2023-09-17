@@ -4,10 +4,11 @@ import io.github.kawaiicakes.civilization.api.level.HexTilePos;
 import io.github.kawaiicakes.civilization.api.utils.CivNBT;
 import io.github.kawaiicakes.civilization.api.utils.NBTSerializable;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.IntArrayTag;
+import net.minecraft.nbt.Tag;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,52 +17,76 @@ import java.util.UUID;
  * Don't cache values returned from the level as these are not intended to store live data.
  * They are records for a reason, after all.
  */
-public record CivLevelCity(
-        UUID cityId,
-        String cityName,
-        Set<HexTilePos> tiles,
-        Map<UUID, CivPermissions> citizens,
-        int diplomacy
-) implements NBTSerializable<CompoundTag, CivLevelCity> {
+public class CivLevelCity implements NBTSerializable<CompoundTag> {
+    public UUID cityId;
+    public String cityName;
+    public Set<HexTilePos> tiles;
+    public Set<CivLevelPlayer> citizens;
+    public int diplomacy;
+
+    public CivLevelCity(
+            UUID cityId,
+            String cityName,
+            Set<HexTilePos> tiles,
+            Set<CivLevelPlayer> citizens,
+            int diplomacy
+    ) {
+        this.cityId = cityId;
+        this.cityName = cityName;
+        this.tiles = tiles;
+        this.citizens = citizens;
+        this.diplomacy = diplomacy;
+    }
+
+    public CivLevelCity(CompoundTag nbt) {
+        new CivLevelCity(
+                nbt.getUUID("city_id"),
+                nbt.getString("city_name"),
+                CivNBT.listTagToSet(nbt.getList("tiles", Tag.TAG_INT_ARRAY),
+                        tag -> new HexTilePos(((IntArrayTag) tag).getAsIntArray())),
+                CivNBT.listTagToSet(nbt.getList("citizens", Tag.TAG_COMPOUND),
+                        tag -> new CivLevelPlayer(((CompoundTag) tag).getUUID("id"))),
+                nbt.getInt("diplomacy")
+        );
+    }
+
     @Override
     public @NotNull CompoundTag serializeNBT() {
         CompoundTag compoundTag = new CompoundTag();
 
         compoundTag.putUUID("city_id", this.cityId);
         compoundTag.putString("city_name", this.cityName);
-        compoundTag.put("tiles", CivNBT.tilesToListTag(this.tiles));
-        compoundTag.put("citizens", this.citizensToListTag());
+        compoundTag.put("tiles", CivNBT.collectionToListTag(this.tiles));
+        compoundTag.put("citizens", CivNBT.collectionToListTag(this.citizens));
         compoundTag.putInt("diplomacy", 0);
 
         return compoundTag;
     }
 
     @Override
-    public CivLevelCity deserializeNBT(CompoundTag nbt) {
-        return null;
-        /*
-                new CivLevelCity(
-                nbt.getUUID("city_id"),
-                nbt.getString("city_name"),
-                ((ListTag) Objects.requireNonNull(nbt.get("tiles")))
-                        .stream()
-                        .map(arr -> (HexTilePos.fromIntArray(((IntArrayTag) arr).getAsIntArray())))
-                        .collect(Collectors.toSet()),
-                // TODO
-        );
-        */
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (CivLevelCity) obj;
+        return Objects.equals(this.cityId, that.cityId) &&
+                Objects.equals(this.cityName, that.cityName) &&
+                Objects.equals(this.tiles, that.tiles) &&
+                Objects.equals(this.citizens, that.citizens) &&
+                this.diplomacy == that.diplomacy;
     }
 
-    @Deprecated // Marked for removal. This is just a placeholder method so no errors are thrown during runtime
-    private ListTag citizensToListTag() {
-        ListTag listTag = new ListTag();
+    @Override
+    public int hashCode() {
+        return Objects.hash(cityId, cityName, tiles, citizens, diplomacy);
+    }
 
-        this.citizens.keySet().forEach(uuid -> {
-            CompoundTag compoundTag = new CompoundTag();
-            compoundTag.putInt(uuid.toString(), 0); // TODO
-            listTag.add(compoundTag);
-        });
-
-        return listTag;
+    @Override
+    public String toString() {
+        return "CivLevelCity[" +
+                "cityId=" + cityId + ", " +
+                "cityName=" + cityName + ", " +
+                "tiles=" + tiles + ", " +
+                "citizens=" + citizens + ", " +
+                "diplomacy=" + diplomacy + ']';
     }
 }
