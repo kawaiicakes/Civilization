@@ -36,16 +36,4 @@ public final class CivLevelPlayer implements NBTSerializable<CompoundTag> {
         var that = (CivLevelPlayer) obj;
         return Objects.equals(this.playerId, that.playerId);
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(playerId);
-    }
-
-    @Override
-    public String toString() {
-        return "CivLevelPlayer[" +
-                "playerId=" + playerId + ']';
-    }
-
 }
