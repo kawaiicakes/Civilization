@@ -49,7 +49,7 @@ public final class CivLevelNation implements NBTSerializable<CompoundTag> {
                 nationNBT.getString("nation_name"),
                 CivNBT.listTagToSet(nationNBT.getList("players", Tag.TAG_COMPOUND),
                         tag -> new CivLevelPlayer(((CompoundTag) tag))),
-                CivNBT.listTagToSet(nationNBT.getList("tiles", Tag.TAG_LIST),
+                CivNBT.listTagToSet(nationNBT.getList("cities", Tag.TAG_LIST),
                         tag -> new CivLevelCity(((CompoundTag) tag))),
                 CivNBT.listTagToSet(nationNBT.getList("tiles", Tag.TAG_LIST),
                         tag -> new HexTilePos(((IntArrayTag) tag))),
@@ -82,21 +82,4 @@ public final class CivLevelNation implements NBTSerializable<CompoundTag> {
                 Objects.equals(this.tiles, that.tiles) &&
                 this.diplomacy == that.diplomacy;
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(nationUUID, nationName, players, cities, tiles, diplomacy);
-    }
-
-    @Override
-    public String toString() {
-        return "CivLevelNation[" +
-                "nationUUID=" + nationUUID + ", " +
-                "nationName=" + nationName + ", " +
-                "players=" + players + ", " +
-                "cities=" + cities + ", " +
-                "tiles=" + tiles + ", " +
-                "diplomacy=" + diplomacy + ']';
-    }
-
 }
