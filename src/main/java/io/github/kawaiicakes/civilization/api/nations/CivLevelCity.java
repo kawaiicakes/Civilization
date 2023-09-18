@@ -15,7 +15,6 @@ import java.util.UUID;
 /**
  * Used to easily convey city data to and from NBT and in other contexts.
  * Don't cache values returned from the level as these are not intended to store live data.
- * They are records for a reason, after all.
  */
 public class CivLevelCity implements NBTSerializable<CompoundTag> {
     public @NotNull UUID cityId;
