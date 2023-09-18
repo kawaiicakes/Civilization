@@ -1,12 +1,9 @@
 package io.github.kawaiicakes.civilization.api.nations;
 
 import io.github.kawaiicakes.civilization.api.level.HexTilePos;
-import io.github.kawaiicakes.civilization.api.utils.CivNBT;
-import io.github.kawaiicakes.civilization.api.utils.NBTSerializable;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.Tag;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.Set;
@@ -20,19 +17,20 @@ import java.util.UUID;
  * Despite the nature of UUIDs, sets are used to ensure the same city/player is added to the list again
  * on account of another part of the code.
  */
-public final class CivLevelNation implements NBTSerializable<CompoundTag> {
-    public @NotNull UUID nationUUID;
-    public @NotNull String nationName;
-    public @NotNull Set<CivLevelPlayer> players;
-    public @NotNull Set<CivLevelCity> cities;
-    public @NotNull Set<HexTilePos> tiles;
+public final class CivLevelNation extends CivLevelData<CompoundTag> {
+    public UUID nationUUID;
+    public String nationName;
+    public Set<CivLevelPlayer> players;
+    public Set<CivLevelCity> cities;
+    public Set<HexTilePos> tiles;
     public int diplomacy;
+
     public CivLevelNation(
-            @NotNull UUID nationUUID,
-            @NotNull String nationName,
-            @NotNull Set<CivLevelPlayer> players,
-            @NotNull Set<CivLevelCity> cities,
-            @NotNull Set<HexTilePos> tiles,
+            UUID nationUUID,
+            String nationName,
+            Set<CivLevelPlayer> players,
+            Set<CivLevelCity> cities,
+            Set<HexTilePos> tiles,
             int diplomacy
     ) {
         this.nationUUID = nationUUID;
@@ -47,24 +45,24 @@ public final class CivLevelNation implements NBTSerializable<CompoundTag> {
         this(
                 nationNBT.getUUID("nation_id"),
                 nationNBT.getString("nation_name"),
-                CivNBT.listTagToSet(nationNBT.getList("players", Tag.TAG_COMPOUND),
+                listTagToSet(nationNBT.getList("players", Tag.TAG_COMPOUND),
                         tag -> new CivLevelPlayer(((CompoundTag) tag))),
-                CivNBT.listTagToSet(nationNBT.getList("cities", Tag.TAG_LIST),
+                listTagToSet(nationNBT.getList("cities", Tag.TAG_LIST),
                         tag -> new CivLevelCity(((CompoundTag) tag))),
-                CivNBT.listTagToSet(nationNBT.getList("tiles", Tag.TAG_LIST),
+                listTagToSet(nationNBT.getList("tiles", Tag.TAG_LIST),
                         tag -> new HexTilePos(((IntArrayTag) tag))),
                 nationNBT.getInt("diplomacy"));
     }
 
     @Override
-    public @NotNull CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT() {
         CompoundTag compoundTag = new CompoundTag();
 
         compoundTag.putUUID("nation_id", this.nationUUID);
         compoundTag.putString("nation_name", this.nationName);
-        compoundTag.put("players", CivNBT.collectionToListTag(this.players));
-        compoundTag.put("cities", CivNBT.collectionToListTag(this.cities));
-        compoundTag.put("tiles", CivNBT.collectionToListTag(this.tiles));
+        compoundTag.put("players", collectionToListTag(this.players));
+        compoundTag.put("cities", collectionToListTag(this.cities));
+        compoundTag.put("tiles", collectionToListTag(this.tiles));
         compoundTag.putInt("diplomacy", this.diplomacy);
 
         return compoundTag;
@@ -73,7 +71,7 @@ public final class CivLevelNation implements NBTSerializable<CompoundTag> {
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
+        if (obj.getClass() != this.getClass()) return false;
         var that = (CivLevelNation) obj;
         return Objects.equals(this.nationUUID, that.nationUUID) &&
                 Objects.equals(this.nationName, that.nationName) &&
