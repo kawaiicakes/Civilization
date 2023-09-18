@@ -74,19 +74,4 @@ public class CivLevelCity implements NBTSerializable<CompoundTag> {
                 Objects.equals(this.citizens, that.citizens) &&
                 this.diplomacy == that.diplomacy;
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(cityId, cityName, tiles, citizens, diplomacy);
-    }
-
-    @Override
-    public String toString() {
-        return "CivLevelCity[" +
-                "cityId=" + cityId + ", " +
-                "cityName=" + cityName + ", " +
-                "tiles=" + tiles + ", " +
-                "citizens=" + citizens + ", " +
-                "diplomacy=" + diplomacy + ']';
-    }
 }
