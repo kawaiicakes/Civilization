@@ -1,6 +1,7 @@
 package io.github.kawaiicakes.civilization.api.nations;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.server.ServerLifecycleHooks;
@@ -11,6 +12,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
+import static io.github.kawaiicakes.civilization.Civilization.CHAT_HEADER;
 import static io.github.kawaiicakes.civilization.capabilities.CivLevelCapabilityProvider.CIV_LEVEL_CAP;
 
 /**
@@ -65,7 +67,8 @@ public class NationManager {
             if (nationCreationValid(level, civLevelNation)) {
                 level.getCapability(CIV_LEVEL_CAP).ifPresent(civ -> {
                     level.players().forEach(serverPlayer -> serverPlayer.sendSystemMessage(
-                            Component.literal("Nation " + civLevelNation.nationName + " has been founded.")));
+                            CHAT_HEADER().append(Component.translatable("chat.civilization.nation_founded", civLevelNation.nationName).setStyle(Style.EMPTY))
+                    ));
                     civ.addNation(civLevelNation);
                 });
                 return true;
@@ -78,7 +81,7 @@ public class NationManager {
     }
 
     /**
-     * This method exists to check, from the server, whether a civLevelNation is valid to
+     * This method exists to check, from the server, whether a CivLevelNation is valid to
      * create. Done for security reasons as a malicious client would otherwise be able
      * to submit any CivLevelNation instance to the server for creation.
      * @param level the <code>ServerLevel</code> to check validity against.

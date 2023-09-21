@@ -11,5 +11,9 @@
   "menu.civilization.nation_info": "Nation",
   "menu.civilization.nation_info.tooltip": "Information on your nation.",
   "menu.civilization.reputation_info": "Reputation",
-  "menu.civilization.reputation_info.tooltip": "See what the world thinks of you."
+  "menu.civilization.reputation_info.tooltip": "See what the world thinks of you.",
+
+  "chat.civilization.nation_founded": "Nation %1$s was founded.",
+  "chat.civilization.invalid_nation": "Invalid CivLevelNation! If you see this message contact the author!",
+  "chat.civilization.nation_founded_client": "Successfully founded nation %1$s."
 }

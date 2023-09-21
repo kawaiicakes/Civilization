@@ -5,10 +5,13 @@ import io.github.kawaiicakes.civilization.api.nations.NationManager;
 import io.github.kawaiicakes.civilization.api.network.SimplePacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.Objects;
+
+import static io.github.kawaiicakes.civilization.Civilization.CHAT_HEADER;
 
 public class C2SNewNationPacket extends SimplePacket {
     private final CivLevelNation civLevelNation;
@@ -41,10 +44,13 @@ public class C2SNewNationPacket extends SimplePacket {
         ServerLevel level = Objects.requireNonNull(context.getSender()).getLevel();
 
         if (NationManager.createNation(level, this.civLevelNation)) {
-            context.getSender().sendSystemMessage(Component.literal("Successfully founded " + this.civLevelNation.nationName
-                    + " with UUID " + this.civLevelNation.nationUUID));
+            context.getSender().sendSystemMessage(
+                    CHAT_HEADER().append(Component.translatable("chat.civilization.nation_founded_client", this.civLevelNation.nationName).setStyle(Style.EMPTY))
+            );
         } else {
-            context.getSender().sendSystemMessage(Component.literal("Invalid CivLevelNation! If you see this message contact the author!"));
+            context.getSender().sendSystemMessage(
+                    CHAT_HEADER().append(Component.translatable("chat.civilization.invalid_nation").setStyle(Style.EMPTY))
+            );
         }
     }
 }
