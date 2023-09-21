@@ -65,13 +65,11 @@ public class NationManager {
             if (nationCreationValid(level, civLevelNation)) {
                 level.getCapability(CIV_LEVEL_CAP).ifPresent(civ -> {
                     level.players().forEach(serverPlayer -> serverPlayer.sendSystemMessage(
-                            Component.literal("Successfully passed validity test!")));
+                            Component.literal("Nation " + civLevelNation.nationName + " has been founded.")));
                     civ.addNation(civLevelNation);
                 });
                 return true;
             } else {
-                level.players().forEach(serverPlayer -> serverPlayer.sendSystemMessage(
-                        Component.literal("Invalid civLevelNation!")));
                 return false;
             }
         } else {

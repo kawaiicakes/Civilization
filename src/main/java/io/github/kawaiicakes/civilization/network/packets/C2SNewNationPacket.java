@@ -41,10 +41,10 @@ public class C2SNewNationPacket extends SimplePacket {
         ServerLevel level = Objects.requireNonNull(context.getSender()).getLevel();
 
         if (NationManager.createNation(level, this.civLevelNation)) {
-            context.getSender().sendSystemMessage(Component.literal("Successfully founded civLevelNation " + this.civLevelNation.nationName
+            context.getSender().sendSystemMessage(Component.literal("Successfully founded " + this.civLevelNation.nationName
                     + " with UUID " + this.civLevelNation.nationUUID));
         } else {
-            context.getSender().sendSystemMessage(Component.literal("Invalid civLevelNation!"));
+            context.getSender().sendSystemMessage(Component.literal("Invalid CivLevelNation! If you see this message contact the author!"));
         }
     }
 }
