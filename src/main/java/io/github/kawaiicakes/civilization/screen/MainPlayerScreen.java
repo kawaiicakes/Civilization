@@ -97,8 +97,6 @@ public class MainPlayerScreen extends SimpleGUI {
     public void renderBackground(@NotNull PoseStack pPoseStack) {
         super.renderBackground(pPoseStack);
 
-        // logo
-        // FIXME: relativize topPos?
         this.blit(pPoseStack, LOGO.renderAtNewPos(
                 this.leftPos + this.background.blitUWidth()
                         + ((TAB_UNSELECTED.blitUWidth() - LOGO.blitUWidth() - 4) / 2),
@@ -107,7 +105,7 @@ public class MainPlayerScreen extends SimpleGUI {
 
         if (Objects.equals(this.activeTab, "player_info")) {
             // FIXME: move this to #renderOverviewMenu. The problem is doing so makes the model dark for some reason
-            renderEntityInInventory(this.leftPos + 51, this.topPos + 75, 80, (float) (this.leftPos + 51) - this.xMouse, (float) (this.topPos + 75 - 50) - this.yMouse, this.minecraft.player);
+            renderEntityInInventory(this.leftPos + 51, this.topPos + 75, (float) (this.leftPos + 51) - this.xMouse, (float) (this.topPos + 75 - 50) - this.yMouse, this.minecraft.player);
         }
     }
 
@@ -120,23 +118,17 @@ public class MainPlayerScreen extends SimpleGUI {
         }
     }
 
-    private static void renderEntityInInventory(int pPosX, int pPosY, int pScale, float pMouseX, float pMouseY, LivingEntity pLivingEntity) {
-        float f = (float)Math.atan((double)(pMouseX / 40.0F));
-        float f1 = (float)Math.atan((double)(pMouseY / 40.0F));
-        renderEntityInInventoryRaw(pPosX, pPosY, pScale, f, f1, pLivingEntity);
-    }
-
-    private static void renderEntityInInventoryRaw(int pPosX, int pPosY, int pScale, float angleXComponent, float angleYComponent, LivingEntity pLivingEntity) {
-        float f = angleXComponent;
-        float f1 = angleYComponent;
+    private static void renderEntityInInventory(int pPosX, int pPosY, float pMouseX, float pMouseY, LivingEntity pLivingEntity) {
+        float f = (float)Math.atan(pMouseX / 40.0F);
+        float f1 = (float)Math.atan(pMouseY / 40.0F);
         PoseStack posestack = RenderSystem.getModelViewStack();
         posestack.pushPose();
-        posestack.translate((double)pPosX, (double)pPosY, 1050.0D);
+        posestack.translate(pPosX, pPosY, 1050.0D);
         posestack.scale(1.0F, 1.0F, -1.0F);
         RenderSystem.applyModelViewMatrix();
         PoseStack posestack1 = new PoseStack();
         posestack1.translate(0.0D, 0.0D, 1000.0D);
-        posestack1.scale((float)pScale, (float)pScale, (float)pScale);
+        posestack1.scale(80F, 80F, 80F);
         Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
         Quaternion quaternion1 = Vector3f.XP.rotationDegrees(f1 * 20.0F);
         quaternion.mul(quaternion1);
@@ -167,7 +159,9 @@ public class MainPlayerScreen extends SimpleGUI {
         pLivingEntity.setXRot(f4);
         pLivingEntity.yHeadRotO = f5;
         pLivingEntity.yHeadRot = f6;
-        posestack.popPose();
+
+        posestack.popPose(); // If this is moved to the bottom of the method everything glitches out
+
         RenderSystem.applyModelViewMatrix();
         Lighting.setupFor3DItems();
     }
@@ -203,7 +197,7 @@ public class MainPlayerScreen extends SimpleGUI {
     }
 
     private void renderOverviewMenu(PoseStack poseStack, int xMouse, int yMouse, float tickDelta) {
-
+        //renderEntityInInventory(this.leftPos + 51, this.topPos + 75, 80, (float) (this.leftPos + 51) - this.xMouse, (float) (this.topPos + 75 - 50) - this.yMouse, this.minecraft.player);
     }
 
     private void renderNationMenu(PoseStack poseStack, int xMouse, int yMouse, float tickDelta) {
