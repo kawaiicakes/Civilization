@@ -68,10 +68,6 @@ public class MainPlayerScreen extends SimpleGUI {
         this.activeTab = tab;
     }
 
-    public String getActiveTab() {
-        return this.activeTab;
-    }
-
     @Override
     public void init() {
         // Renders background texture + tabs to the centre of the screen.
@@ -118,21 +114,43 @@ public class MainPlayerScreen extends SimpleGUI {
         }
     }
 
+    private void renderOverviewMenu(PoseStack poseStack, int xMouse, int yMouse, float tickDelta) {
+        //renderEntityInInventory(this.leftPos + 51, this.topPos + 75, 80, (float) (this.leftPos + 51) - this.xMouse, (float) (this.topPos + 75 - 50) - this.yMouse, this.minecraft.player);
+    }
+
+    private void renderNationMenu(PoseStack poseStack, int xMouse, int yMouse, float tickDelta) {
+
+    }
+
+    private void renderCityMenu(PoseStack poseStack, int xMouse, int yMouse, float tickDelta) {
+
+    }
+
+    private void renderReputationMenu(PoseStack poseStack, int xMouse, int yMouse, float tickDelta) {
+
+    }
+
     private static void renderEntityInInventory(int pPosX, int pPosY, float pMouseX, float pMouseY, LivingEntity pLivingEntity) {
         float f = (float)Math.atan(pMouseX / 40.0F);
         float f1 = (float)Math.atan(pMouseY / 40.0F);
+
         PoseStack posestack = RenderSystem.getModelViewStack();
         posestack.pushPose();
         posestack.translate(pPosX, pPosY, 1050.0D);
         posestack.scale(1.0F, 1.0F, -1.0F);
+
         RenderSystem.applyModelViewMatrix();
+
         PoseStack posestack1 = new PoseStack();
         posestack1.translate(0.0D, 0.0D, 1000.0D);
         posestack1.scale(80F, 80F, 80F);
+
         Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
         Quaternion quaternion1 = Vector3f.XP.rotationDegrees(f1 * 20.0F);
         quaternion.mul(quaternion1);
+
         posestack1.mulPose(quaternion);
+
         float f2 = pLivingEntity.yBodyRot;
         float f3 = pLivingEntity.getYRot();
         float f4 = pLivingEntity.getXRot();
@@ -143,17 +161,20 @@ public class MainPlayerScreen extends SimpleGUI {
         pLivingEntity.setXRot(-f1 * 20.0F);
         pLivingEntity.yHeadRot = pLivingEntity.getYRot();
         pLivingEntity.yHeadRotO = pLivingEntity.getYRot();
+
         Lighting.setupForEntityInInventory();
         EntityRenderDispatcher entityrenderdispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
+
         quaternion1.conj();
+
         entityrenderdispatcher.overrideCameraOrientation(quaternion1);
         entityrenderdispatcher.setRenderShadow(false);
         MultiBufferSource.BufferSource multibuffersource$buffersource = Minecraft.getInstance().renderBuffers().bufferSource();
-        RenderSystem.runAsFancy(() -> {
-            entityrenderdispatcher.render(pLivingEntity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, posestack1, multibuffersource$buffersource, 15728880);
-        });
+        RenderSystem.runAsFancy(() ->
+                entityrenderdispatcher.render(pLivingEntity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, posestack1, multibuffersource$buffersource, 15728880));
         multibuffersource$buffersource.endBatch();
         entityrenderdispatcher.setRenderShadow(true);
+
         pLivingEntity.yBodyRot = f2;
         pLivingEntity.setYRot(f3);
         pLivingEntity.setXRot(f4);
@@ -194,22 +215,6 @@ public class MainPlayerScreen extends SimpleGUI {
                 ((DynamicButton) this.renderables.get(tab)).setState("unselected");
             }
         }
-    }
-
-    private void renderOverviewMenu(PoseStack poseStack, int xMouse, int yMouse, float tickDelta) {
-        //renderEntityInInventory(this.leftPos + 51, this.topPos + 75, 80, (float) (this.leftPos + 51) - this.xMouse, (float) (this.topPos + 75 - 50) - this.yMouse, this.minecraft.player);
-    }
-
-    private void renderNationMenu(PoseStack poseStack, int xMouse, int yMouse, float tickDelta) {
-
-    }
-
-    private void renderCityMenu(PoseStack poseStack, int xMouse, int yMouse, float tickDelta) {
-
-    }
-
-    private void renderReputationMenu(PoseStack poseStack, int xMouse, int yMouse, float tickDelta) {
-
     }
 
     private class TabButton extends DynamicButton {
@@ -254,7 +259,7 @@ public class MainPlayerScreen extends SimpleGUI {
             pPoseStack.popPose();
         }
 
-        public void renderSexyTab(PoseStack poseStack, int xMouse, int yMouse, float tickDelta, int blitVOffset, int blitOffset, String hexColor) {
+        private void renderSexyTab(PoseStack poseStack, int xMouse, int yMouse, float tickDelta, int blitVOffset, int blitOffset, String hexColor) {
             poseStack.pushPose();
             this.renderDefinition = this.renderDefinition.blitFromNewY(blitVOffset);
             poseStack.translate(0, 0, blitOffset);
