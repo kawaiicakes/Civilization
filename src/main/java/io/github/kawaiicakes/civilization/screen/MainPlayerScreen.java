@@ -9,7 +9,6 @@ import io.github.kawaiicakes.civilization.api.screen.BlitRenderDefinition;
 import io.github.kawaiicakes.civilization.api.screen.DynamicButton;
 import io.github.kawaiicakes.civilization.api.screen.SimpleGUI;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.network.chat.Component;
@@ -70,7 +69,7 @@ public class MainPlayerScreen extends SimpleGUI {
     }
 
     public String getActiveTab() {
-        return activeTab;
+        return this.activeTab;
     }
 
     @Override
@@ -82,6 +81,16 @@ public class MainPlayerScreen extends SimpleGUI {
         this.tabLeftPos = this.leftPos + this.background.blitUWidth() - 4;
 
         this.initializeTabs();
+    }
+
+    // Place black box at 14 25 relative to 0 0 of background
+    @Override
+    public void render(@NotNull PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+        this.setTabState();
+        this.xMouse = pMouseX;
+        this.yMouse = pMouseY;
+        this.renderActiveMenu(pPoseStack, pMouseX, pMouseY, pPartialTick);
+        super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
     }
 
     @Override
@@ -96,31 +105,28 @@ public class MainPlayerScreen extends SimpleGUI {
                 this.topPos + 20)
         );
 
-        renderEntityInInventory(this.leftPos + 51, this.topPos + 75, 30, (float)(this.leftPos + 51) - this.xMouse, (float)(this.topPos + 75 - 50) - this.yMouse, this.minecraft.player);
-    }
-
-    // Place black box at 14 25 relative to 0 0 of background
-    @Override
-    public void render(@NotNull PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-        this.renderTabs();
-        this.xMouse = pMouseX;
-        this.yMouse = pMouseY;
-        super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
-    }
-
-    public void renderNationTab(PoseStack poseStack, int xMouse, int yMouse, float tickDelta) {
-        if (this.nation == null) {
-            // TODO
+        if (Objects.equals(this.activeTab, "player_info")) {
+            // FIXME: move this to #renderOverviewMenu. The problem is doing so makes the model dark for some reason
+            renderEntityInInventory(this.leftPos + 51, this.topPos + 75, 80, (float) (this.leftPos + 51) - this.xMouse, (float) (this.topPos + 75 - 50) - this.yMouse, this.minecraft.player);
         }
     }
 
-    public static void renderEntityInInventory(int pPosX, int pPosY, int pScale, float pMouseX, float pMouseY, LivingEntity pLivingEntity) {
+    private void renderActiveMenu(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+        switch (this.activeTab) {
+            case "player_info" -> this.renderOverviewMenu(pPoseStack, pMouseX, pMouseY, pPartialTick);
+            case "nation_info" -> this.renderNationMenu(pPoseStack, pMouseX, pMouseY, pPartialTick);
+            case "city_info" -> this.renderCityMenu(pPoseStack, pMouseX, pMouseY, pPartialTick);
+            case "reputation_info" -> this.renderReputationMenu(pPoseStack, pMouseX, pMouseY, pPartialTick);
+        }
+    }
+
+    private static void renderEntityInInventory(int pPosX, int pPosY, int pScale, float pMouseX, float pMouseY, LivingEntity pLivingEntity) {
         float f = (float)Math.atan((double)(pMouseX / 40.0F));
         float f1 = (float)Math.atan((double)(pMouseY / 40.0F));
         renderEntityInInventoryRaw(pPosX, pPosY, pScale, f, f1, pLivingEntity);
     }
 
-    public static void renderEntityInInventoryRaw(int pPosX, int pPosY, int pScale, float angleXComponent, float angleYComponent, LivingEntity pLivingEntity) {
+    private static void renderEntityInInventoryRaw(int pPosX, int pPosY, int pScale, float angleXComponent, float angleYComponent, LivingEntity pLivingEntity) {
         float f = angleXComponent;
         float f1 = angleYComponent;
         PoseStack posestack = RenderSystem.getModelViewStack();
@@ -178,11 +184,11 @@ public class MainPlayerScreen extends SimpleGUI {
         for (int tab = 0; tab < 4; tab++) {
             int topPos = tabTopPosDefault - (tab * (TAB_UNSELECTED.blitVHeight() + 1));
 
-            this.createTab(topPos, tabNames[tab]);
+            this.addRenderableWidget(new TabButton(topPos, tabNames[tab]));
         }
     }
 
-    private void renderTabs() {
+    private void setTabState() {
         String[] tabNames = {"player_info", "city_info", "nation_info", "reputation_info"};
 
         for (int tab = 0; tab < 4; tab++) {
@@ -196,56 +202,72 @@ public class MainPlayerScreen extends SimpleGUI {
         }
     }
 
-    /**
-     * Small helper method to cut down on repeatedly typing the same arguments.
-     */
-    private void createTab(int topPos, String tabName) {
-        Font pFont = Minecraft.getInstance().font;
+    private void renderOverviewMenu(PoseStack poseStack, int xMouse, int yMouse, float tickDelta) {
 
-        this.addRenderableWidget(
-                new DynamicButton(
-                        TAB_UNSELECTED.renderAtNewPos(this.tabLeftPos, topPos),
-                        this.textureLocation,
-                        Component.translatable("menu.civilization." + tabName),
-                        (pButton) -> this.setActiveTab(tabName),
-                        ((pButton, pPoseStack, pMouseX, pMouseY) ->
-                                this.renderTooltip(
-                                        pPoseStack,
-                                        Component.translatable("menu.civilization." + tabName + ".tooltip"),
-                                        pMouseX,
-                                        pMouseY
-                                )
-                        ),
-                        this.textureWidth,
-                        this.textureHeight
-                ) {
-                    // TODO: consider extracting this to a new subclass.
-                    @Override
-                    public void renderButton(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-                        RenderSystem.enableDepthTest();
-                        switch (this.getState()) {
-                            case "selected" ->
-                                    this.renderSexyTab(pPoseStack, pMouseX, pMouseY, pPartialTick, TAB_SELECTED_OFFSET, 5, tabName, "d9fa75");
-                            case "selected_bottom" ->
-                                    this.renderSexyTab(pPoseStack, pMouseX, pMouseY, pPartialTick, TAB_SELECTED_BOTTOM_OFFSET, 5, tabName, "d9fa75");
-                            case "unselected" ->
-                                    this.renderSexyTab(pPoseStack, pMouseX, pMouseY, pPartialTick, TAB_UNSELECTED.blitVOffset(), -1, tabName, "747474");
-                            default ->
-                                    this.renderSexyTab(pPoseStack, pMouseX, pMouseY, pPartialTick, 0, -1, tabName, "747474");
-                        }
-                        RenderSystem.disableDepthTest();
-                    }
+    }
 
-                    public void renderSexyTab(PoseStack poseStack, int xMouse, int yMouse, float tickDelta, int blitVOffset, int blitOffset, String tabName, String hexColor) {
-                        poseStack.pushPose();
-                        this.renderDefinition = this.renderDefinition.blitFromNewY(blitVOffset);
-                        poseStack.translate(0, 0, blitOffset);
-                        super.renderButton(poseStack, xMouse, yMouse, tickDelta);
-                        drawString(poseStack, pFont, Component.translatable("menu.civilization." + tabName),
-                                this.x + 10, this.y + (this.renderDefinition.blitVHeight() / 2) - 5, Integer.parseInt(hexColor, 16));
-                        poseStack.popPose();
-                    }
-                }
-        );
+    private void renderNationMenu(PoseStack poseStack, int xMouse, int yMouse, float tickDelta) {
+
+    }
+
+    private void renderCityMenu(PoseStack poseStack, int xMouse, int yMouse, float tickDelta) {
+
+    }
+
+    private void renderReputationMenu(PoseStack poseStack, int xMouse, int yMouse, float tickDelta) {
+
+    }
+
+    private class TabButton extends DynamicButton {
+        private final String tabName;
+
+        public TabButton(int topPos, String tabName) {
+            super(
+                    TAB_UNSELECTED.renderAtNewPos(MainPlayerScreen.this.tabLeftPos, topPos),
+                    MainPlayerScreen.this.textureLocation,
+                    Component.translatable("menu.civilization." + tabName),
+                    (pButton) -> MainPlayerScreen.this.setActiveTab(tabName),
+                    ((pButton, pPoseStack, pMouseX, pMouseY) ->
+                            MainPlayerScreen.this.renderTooltip(
+                                    pPoseStack,
+                                    Component.translatable("menu.civilization." + tabName + ".tooltip"),
+                                    pMouseX,
+                                    pMouseY
+                            )
+                    ),
+                    MainPlayerScreen.this.textureWidth,
+                    MainPlayerScreen.this.textureHeight
+            );
+
+            this.tabName = tabName;
+        }
+
+        @Override
+        public void renderButton(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+            pPoseStack.pushPose();
+            RenderSystem.enableDepthTest();
+            switch (this.getState()) {
+                case "selected" ->
+                        this.renderSexyTab(pPoseStack, pMouseX, pMouseY, pPartialTick, TAB_SELECTED_OFFSET, 5, "d9fa75");
+                case "selected_bottom" ->
+                        this.renderSexyTab(pPoseStack, pMouseX, pMouseY, pPartialTick, TAB_SELECTED_BOTTOM_OFFSET, 5, "d9fa75");
+                case "unselected" ->
+                        this.renderSexyTab(pPoseStack, pMouseX, pMouseY, pPartialTick, TAB_UNSELECTED.blitVOffset(), -1, "747474");
+                default ->
+                        this.renderSexyTab(pPoseStack, pMouseX, pMouseY, pPartialTick, 0, -1, "747474");
+            }
+            RenderSystem.disableDepthTest();
+            pPoseStack.popPose();
+        }
+
+        public void renderSexyTab(PoseStack poseStack, int xMouse, int yMouse, float tickDelta, int blitVOffset, int blitOffset, String hexColor) {
+            poseStack.pushPose();
+            this.renderDefinition = this.renderDefinition.blitFromNewY(blitVOffset);
+            poseStack.translate(0, 0, blitOffset);
+            super.renderButton(poseStack, xMouse, yMouse, tickDelta);
+            drawString(poseStack, Minecraft.getInstance().font, Component.translatable("menu.civilization." + this.tabName),
+                    this.x + 10, this.y + (this.renderDefinition.blitVHeight() / 2) - 5, Integer.parseInt(hexColor, 16));
+            poseStack.popPose();
+        }
     }
 }
