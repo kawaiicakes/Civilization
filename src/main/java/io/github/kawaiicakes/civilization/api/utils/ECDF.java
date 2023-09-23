@@ -42,6 +42,7 @@ public class ECDF {
      *          ordered from lowest to highest bound at index 0 and 1 respectively.
      *          if nq is not an integer, an array of 1 <code>double</code> representing the value under which it
      *          is said the quantile percentage of data falls.
+     * @throws IllegalArgumentException if the quantile is not a value between 0.00 and 1.00 inclusive.
      */
     public double[] getQuantile(double quantile) throws IllegalArgumentException {
         if (quantile < 0.00 || quantile > 1.00) {
@@ -51,7 +52,11 @@ public class ECDF {
         boolean nqIsInt = (this.values.length * quantile) == (int)(this.values.length * quantile);
 
         return nqIsInt
-                ? new double[]{this.values[(int) (this.values.length * quantile)], this.values[(int) ((this.values.length * quantile) + 1)]}
+                ? new double[]{this.values[(int) (this.values.length * quantile)], this.values[this.doesNotExceedLength((this.values.length * quantile) + 1)]}
                 : new double[]{this.values[(int) Math.ceil((this.values.length * quantile))]};
+    }
+
+    private int doesNotExceedLength(double value) {
+        return value <= this.values.length ? (int) value : this.values.length;
     }
 }
