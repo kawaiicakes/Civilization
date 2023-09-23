@@ -1,23 +1,24 @@
 package io.github.kawaiicakes.civilization.capabilities;
 
+import io.github.kawaiicakes.civilization.api.nations.CivLevelData;
 import io.github.kawaiicakes.civilization.api.nations.CivLevelNation;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CivLevelCapability {
     @NotNull
-    private List<CivLevelNation> civLevelNations = new ArrayList<>();
+    private Set<CivLevelNation> civLevelNations = new HashSet<>();
 
-    public @NotNull List<CivLevelNation> getNations() {
+    public @NotNull Set<CivLevelNation> getNations() {
         return this.civLevelNations;
     }
 
-    public void setNations(@NotNull List<CivLevelNation> civLevelNations) {
+    public void setNations(@NotNull Set<CivLevelNation> civLevelNations) {
         this.civLevelNations = civLevelNations;
     }
 
@@ -26,37 +27,12 @@ public class CivLevelCapability {
     }
 
     public void saveNBT(CompoundTag nbt) {
-        this.saveNationsNBT(nbt);
+        nbt.put("civLevelNations", CivLevelData.collectionToListTag(this.civLevelNations));
     }
 
     public void loadNBT(CompoundTag nbt) {
-        this.loadNationsNBT(nbt);
-    }
+        ListTag nationNBTList = nbt.getList("civLevelNations", Tag.TAG_COMPOUND);
 
-    private void saveNationsNBT(CompoundTag nbt) {
-        ListTag nationsNBTList = new ListTag();
-
-        this.civLevelNations.forEach(levelNation -> {
-            if (levelNation != null) nationsNBTList.add(levelNation.serializeNBT());
-        });
-
-
-        nbt.put("civLevelNations", nationsNBTList);
-    }
-
-    private void loadNationsNBT(CompoundTag nbt) {
-        if (nbt != null && nbt.get("civLevelNations") != null) {
-            ListTag nationNBTList = nbt.getList("civLevelNations", Tag.TAG_COMPOUND);
-
-            List<CivLevelNation> civLevelNationList = new ArrayList<>(nationNBTList.size());
-
-            nationNBTList.forEach(n -> {
-                CompoundTag nationNBT = (CompoundTag) n;
-
-                civLevelNationList.add(new CivLevelNation(nationNBT));
-            });
-
-            this.setNations(civLevelNationList);
-        }
+        this.civLevelNations = CivLevelData.listTagToSet(nationNBTList, nat -> new CivLevelNation((CompoundTag) nat));
     }
 }

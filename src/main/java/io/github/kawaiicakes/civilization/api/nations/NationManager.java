@@ -7,10 +7,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.HashSet;
-import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Stream;
 
 import static io.github.kawaiicakes.civilization.Civilization.CHAT_HEADER;
 import static io.github.kawaiicakes.civilization.capabilities.CivLevelCapabilityProvider.CIV_LEVEL_CAP;
@@ -44,9 +44,9 @@ public class NationManager {
         return null;
     }
 
-    public static List<CivLevelNation> getNations(ServerLevel level) {
+    public static Set<CivLevelNation> getNations(ServerLevel level) {
         if (!level.isClientSide()) {
-            AtomicReference<List<CivLevelNation>> listAtomicReference = new AtomicReference<>();
+            AtomicReference<Set<CivLevelNation>> listAtomicReference = new AtomicReference<>();
             level.getCapability(CIV_LEVEL_CAP).ifPresent(levelCap -> listAtomicReference.set(levelCap.getNations()));
             return listAtomicReference.get();
         } else {
@@ -92,14 +92,14 @@ public class NationManager {
     public static boolean nationCreationValid(ServerLevel level, CivLevelNation civLevelNation) {
         if (level.isClientSide()) return false;
 
-        List<CivLevelNation> civLevelNationList = getNations(level);
+        Set<CivLevelNation> civLevelNationList = getNations(level);
+
         if (civLevelNationList == null) return false;
-        final Stream<CivLevelNation> nationStream = civLevelNationList.stream();
 
         if (civLevelNationList.contains(civLevelNation)) return false;
 
         return (
-                nationStream.noneMatch(nat -> nat.nationUUID == civLevelNation.nationUUID)
+                civLevelNationList.stream().noneMatch(nat -> Objects.equals(nat.nationUUID, civLevelNation.nationUUID))
                 && civLevelNation.tiles.isEmpty()
                 && civLevelNation.players.isEmpty()
                 && civLevelNation.cities.isEmpty()
