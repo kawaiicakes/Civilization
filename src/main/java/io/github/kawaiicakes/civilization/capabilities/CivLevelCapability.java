@@ -1,6 +1,6 @@
 package io.github.kawaiicakes.civilization.capabilities;
 
-import io.github.kawaiicakes.civilization.api.nbt.CivLevelData;
+import io.github.kawaiicakes.civilization.api.nbt.CivSerializable;
 import io.github.kawaiicakes.civilization.nbt.CivLevelNation;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -34,13 +34,13 @@ public class CivLevelCapability {
     }
 
     public void saveNBT(CompoundTag nbt) {
-        nbt.put("civLevelNations", CivLevelData.collectionToListTag(this.civLevelNations));
+        nbt.put("civLevelNations", CivSerializable.collectionToListTag(this.civLevelNations));
     }
 
     public void loadNBT(CompoundTag nbt) {
         ListTag nationNBTList = nbt.getList("civLevelNations", Tag.TAG_COMPOUND);
 
-        this.civLevelNations = CivLevelData.listTagToSet(nationNBTList, nat -> new CivLevelNation((CompoundTag) nat));
+        this.civLevelNations = CivSerializable.listTagToSet(nationNBTList, nat -> new CivLevelNation((CompoundTag) nat));
     }
 
     public static class Provider implements ICapabilitySerializable<CompoundTag> {

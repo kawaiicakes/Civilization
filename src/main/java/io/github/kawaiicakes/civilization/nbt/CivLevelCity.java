@@ -1,7 +1,7 @@
 package io.github.kawaiicakes.civilization.nbt;
 
 import io.github.kawaiicakes.civilization.api.level.HexTilePos;
-import io.github.kawaiicakes.civilization.api.nbt.CivLevelData;
+import io.github.kawaiicakes.civilization.api.nbt.CivSerializable;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.Tag;
@@ -14,7 +14,7 @@ import java.util.UUID;
  * Used to easily convey city data to and from NBT and in other contexts.
  * Don't cache values returned from the level as these are not intended to store live data.
  */
-public class CivLevelCity extends CivLevelData<CompoundTag> {
+public class CivLevelCity extends CivSerializable<CompoundTag> {
     public UUID cityId;
     public String cityName;
     public Set<HexTilePos> tiles;

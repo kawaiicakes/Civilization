@@ -1,12 +1,12 @@
 package io.github.kawaiicakes.civilization.nbt;
 
-import io.github.kawaiicakes.civilization.api.nbt.CivLevelData;
+import io.github.kawaiicakes.civilization.api.nbt.CivSerializable;
 import net.minecraft.nbt.CompoundTag;
 
 import java.util.Objects;
 import java.util.UUID;
 
-public final class CivLevelPlayer extends CivLevelData<CompoundTag> {
+public final class CivLevelPlayer extends CivSerializable<CompoundTag> {
     public UUID playerId;
 
     public CivLevelPlayer(

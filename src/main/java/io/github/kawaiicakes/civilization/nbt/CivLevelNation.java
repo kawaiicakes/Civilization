@@ -1,7 +1,7 @@
 package io.github.kawaiicakes.civilization.nbt;
 
 import io.github.kawaiicakes.civilization.api.level.HexTilePos;
-import io.github.kawaiicakes.civilization.api.nbt.CivLevelData;
+import io.github.kawaiicakes.civilization.api.nbt.CivSerializable;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.Tag;
@@ -18,7 +18,7 @@ import java.util.UUID;
  * Despite the nature of UUIDs, sets are used to ensure the same city/player is added to the list again
  * on account of another part of the code.
  */
-public final class CivLevelNation extends CivLevelData<CompoundTag> {
+public final class CivLevelNation extends CivSerializable<CompoundTag> {
     public UUID nationUUID;
     public String nationName;
     public Set<CivLevelPlayer> players;

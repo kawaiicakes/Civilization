@@ -12,16 +12,14 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Used to easily convey some data to and from NBT and in other contexts.
- * Don't cache values returned from the level as these are not intended to store live data.
- * The data to be exchanged is held in subclass fields.
- * <br>
- * Deserialization is to be handled by the constructor.
+ * Implementing classes are essentially codecs for some NBT data specifically made for this mod. Implementing classes
+ * are expected to contain codecs for <code>ListTag</code>s. Deserialization is to be handled by the constructor.
+ * As many NBT data structures are expected to be nested by this mod, this abstraction makes life much easier.
  */
 @FieldsAreNonnullByDefault
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public abstract class CivLevelData<T extends Tag> implements NBTSerializable<T> {
+public abstract class CivSerializable<T extends Tag> implements NBTSerializable<T> {
     /**
      *  Simple utility method to easily return a <code>ListTag</code> containing the elements of
      *  a <code>Collection</code>. Bear in mind that no precautions are taken to prevent duplicate
