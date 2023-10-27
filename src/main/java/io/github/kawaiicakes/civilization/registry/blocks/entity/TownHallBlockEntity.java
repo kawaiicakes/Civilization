@@ -1,4 +1,4 @@
-package io.github.kawaiicakes.civilization.blocks.entity;
+package io.github.kawaiicakes.civilization.registry.blocks.entity;
 
 import io.github.kawaiicakes.civilization.api.blocks.entity.AbstractClaimBlockEntity;
 import net.minecraft.core.BlockPos;

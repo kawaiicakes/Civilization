@@ -4,7 +4,7 @@ import io.github.kawaiicakes.civilization.Civilization;
 import io.github.kawaiicakes.civilization.client.KeyBinds;
 import io.github.kawaiicakes.civilization.network.CivPacketHandler;
 import io.github.kawaiicakes.civilization.network.packets.C2SNewNationPacket;
-import io.github.kawaiicakes.civilization.screen.MainPlayerScreen;
+import io.github.kawaiicakes.civilization.client.screen.MainPlayerScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;

@@ -1,4 +1,4 @@
-package io.github.kawaiicakes.civilization.screen;
+package io.github.kawaiicakes.civilization.client.screen;
 
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
