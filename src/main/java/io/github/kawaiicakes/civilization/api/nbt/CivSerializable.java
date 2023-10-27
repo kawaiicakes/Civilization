@@ -7,6 +7,7 @@ import net.minecraft.nbt.Tag;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Implementing classes are essentially codecs for some NBT data specifically made for this mod. Implementing classes
@@ -43,7 +44,7 @@ public abstract class CivSerializable<T extends Tag> implements NBTSerializable<
      * @return          a <code>List</code> of type <code>U</code>.
      * @param <U>       a class implementing <code>NBTSerializable</code>.
      */
-    public abstract <U extends NBTSerializable<?>> Collection<U> listTagToCollection(ListTag listTag);
+    public abstract <U extends NBTSerializable<?>> List<U> listTagToList(ListTag listTag);
 
     @Override
     public abstract boolean equals(Object obj);
