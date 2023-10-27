@@ -44,7 +44,7 @@ public abstract class CivSerializable<T extends Tag> implements NBTSerializable<
      * @return          a <code>List</code> of type <code>U</code>.
      * @param <U>       a class implementing <code>NBTSerializable</code>.
      */
-    public abstract <U extends NBTSerializable<?>> List<U> listTagToList(ListTag listTag);
+    public abstract List<? extends NBTSerializable<?>> listTagToList(ListTag listTag);
 
     @Override
     public abstract boolean equals(Object obj);
