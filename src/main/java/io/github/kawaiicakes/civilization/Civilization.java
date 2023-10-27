@@ -2,7 +2,7 @@ package io.github.kawaiicakes.civilization;
 
 import com.mojang.logging.LogUtils;
 import io.github.kawaiicakes.civilization.events.CapabilityEvents;
-import io.github.kawaiicakes.civilization.events.DebugEvents;
+import io.github.kawaiicakes.civilization.events.PlayerEvents;
 import io.github.kawaiicakes.civilization.network.CivPacketHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -30,7 +30,7 @@ public class Civilization
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(DebugEvents.class);
+        MinecraftForge.EVENT_BUS.addListener(PlayerEvents::onBlockPlaced);
         MinecraftForge.EVENT_BUS.register(CapabilityEvents.class);
 
         modEventBus.addListener(this::commonSetup);
