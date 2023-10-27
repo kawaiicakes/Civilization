@@ -1,6 +1,6 @@
 package io.github.kawaiicakes.civilization.api.level;
 
-import io.github.kawaiicakes.civilization.api.utils.NBTSerializable;
+import io.github.kawaiicakes.civilization.api.nbt.NBTSerializable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.world.level.ChunkPos;

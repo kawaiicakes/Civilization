@@ -2,7 +2,6 @@ package io.github.kawaiicakes.civilization.api.nbt;
 
 import com.mojang.logging.annotations.FieldsAreNonnullByDefault;
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
-import io.github.kawaiicakes.civilization.api.utils.NBTSerializable;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 
