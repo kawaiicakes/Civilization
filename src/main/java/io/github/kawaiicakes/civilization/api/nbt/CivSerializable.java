@@ -7,9 +7,6 @@ import net.minecraft.nbt.Tag;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Implementing classes are essentially codecs for some NBT data specifically made for this mod. Implementing classes
@@ -21,7 +18,7 @@ import java.util.stream.Collectors;
 @MethodsReturnNonnullByDefault
 public abstract class CivSerializable<T extends Tag> implements NBTSerializable<T> {
     /**
-     *  Simple utility method to easily return a <code>ListTag</code> containing the elements of
+     *  Implementing methods serialize a <code>ListTag</code> containing the elements of
      *  a <code>Collection</code>. Bear in mind that no precautions are taken to prevent duplicate
      *  entries. Use accordingly.
      * @param uCollection Any <code>Collection</code> of type <code>U</code>.
@@ -29,7 +26,7 @@ public abstract class CivSerializable<T extends Tag> implements NBTSerializable<
      * @param <U>   the type extending <code>NBTSerializable</code>. Any instance of <code>U</code>
      *              may call <code>#serializeNBT</code> to return a subclass of <code>Tag</code>.
      */
-    public static <U extends NBTSerializable<?>> ListTag collectionToListTag(Collection<U> uCollection) {
+    public <U extends NBTSerializable<?>> ListTag collectionToListTag(Collection<U> uCollection) {
         ListTag listTag = new ListTag();
 
         uCollection.forEach(u -> {
@@ -40,18 +37,13 @@ public abstract class CivSerializable<T extends Tag> implements NBTSerializable<
     }
 
     /**
-     * Easily turn a <code>ListTag</code> into a <code>Set</code> of type <code>T</code>. Mainly exists for convenience
-     * and formality.
+     * Implementations deserialize a <code>ListTag</code> into a <code>Set</code> of type <code>T</code>.
      * @param listTag   the <code>ListTag</code> to convert. Ensure <code>pTagType</code> corresponds to the type
      *                  parameter of <code>NBTSerializable</code> in <code>U</code>.
-     * @param mapper    the <code>Function</code> corresponding to the deserialization of <code>U</code>.
-     * @return          a <code>Set</code> of type <code>U</code> constructed to the given mapper.
+     * @return          a <code>List</code> of type <code>U</code>.
      * @param <U>       a class implementing <code>NBTSerializable</code>.
      */
-    public static <U extends NBTSerializable<?>> Set<U> listTagToSet(ListTag listTag,
-                                                                     Function<? super Tag, ? extends U> mapper) {
-        return listTag.stream().map(mapper).collect(Collectors.toSet());
-    }
+    public abstract <U extends NBTSerializable<?>> Collection<U> listTagToCollection(ListTag listTag);
 
     @Override
     public abstract boolean equals(Object obj);
