@@ -14,7 +14,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
 
-    mappings channel: 'parchment', version: '2022.11.27-1.19.2'
+    mappings channel: 'parchment', version: "${parchment_version}"
 
     runs {
         client {
@@ -96,7 +96,7 @@ jar {
         attributes([
                 "Specification-Title"     : "civilization",
                 "Specification-Vendor"    : "kawaiicakes",
-                "Specification-Version"   : "${mod_version}",
+                "Specification-Version"   : "${minecraft_version}-${mod_version}",
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : "kawaiicakes",
