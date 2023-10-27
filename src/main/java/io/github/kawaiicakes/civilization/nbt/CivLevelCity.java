@@ -1,6 +1,7 @@
-package io.github.kawaiicakes.civilization.api.nbt;
+package io.github.kawaiicakes.civilization.nbt;
 
 import io.github.kawaiicakes.civilization.api.level.HexTilePos;
+import io.github.kawaiicakes.civilization.api.nbt.CivLevelData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.Tag;

@@ -1,5 +1,6 @@
-package io.github.kawaiicakes.civilization.api.nbt;
+package io.github.kawaiicakes.civilization.api.level;
 
+import io.github.kawaiicakes.civilization.nbt.CivLevelNation;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.MinecraftServer;

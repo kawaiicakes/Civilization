@@ -1,5 +1,6 @@
-package io.github.kawaiicakes.civilization.api.nbt;
+package io.github.kawaiicakes.civilization.nbt;
 
+import io.github.kawaiicakes.civilization.api.nbt.CivLevelData;
 import net.minecraft.nbt.CompoundTag;
 
 import java.util.Objects;

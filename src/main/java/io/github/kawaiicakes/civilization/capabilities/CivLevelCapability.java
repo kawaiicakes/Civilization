@@ -1,7 +1,7 @@
 package io.github.kawaiicakes.civilization.capabilities;
 
 import io.github.kawaiicakes.civilization.api.nbt.CivLevelData;
-import io.github.kawaiicakes.civilization.api.nbt.CivLevelNation;
+import io.github.kawaiicakes.civilization.nbt.CivLevelNation;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
