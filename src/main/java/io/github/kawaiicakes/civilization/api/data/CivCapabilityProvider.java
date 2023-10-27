@@ -14,14 +14,14 @@ import org.jetbrains.annotations.Nullable;
  * @param <U> the type extending <code>Tag</code> in the type parameter for <code>T</code>.
  */
 public abstract class CivCapabilityProvider<T extends CivCapability<U>, U extends Tag> implements ICapabilitySerializable<U> {
-    T capability = null;
-    final LazyOptional<T> lazyHandler = LazyOptional.of(this::create);
+    protected T capability = null;
+    protected final LazyOptional<T> lazyHandler = LazyOptional.of(this::create);
 
     /**
      * <code>$capability</code> is to be referenced here. If null, then instantiate <code>T</code> and return.
      * Otherwise, return this field.
      */
-    abstract T create();
+    protected abstract T create();
 
     /**
      * This should return a static field in the implementing class containing the <code>CapabilityToken</code>
