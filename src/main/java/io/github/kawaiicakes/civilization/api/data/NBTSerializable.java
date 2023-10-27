@@ -1,4 +1,4 @@
-package io.github.kawaiicakes.civilization.api.nbt;
+package io.github.kawaiicakes.civilization.api.data;
 
 import net.minecraft.nbt.Tag;
 
