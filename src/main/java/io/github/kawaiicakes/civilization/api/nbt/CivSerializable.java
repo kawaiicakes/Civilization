@@ -38,11 +38,10 @@ public abstract class CivSerializable<T extends Tag> implements NBTSerializable<
     }
 
     /**
-     * Implementations deserialize a <code>ListTag</code> into a <code>Set</code> of type <code>T</code>.
+     * Deserializes a <code>ListTag</code> into a <code>List</code> of type <code>T</code>.
      * @param listTag   the <code>ListTag</code> to convert. Ensure <code>pTagType</code> corresponds to the type
      *                  parameter of <code>NBTSerializable</code> in <code>U</code>.
      * @return          a <code>List</code> of type <code>U</code>.
-     * @param <U>       a class implementing <code>NBTSerializable</code>.
      */
     public abstract List<? extends NBTSerializable<?>> listTagToList(ListTag listTag);
 
