@@ -48,9 +48,9 @@ public class CivLevelCapability {
 
         private CivLevelCapability civLevelCapability = null;
 
-        private final LazyOptional<CivLevelCapability> lazyHandler = LazyOptional.of(this::createCapability);
+        private final LazyOptional<CivLevelCapability> lazyHandler = LazyOptional.of(this::create);
 
-        private CivLevelCapability createCapability() {
+        private CivLevelCapability create() {
             if (this.civLevelCapability == null) {
                 // TODO: proper constructor
                 this.civLevelCapability =  new CivLevelCapability();
@@ -71,14 +71,14 @@ public class CivLevelCapability {
         public CompoundTag serializeNBT() {
             CompoundTag nbt = new CompoundTag();
             // TODO: code shit here.
-            this.createCapability().saveNBT(nbt);
+            this.create().saveNBT(nbt);
             return nbt;
         }
 
         @Override
         public void deserializeNBT(CompoundTag nbt) {
             // TODO
-            this.createCapability().loadNBT(nbt);
+            this.create().loadNBT(nbt);
         }
     }
 }
