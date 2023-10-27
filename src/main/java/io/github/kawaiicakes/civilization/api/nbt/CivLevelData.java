@@ -1,4 +1,4 @@
-package io.github.kawaiicakes.civilization.api.nations;
+package io.github.kawaiicakes.civilization.api.nbt;
 
 import com.mojang.logging.annotations.FieldsAreNonnullByDefault;
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;

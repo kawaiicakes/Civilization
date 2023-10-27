@@ -17,7 +17,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import static io.github.kawaiicakes.civilization.Civilization.LOGGER;
-import static io.github.kawaiicakes.civilization.api.nations.NationManager.NULLARIA;
+import static io.github.kawaiicakes.civilization.api.nbt.NationManager.NULLARIA;
 
 public class PlayerEvents {
     @Mod.EventBusSubscriber(modid = Civilization.MOD_ID, value = Dist.CLIENT)

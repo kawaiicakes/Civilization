@@ -1,7 +1,7 @@
 package io.github.kawaiicakes.civilization.network.packets;
 
-import io.github.kawaiicakes.civilization.api.nations.CivLevelNation;
-import io.github.kawaiicakes.civilization.api.nations.NationManager;
+import io.github.kawaiicakes.civilization.api.nbt.CivLevelNation;
+import io.github.kawaiicakes.civilization.api.nbt.NationManager;
 import io.github.kawaiicakes.civilization.api.network.SimplePacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;

@@ -1,4 +1,4 @@
-package io.github.kawaiicakes.civilization.api.nations;
+package io.github.kawaiicakes.civilization.api.nbt;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
