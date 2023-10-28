@@ -1,15 +1,20 @@
 package io.github.kawaiicakes.civilization.network.packets;
 
+import io.github.kawaiicakes.civilization.api.level.NationManager;
 import io.github.kawaiicakes.civilization.api.network.SimplePacket;
 import io.github.kawaiicakes.civilization.capabilities.data.CivNation;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.Objects;
 
+import static io.github.kawaiicakes.civilization.Civilization.CHAT_HEADER;
+
 public class C2SNewNationPacket extends SimplePacket {
-    //private final CivNation civNation;
+    private final CivNation civNation;
 
     /**
      * Sends an instance of this with the given <code>CivLevelNation</code> to the server
@@ -20,22 +25,21 @@ public class C2SNewNationPacket extends SimplePacket {
      * @param civNation    the <code>CivLevelNation</code> to send to the server.
      */
     public C2SNewNationPacket(CivNation civNation) {
-        //this.civNation = civNation;
+        this.civNation = civNation;
     }
 
     public C2SNewNationPacket(FriendlyByteBuf buf) {
-        //this.civNation = new CivNation();
+        this.civNation = CivNation.deserializeNBT(Objects.requireNonNull(buf.readAnySizeNbt()));
     }
 
     @Override
     public void toBytes(FriendlyByteBuf buf) {
-        //buf.writeNbt(this.civNation.serializeNBT());
+        buf.writeNbt(this.civNation.serializeNBT());
     }
 
     @Override
     public void onReceipt(NetworkEvent.Context context) {
         ServerLevel level = Objects.requireNonNull(context.getSender()).getLevel();
-        /*
         if (NationManager.createNation(level, this.civNation)) {
             context.getSender().sendSystemMessage(
                     CHAT_HEADER().append(Component.translatable("chat.civilization.nation_founded_client", this.civNation.name()).setStyle(Style.EMPTY))
@@ -45,7 +49,5 @@ public class C2SNewNationPacket extends SimplePacket {
                     CHAT_HEADER().append(Component.translatable("chat.civilization.invalid_nation").setStyle(Style.EMPTY))
             );
         }
-
-         */
     }
 }

@@ -41,7 +41,7 @@ public class NationManager {
     public static Set<CivNation> getNations(ServerLevel level) {
         if (!level.isClientSide()) {
             AtomicReference<Set<CivNation>> listAtomicReference = new AtomicReference<>();
-            //level.getCapability(CIV_LEVEL_CAP).ifPresent(levelCap -> listAtomicReference.set(levelCap.getNations()));
+            level.getCapability(CIV_LEVEL_CAP).ifPresent(levelCap -> listAtomicReference.set(levelCap.getNations()));
             return listAtomicReference.get();
         } else {
             return null;
@@ -63,7 +63,7 @@ public class NationManager {
                     level.players().forEach(serverPlayer -> serverPlayer.sendSystemMessage(
                             CHAT_HEADER().append(Component.translatable("chat.civilization.nation_founded", civNation.name()).setStyle(Style.EMPTY))
                     ));
-                    //civ.addNation(civNation);
+                    civ.addNation(civNation);
                 });
                 return true;
             } else {
