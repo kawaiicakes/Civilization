@@ -16,8 +16,8 @@ public class CapabilityEvents {
     public static void onAttachCapabilities(AttachCapabilitiesEvent<Level> event) {
         if (!(event.getObject() instanceof ServerLevel level)) return;
 
-        if (level.getCapability(CivLevelCapability.Provider.CIV_LEVEL_CAP).isPresent()) return;
+        if (level.getCapability(CivGlobalDataCapability.Provider.CIV_LEVEL_CAP).isPresent()) return;
 
-        event.addCapability(new ResourceLocation(MOD_ID, level.dimension().location().getPath() + "_data"), new CivLevelCapability.Provider());
+        event.addCapability(new ResourceLocation(MOD_ID, level.dimension().location().getPath() + "_data"), new CivGlobalDataCapability.Provider());
     }
 }

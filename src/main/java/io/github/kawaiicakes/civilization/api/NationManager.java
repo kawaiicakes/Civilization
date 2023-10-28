@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static io.github.kawaiicakes.civilization.Civilization.CHAT_HEADER;
-import static io.github.kawaiicakes.civilization.capabilities.CivLevelCapability.Provider.CIV_LEVEL_CAP;
+import static io.github.kawaiicakes.civilization.capabilities.CivGlobalDataCapability.Provider.CIV_LEVEL_CAP;
 
 /**
  * Central hub for easily accessing nation info. Also exists as a security checkpoint for packets received from clients.

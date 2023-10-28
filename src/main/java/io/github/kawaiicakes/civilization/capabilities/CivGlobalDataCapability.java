@@ -12,7 +12,11 @@ import net.minecraftforge.common.capabilities.CapabilityToken;
 
 import java.util.*;
 
-public class CivLevelCapability implements CivCapability<CompoundTag> {
+/**
+ * This capability is intended to store, on all <code>ServerLevel</code>s, non-dimension-specific information such as
+ * who is in what nation, nation flags/names, etc.
+ */
+public class CivGlobalDataCapability implements CivCapability<CompoundTag> {
     // TODO: look into Int2ObjectArrayMaps
     protected final Map<UUID, CivNation> nationMap = new HashMap<>();
 
@@ -42,19 +46,19 @@ public class CivLevelCapability implements CivCapability<CompoundTag> {
         );
     }
 
-    public static class Provider extends CivCapabilityProvider<CivLevelCapability, CompoundTag> {
-        public static Capability<CivLevelCapability> CIV_LEVEL_CAP = CapabilityManager.get(new CapabilityToken<>() {});
+    public static class Provider extends CivCapabilityProvider<CivGlobalDataCapability, CompoundTag> {
+        public static Capability<CivGlobalDataCapability> CIV_LEVEL_CAP = CapabilityManager.get(new CapabilityToken<>() {});
 
-        protected CivLevelCapability create() {
+        protected CivGlobalDataCapability create() {
             if (this.capability == null) {
                 // TODO: proper constructor
-                this.capability =  new CivLevelCapability();
+                this.capability =  new CivGlobalDataCapability();
             }
             return this.capability;
         }
 
         @Override
-        public Capability<CivLevelCapability> getCap() {
+        public Capability<CivGlobalDataCapability> getCap() {
             return CIV_LEVEL_CAP;
         }
 
