@@ -20,8 +20,6 @@ import static io.github.kawaiicakes.civilization.capabilities.CivLevelCapability
 public class NationManager {
     private static final Map<ChunkPos, UUID> CHUNK_MAP = new HashMap<>();
 
-    //public static CivNation NULLARIA = new CivNation();
-
     /**
      * Only use this when absolutely necessary and ensure that it is called on the server thread.
      * Do not cache the return as it may cause memory leaks.
@@ -31,9 +29,7 @@ public class NationManager {
     public static ServerLevel getOverworld() {
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         if (server != null) {
-            if (server.getLevel(ServerLevel.OVERWORLD) != null) {
-                return server.getLevel(ServerLevel.OVERWORLD);
-            }
+            return server.overworld();
         }
         return null;
     }

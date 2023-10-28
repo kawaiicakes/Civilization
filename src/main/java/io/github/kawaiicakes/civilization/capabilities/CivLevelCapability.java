@@ -10,12 +10,19 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class CivLevelCapability implements CivCapability<CompoundTag> {
+    // TODO: look into Int2ObjectArrayMaps
     protected final Map<UUID, CivNation> nationMap = new HashMap<>();
+
+    public Set<CivNation> getNations() {
+        return new HashSet<>(nationMap.values());
+    }
+
+    public void addNation(CivNation nation) {
+        this.nationMap.put(nation.id(), nation);
+    }
 
     @Override
     public void writeNBT(CompoundTag tag) {
