@@ -13,7 +13,7 @@ public class CapabilityEvents {
     // TODO: if fake dimensions like the Create: Aeronautics worldshell space are ServerLevel instances, this poses a problem...
     // A solution I can think of is including a configurable list of ResourceLocations corresponding to regions in which this mod should fully work...
     @SubscribeEvent
-    public static void onAttachCapabilitiesOverworld(AttachCapabilitiesEvent<Level> event) {
+    public static void onAttachCapabilities(AttachCapabilitiesEvent<Level> event) {
         if (!(event.getObject() instanceof ServerLevel level)) return;
 
         if (level.getCapability(CivLevelCapability.Provider.CIV_LEVEL_CAP).isPresent()) return;
