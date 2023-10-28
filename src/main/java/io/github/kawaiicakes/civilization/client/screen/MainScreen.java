@@ -35,7 +35,7 @@ public class MainScreen extends Screen {
     private static final byte logoVOffset = 8;
 
     private static final Component MAIN_SCREEN_NAME = Component.translatable("menu.civilization.main_menu");
-    private static final Component TAB_PLAYER_INFO = Component.translatable("menu.button.civilization.player_info");
+    private static final Component TAB_PLAYER_INFO = Component.translatable("menu.civilization.player_info");
     private int leftPos;
     private int topPos;
     private byte activeTab = 0;
