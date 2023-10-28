@@ -18,21 +18,21 @@ import java.util.*;
  */
 public class CivGlobalDataCapability implements CivCapability<CompoundTag> {
     // TODO: look into Int2ObjectArrayMaps
-    protected final Map<UUID, CivNation> nationMap = new HashMap<>();
+    protected static final Map<UUID, CivNation> nationMap = new HashMap<>();
 
     public Set<CivNation> getNations() {
         return new HashSet<>(nationMap.values());
     }
 
     public void addNation(CivNation nation) {
-        this.nationMap.put(nation.id(), nation);
+        nationMap.put(nation.id(), nation);
     }
 
     @Override
     public void writeNBT(CompoundTag tag) {
         ListTag nationNBTList = new ListTag();
 
-        this.nationMap.values().forEach(nation -> nationNBTList.add(nation.serializeNBT()));
+        nationMap.values().forEach(nation -> nationNBTList.add(nation.serializeNBT()));
 
         tag.put("nations", nationNBTList);
     }
@@ -42,7 +42,7 @@ public class CivGlobalDataCapability implements CivCapability<CompoundTag> {
         ListTag nationNBTList = tag.getList("nations", Tag.TAG_COMPOUND);
 
         nationNBTList.forEach(nbt ->
-                this.nationMap.put(((CompoundTag) nbt).getUUID("id"), CivNation.deserializeNBT((CompoundTag) nbt))
+                nationMap.put(((CompoundTag) nbt).getUUID("id"), CivNation.deserializeNBT((CompoundTag) nbt))
         );
     }
 

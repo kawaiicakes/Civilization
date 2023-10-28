@@ -1,9 +1,9 @@
 package io.github.kawaiicakes.civilization;
 
 import com.mojang.logging.LogUtils;
+import io.github.kawaiicakes.civilization.capabilities.CapabilityEvents;
 import io.github.kawaiicakes.civilization.client.KeyBinds;
 import io.github.kawaiicakes.civilization.client.screen.MainPlayerScreen;
-import io.github.kawaiicakes.civilization.capabilities.CapabilityEvents;
 import io.github.kawaiicakes.civilization.network.CivPacketHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
