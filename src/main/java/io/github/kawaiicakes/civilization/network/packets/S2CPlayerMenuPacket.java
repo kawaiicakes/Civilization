@@ -10,7 +10,7 @@ import net.minecraftforge.network.NetworkEvent;
  */
 public class S2CPlayerMenuPacket extends SimplePacket {
     public S2CPlayerMenuPacket() {
-        super();
+
     }
 
     public S2CPlayerMenuPacket(FriendlyByteBuf buf) {

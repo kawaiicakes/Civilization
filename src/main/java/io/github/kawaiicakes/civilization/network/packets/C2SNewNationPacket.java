@@ -20,12 +20,10 @@ public class C2SNewNationPacket extends SimplePacket {
      * @param civNation    the <code>CivLevelNation</code> to send to the server.
      */
     public C2SNewNationPacket(CivNation civNation) {
-        super();
         //this.civNation = civNation;
     }
 
     public C2SNewNationPacket(FriendlyByteBuf buf) {
-        super(buf);
         //this.civNation = new CivNation();
     }
 
