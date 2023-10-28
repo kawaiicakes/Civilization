@@ -1,6 +1,5 @@
-package io.github.kawaiicakes.civilization.events;
+package io.github.kawaiicakes.civilization.commands;
 
-import io.github.kawaiicakes.civilization.commands.CommandOpenMainMenu;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;

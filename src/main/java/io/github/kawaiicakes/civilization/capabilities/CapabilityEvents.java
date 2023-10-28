@@ -1,6 +1,5 @@
-package io.github.kawaiicakes.civilization.events;
+package io.github.kawaiicakes.civilization.capabilities;
 
-import io.github.kawaiicakes.civilization.capabilities.CivLevelCapability;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
