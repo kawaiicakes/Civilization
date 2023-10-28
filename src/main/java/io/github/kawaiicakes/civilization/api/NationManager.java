@@ -1,4 +1,4 @@
-package io.github.kawaiicakes.civilization.api.level;
+package io.github.kawaiicakes.civilization.api;
 
 import io.github.kawaiicakes.civilization.capabilities.data.CivNation;
 import net.minecraft.network.chat.Component;

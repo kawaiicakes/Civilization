@@ -1,6 +1,6 @@
 package io.github.kawaiicakes.civilization.network.packets;
 
-import io.github.kawaiicakes.civilization.api.level.NationManager;
+import io.github.kawaiicakes.civilization.api.NationManager;
 import io.github.kawaiicakes.civilization.api.network.SimplePacket;
 import io.github.kawaiicakes.civilization.capabilities.data.CivNation;
 import net.minecraft.network.FriendlyByteBuf;
