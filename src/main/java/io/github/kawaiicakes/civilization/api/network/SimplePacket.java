@@ -1,9 +1,7 @@
 package io.github.kawaiicakes.civilization.api.network;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
@@ -14,35 +12,11 @@ import java.util.function.Supplier;
  * #messageBuilder</code> during Forge common setup.
  * <br><br>
  * What the packet communicates and how it does so is dependent on implementation
- * of this class.
+ * of this class. You must also create two constructors; one which instantiates
+ * this normally for sending, and another which takes a <code>FriendlyByteBuf</code>
+ * as an argument and essentially acts as a deserializer.
  */
 public abstract class SimplePacket {
-    /**
-     * This constructor is called when one wants to send the packet. When instantiating a new packet
-     * on query for dispatch with <code>SimpleChannel</code>, this packet is encoded with
-     * <code>#toBytes</code>, sent to the recipient, then decoded using the constructor accepting
-     * a <code>FriendlyByteBuf</code> as its argument. This creates an instance of this object on
-     * the recipient's end, which is then executed on its main thread with <code>#handle</code>.
-     * <br><br>
-     * Naturally, the implementation of this behaviour is up to you. This is just here to inform
-     * you about how to actually send a packet using this constructor.
-     */
-    public SimplePacket() {
-
-    }
-
-    /**
-     * This constructor functions as the decoder; it is called when the recipient receives the
-     * <code>FriendlyByteBuf</code> from the network. It translates the <code>FriendlyByteBuf</code>
-     * to a new instance of this class; where it is then consumed on the main thread of the receiving
-     * side.
-     * @param buf   the <code>FriendlyByteBuf</code> received over the <code>SimpleChannel</code>
-     *              instance.
-     */
-    public SimplePacket(FriendlyByteBuf buf) {
-
-    }
-
     /**
      * This is the encoder and is called as soon as the packet is sent; it runs on the main thread.
      * Do not try to access sided stuff from here. Its job is to take some data, write it
