@@ -7,6 +7,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import static io.github.kawaiicakes.civilization.Civilization.MOD_ID;
+import static io.github.kawaiicakes.civilization.capabilities.CivGlobalDataCapability.Provider.CIV_LEVEL_CAP;
 
 public class CapabilityEvents {
 
@@ -16,7 +17,7 @@ public class CapabilityEvents {
     public static void attachGlobalData(AttachCapabilitiesEvent<Level> event) {
         if (!(event.getObject() instanceof ServerLevel level)) return;
 
-        if (level.getCapability(CivGlobalDataCapability.Provider.CIV_LEVEL_CAP).isPresent()) return;
+        if (level.getCapability(CIV_LEVEL_CAP).isPresent()) return;
 
         event.addCapability(new ResourceLocation(MOD_ID, "global_data"), new CivGlobalDataCapability.Provider());
     }
