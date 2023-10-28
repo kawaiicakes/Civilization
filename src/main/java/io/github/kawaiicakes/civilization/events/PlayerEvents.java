@@ -3,8 +3,6 @@ package io.github.kawaiicakes.civilization.events;
 import io.github.kawaiicakes.civilization.Civilization;
 import io.github.kawaiicakes.civilization.api.level.HexTilePos;
 import io.github.kawaiicakes.civilization.client.KeyBinds;
-import io.github.kawaiicakes.civilization.network.CivPacketHandler;
-import io.github.kawaiicakes.civilization.network.packets.C2SNewNationPacket;
 import io.github.kawaiicakes.civilization.client.screen.MainPlayerScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -17,7 +15,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import static io.github.kawaiicakes.civilization.Civilization.LOGGER;
-import static io.github.kawaiicakes.civilization.api.level.NationManager.NULLARIA;
 
 public class PlayerEvents {
     @Mod.EventBusSubscriber(modid = Civilization.MOD_ID, value = Dist.CLIENT)
@@ -26,7 +23,7 @@ public class PlayerEvents {
         public static void onKeyInput(InputEvent.Key event) {
             if (KeyBinds.CIV_MENU.consumeClick()) {
                 Minecraft.getInstance().setScreen(new MainPlayerScreen());
-                CivPacketHandler.sendToServer(new C2SNewNationPacket(NULLARIA));
+                //CivPacketHandler.sendToServer(new C2SNewNationPacket(NULLARIA));
             }
         }
     }

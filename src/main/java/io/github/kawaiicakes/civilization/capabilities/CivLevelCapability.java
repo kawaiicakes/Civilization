@@ -2,8 +2,7 @@ package io.github.kawaiicakes.civilization.capabilities;
 
 import io.github.kawaiicakes.civilization.api.data.CivCapability;
 import io.github.kawaiicakes.civilization.api.data.CivCapabilityProvider;
-import io.github.kawaiicakes.civilization.api.nbt.CivSerializable;
-import io.github.kawaiicakes.civilization.nbt.CivLevelNation;
+import io.github.kawaiicakes.civilization.capabilities.data.CivNation;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -12,18 +11,18 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 
 public class CivLevelCapability implements CivCapability<CompoundTag> {
-    CivLevelNation civLevelNations;
+    CivNation civNations;
 
     @Override
     public void writeNBT(CompoundTag tag) {
-        tag.put("civLevelNations", CivSerializable.collectionToListTag(this.civLevelNations));
+        //tag.put("civLevelNations", CivSerializable.collectionToListTag(this.civNations));
     }
 
     @Override
     public void readNBT(CompoundTag tag) {
         ListTag nationNBTList = tag.getList("civLevelNations", Tag.TAG_COMPOUND);
 
-        this.civLevelNations = CivSerializable.listTagToSet(nationNBTList, nat -> new CivLevelNation((CompoundTag) nat));
+        //this.civNations = CivSerializable.listTagToSet(nationNBTList, nat -> new CivNation());
     }
 
     public static class Provider extends CivCapabilityProvider<CivLevelCapability, CompoundTag> {
