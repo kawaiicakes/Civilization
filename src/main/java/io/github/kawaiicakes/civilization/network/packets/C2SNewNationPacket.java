@@ -6,7 +6,6 @@ import io.github.kawaiicakes.civilization.capabilities.data.CivNation;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.Objects;
@@ -39,13 +38,12 @@ public class C2SNewNationPacket extends SimplePacket {
 
     @Override
     public void onReceipt(NetworkEvent.Context context) {
-        ServerLevel level = Objects.requireNonNull(context.getSender()).getLevel();
-        if (NationManager.createNation(level, this.civNation)) {
-            context.getSender().sendSystemMessage(
+        if (NationManager.createNation(this.civNation)) {
+            Objects.requireNonNull(context.getSender()).sendSystemMessage(
                     CHAT_HEADER().append(Component.translatable("chat.civilization.nation_founded_client", this.civNation.name()).setStyle(Style.EMPTY))
             );
         } else {
-            context.getSender().sendSystemMessage(
+            Objects.requireNonNull(context.getSender()).sendSystemMessage(
                     CHAT_HEADER().append(Component.translatable("chat.civilization.invalid_nation").setStyle(Style.EMPTY))
             );
         }

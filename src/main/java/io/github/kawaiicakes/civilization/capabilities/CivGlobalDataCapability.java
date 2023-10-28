@@ -20,11 +20,11 @@ public class CivGlobalDataCapability implements CivCapability<CompoundTag> {
     // TODO: look into Int2ObjectArrayMaps
     protected static final Map<UUID, CivNation> nationMap = new HashMap<>();
 
-    public Set<CivNation> getNations() {
+    public static Set<CivNation> getNations() {
         return new HashSet<>(nationMap.values());
     }
 
-    public void addNation(CivNation nation) {
+    public static void addNation(CivNation nation) {
         nationMap.put(nation.id(), nation);
     }
 
