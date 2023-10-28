@@ -10,19 +10,29 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 public class CivLevelCapability implements CivCapability<CompoundTag> {
-    CivNation civNations;
+    protected final Map<UUID, CivNation> nationMap = new HashMap<>();
 
     @Override
     public void writeNBT(CompoundTag tag) {
-        //tag.put("civLevelNations", CivSerializable.collectionToListTag(this.civNations));
+        ListTag nationNBTList = new ListTag();
+
+        this.nationMap.values().forEach(nation -> nationNBTList.add(nation.serializeNBT()));
+
+        tag.put("nations", nationNBTList);
     }
 
     @Override
     public void readNBT(CompoundTag tag) {
-        ListTag nationNBTList = tag.getList("civLevelNations", Tag.TAG_COMPOUND);
+        ListTag nationNBTList = tag.getList("nations", Tag.TAG_COMPOUND);
 
-        //this.civNations = CivSerializable.listTagToSet(nationNBTList, nat -> new CivNation());
+        nationNBTList.forEach(nbt ->
+                this.nationMap.put(((CompoundTag) nbt).getUUID("id"), CivNation.deserializeNBT((CompoundTag) nbt))
+        );
     }
 
     public static class Provider extends CivCapabilityProvider<CivLevelCapability, CompoundTag> {
