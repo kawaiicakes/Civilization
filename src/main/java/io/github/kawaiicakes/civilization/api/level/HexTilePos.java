@@ -11,7 +11,7 @@ import java.util.Set;
 
 /**
  * Class concerned with translating Hexagonal Efficient Coordinate System (HECS) coordinates to & from
- * Minecraft pos values. A hex tile represents an area of 12 chunks which is owned by the nation
+ * Minecraft pos values. A hex tile represents an area of 12 chunks which is owned by the city
  * that has claimed it.
  * <br><br>
  * As the shape formed by a 12-chunk hex has no discrete centre in terms of <code>ChunkPos</code>,
@@ -65,6 +65,31 @@ public class HexTilePos implements CivSerializable<IntArrayTag> {
     public String getPrettyCoordinates() {
         byte val = (byte) (this.arrayZero ? 0 : 1);
         return "(" + val + ", " + this.row + ", " + this.col + ")";
+    }
+
+    /**
+     * Useful for when founding cities or the like.
+     * @return Returns a <code>HashSet</code> of the 6 tiles adjacent to this plus this one.
+     */
+    public Set<HexTilePos> getAdjacent() {
+        Set<HexTilePos> toReturn = new HashSet<>();
+
+        boolean a = this.arrayZero;
+        int aInt = this.arrayZero ? 0 : 1;
+        int r = this.row;
+        int c = this.col;
+
+        toReturn.add(this);
+        toReturn.add(new HexTilePos(a,r,c + 1));
+        toReturn.add(new HexTilePos(a,r,c - 1));
+
+        toReturn.add(new HexTilePos(!a,r - (1 - aInt),c - (1 - aInt)));
+        toReturn.add(new HexTilePos(!a,r - (1 - aInt),c + aInt));
+
+        toReturn.add(new HexTilePos(!a, r + aInt, c - (1 - aInt)));
+        toReturn.add(new HexTilePos(!a, r + aInt, c + aInt));
+
+        return toReturn;
     }
 
     public int[] asIntArray() {
