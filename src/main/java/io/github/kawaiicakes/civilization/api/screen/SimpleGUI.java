@@ -13,11 +13,14 @@ import org.jetbrains.annotations.NotNull;
  * Simple class offering the ability to easily construct GUIs used for networking.
  * These GUIs are designed to be opened using a keybind setting the screen of the client
  * Minecraft instance to this.
- *<br><br>
+ * <br><br>
  * Each instance consists of a 'primary' background rendered as a texture using blitting,
  * and then other 'modular' components which are functional and/or cosmetic in nature.
  * Coordinates are defined relative to the primary background; which in turn has its
  * coordinates defined accounting for screen size among other variables.
+ * <br><br>
+ * These are not ideal for container screens. These are made specifically to be opened
+ * at the will of the player.
  */
 public class SimpleGUI extends Screen {
     /**
