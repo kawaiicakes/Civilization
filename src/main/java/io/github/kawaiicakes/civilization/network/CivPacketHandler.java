@@ -1,5 +1,6 @@
 package io.github.kawaiicakes.civilization.network;
 
+import io.github.kawaiicakes.civilization.network.packets.C2SNewCityPacket;
 import io.github.kawaiicakes.civilization.network.packets.C2SNewNationPacket;
 import io.github.kawaiicakes.civilization.network.packets.S2CPlayerMenuPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -38,6 +39,12 @@ public class CivPacketHandler {
                 .decoder(C2SNewNationPacket::new)
                 .encoder(C2SNewNationPacket::toBytes)
                 .consumerMainThread(C2SNewNationPacket::handle)
+                .add();
+
+        net.messageBuilder(C2SNewCityPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2SNewCityPacket::new)
+                .encoder(C2SNewCityPacket::toBytes)
+                .consumerMainThread(C2SNewCityPacket::handle)
                 .add();
     }
 

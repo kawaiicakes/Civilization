@@ -19,24 +19,24 @@ import static io.github.kawaiicakes.civilization.Civilization.LOGGER;
  * The sender of this packet must be a <code>ServerPlayer</code> instance, or it will not work.
  */
 public class C2SNewCityPacket extends SimplePacket {
-    private final CivCity civNation;
+    private final CivCity civCity;
 
     /**
-     * Sends an instance of this with the given <code>CivLevelNation</code> to the server
+     * Sends an instance of this with the given <code>CivCity</code> to the server
      * when passed as the argument in <code>SimpleChannel</code>.
-     * @param civNation    the <code>CivLevelNation</code> to send to the server.
+     * @param civCity    the <code>CivCity</code> to send to the server.
      */
-    public C2SNewCityPacket(CivCity civNation) {
-        this.civNation = civNation;
+    public C2SNewCityPacket(CivCity civCity) {
+        this.civCity = civCity;
     }
 
     public C2SNewCityPacket(FriendlyByteBuf buf) {
-        this.civNation = CivCity.deserializeNBT(Objects.requireNonNull(buf.readAnySizeNbt()));
+        this.civCity = CivCity.deserializeNBT(Objects.requireNonNull(buf.readAnySizeNbt()));
     }
 
     @Override
     public void toBytes(FriendlyByteBuf buf) {
-        buf.writeNbt(this.civNation.serializeNBT());
+        buf.writeNbt(this.civCity.serializeNBT());
     }
 
     @Override
@@ -47,9 +47,9 @@ public class C2SNewCityPacket extends SimplePacket {
         }
 
         ServerPlayer player = context.getSender();
-        if (CivManager.foundCity(player.getLevel(), HexTilePos.chunkToHexPos(player.chunkPosition()), this.civNation)) {
+        if (CivManager.foundCity(player.getLevel(), HexTilePos.chunkToHexPos(player.chunkPosition()), this.civCity)) {
             Objects.requireNonNull(context.getSender()).sendSystemMessage(
-                    CHAT_HEADER().append(Component.translatable("chat.civilization.city_founded_client", this.civNation.name()).setStyle(Style.EMPTY))
+                    CHAT_HEADER().append(Component.translatable("chat.civilization.city_founded_client", this.civCity.name()).setStyle(Style.EMPTY))
             );
         } else {
             Objects.requireNonNull(context.getSender()).sendSystemMessage(
