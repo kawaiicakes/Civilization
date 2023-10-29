@@ -19,26 +19,26 @@ import java.util.*;
  */
 public class CivGlobalDataCapability implements CivCapability<CompoundTag> {
     // TODO: look into Int2ObjectArrayMaps
-    private static final Map<UUID, CivNation> nationMap = new HashMap<>();
+    private static final Map<UUID, CivNation> NATION_MAP = new HashMap<>();
 
     public static Set<CivNation> getNations() {
-        return new HashSet<>(nationMap.values());
+        return new HashSet<>(NATION_MAP.values());
     }
 
     @Nullable
     public static CivNation getNationById(UUID id) {
-        return nationMap.get(id);
+        return NATION_MAP.get(id);
     }
 
     public static void addNation(CivNation nation) {
-        nationMap.put(nation.id(), nation);
+        NATION_MAP.put(nation.id(), nation);
     }
 
     @Override
     public void writeNBT(CompoundTag tag) {
         ListTag nationNBTList = new ListTag();
 
-        nationMap.values().forEach(nation -> nationNBTList.add(nation.serializeNBT()));
+        NATION_MAP.values().forEach(nation -> nationNBTList.add(nation.serializeNBT()));
 
         tag.put("nations", nationNBTList);
     }
@@ -48,7 +48,7 @@ public class CivGlobalDataCapability implements CivCapability<CompoundTag> {
         ListTag nationNBTList = tag.getList("nations", Tag.TAG_COMPOUND);
 
         nationNBTList.forEach(nbt ->
-                nationMap.put(((CompoundTag) nbt).getUUID("id"), CivNation.deserializeNBT((CompoundTag) nbt))
+                NATION_MAP.put(((CompoundTag) nbt).getUUID("id"), CivNation.deserializeNBT((CompoundTag) nbt))
         );
     }
 
