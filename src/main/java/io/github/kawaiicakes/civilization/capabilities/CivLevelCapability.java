@@ -66,11 +66,13 @@ public class CivLevelCapability implements CivCapability<CompoundTag> {
     @Override
     public void writeNBT(CompoundTag tag) {
         saveChunkMap(tag);
+        saveCities(tag);
     }
 
     @Override
     public void readNBT(CompoundTag tag) {
         loadChunkMap(tag);
+        loadCities(tag);
     }
 
     private void saveChunkMap(CompoundTag tag) {
@@ -103,6 +105,25 @@ public class CivLevelCapability implements CivCapability<CompoundTag> {
             for (long chunkPos : nbt.getLongArray(POS_KEY)) {
                 this.chunkMap.put(new ChunkPos(chunkPos), nbt.getUUID(OWNER_KEY));
             }
+        });
+    }
+
+    private void saveCities(CompoundTag tag) {
+        ListTag cityList = new ListTag();
+
+        this.cityMap.values().forEach(city -> cityList.add(city.serializeNBT()));
+
+        tag.put(CITY_MAP_KEY, cityList);
+    }
+
+    private void loadCities(CompoundTag tag) {
+        ListTag cityList = (ListTag) tag.get(CITY_MAP_KEY);
+
+        if (cityList == null) return;
+
+        cityList.forEach(city -> {
+            CivCity dsCity = CivCity.deserializeNBT((CompoundTag) city);
+            this.cityMap.put(dsCity.id(), dsCity);
         });
     }
 
