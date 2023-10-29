@@ -21,10 +21,10 @@ import static io.github.kawaiicakes.civilization.capabilities.CivGlobalDataCapab
 import static io.github.kawaiicakes.civilization.capabilities.CivLevelCapability.Provider.CIV_LEVEL_CAP;
 
 /**
- * Central hub for easily accessing nation info. Also exists as a security checkpoint for packets received from clients.
- * This class is intended to work only on the serverside and should not be easily accessible from a client.
+ * Central hub for easily accessing the mod's data. Also exists as a "security checkpoint" for packets received from
+ * clients. This class is intended to work only on the serverside and should not be easily accessible from a client.
  */
-public class NationManager {
+public class CivManager {
     /**
      * Theoretically this will only ever return null or throw an error if called from a client.
      * Do NOT cache the return as it may cause memory leaks.
