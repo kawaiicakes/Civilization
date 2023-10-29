@@ -9,6 +9,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -18,10 +19,15 @@ import java.util.*;
  */
 public class CivGlobalDataCapability implements CivCapability<CompoundTag> {
     // TODO: look into Int2ObjectArrayMaps
-    protected static final Map<UUID, CivNation> nationMap = new HashMap<>();
+    private static final Map<UUID, CivNation> nationMap = new HashMap<>();
 
     public static Set<CivNation> getNations() {
         return new HashSet<>(nationMap.values());
+    }
+
+    @Nullable
+    public static CivNation getNationById(UUID id) {
+        return nationMap.get(id);
     }
 
     public static void addNation(CivNation nation) {
