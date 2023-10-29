@@ -3,13 +3,12 @@ package io.github.kawaiicakes.civilization.capabilities;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import static io.github.kawaiicakes.civilization.Civilization.MOD_ID;
 import static io.github.kawaiicakes.civilization.capabilities.CivGlobalDataCapability.Provider.CIV_GLOBAL_CAP;
-import static io.github.kawaiicakes.civilization.capabilities.CivLevelChunkCapability.Provider.CIV_LEVEL_CHUNK_CAP;
+import static io.github.kawaiicakes.civilization.capabilities.CivLevelCapability.Provider.CIV_LEVEL_CAP;
 
 public class CapabilityEvents {
 
@@ -25,12 +24,14 @@ public class CapabilityEvents {
     }
 
     @SubscribeEvent
-    public static void attachChunkData(AttachCapabilitiesEvent<LevelChunk> event) {
-        if (event.getObject().getLevel().isClientSide) return;
+    public static void attachChunkData(AttachCapabilitiesEvent<Level> event) {
+        if (event.getObject().isClientSide) return;
 
-        if (event.getObject().getCapability(CIV_LEVEL_CHUNK_CAP).isPresent()) return;
+        if (event.getObject().getCapability(CIV_LEVEL_CAP).isPresent()) return;
 
-        event.addCapability(new ResourceLocation(MOD_ID, "chunk_data"), new CivLevelChunkCapability.Provider());
-        event.getObject().setUnsaved(true);
+        event.addCapability(
+                new ResourceLocation(MOD_ID, "level_" + event.getObject().dimension().location().getPath() + "_data"),
+                new CivLevelCapability.Provider()
+        );
     }
 }
