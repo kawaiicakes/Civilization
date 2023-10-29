@@ -1,11 +1,15 @@
 package io.github.kawaiicakes.civilization.api;
 
+import io.github.kawaiicakes.civilization.api.level.HexTilePos;
 import io.github.kawaiicakes.civilization.capabilities.CivGlobalDataCapability;
+import io.github.kawaiicakes.civilization.capabilities.CivLevelChunkCapability;
 import io.github.kawaiicakes.civilization.capabilities.data.CivNation;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,6 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static io.github.kawaiicakes.civilization.Civilization.CHAT_HEADER;
 import static io.github.kawaiicakes.civilization.capabilities.CivGlobalDataCapability.Provider.CIV_GLOBAL_CAP;
+import static io.github.kawaiicakes.civilization.capabilities.CivLevelChunkCapability.Provider.CIV_LEVEL_CHUNK_CAP;
 
 /**
  * Central hub for easily accessing nation info. Also exists as a security checkpoint for packets received from clients.
@@ -47,6 +52,25 @@ public class NationManager {
         AtomicReference<CivNation> nation = new AtomicReference<>();
         getOverworld().getCapability(CIV_GLOBAL_CAP).ifPresent(cap -> nation.set(CivGlobalDataCapability.getNationById(id)));
         return nation.get();
+    }
+
+    /**
+     * Be incredibly careful with this. It can easily cause world corruption.
+     * // TODO: find out when this and <code>#getChunkCap</code> are safe to use.
+     */
+    @Deprecated
+    public static void setTileOwner(ServerLevel level, HexTilePos hex, UUID owner) {
+        hex.toChunkPos().forEach(chunk -> getChunkCap(level, chunk).ifPresent(cap -> cap.claim(owner)));
+    }
+
+    /**
+     * Queries the passed chunk in the passed level for its CivLevelChunkCapability. BE VERY CAREFUL WITH THIS.
+     * Haphazardly writing to the level or attempting to operate on chunks that have yet to be loaded may cause
+     * horrific bugs or world corruption.
+     */
+    @Deprecated
+    private static LazyOptional<CivLevelChunkCapability> getChunkCap(ServerLevel level, ChunkPos pos) {
+        return level.getChunk(pos.x, pos.z).getCapability(CIV_LEVEL_CHUNK_CAP);
     }
 
     /**
