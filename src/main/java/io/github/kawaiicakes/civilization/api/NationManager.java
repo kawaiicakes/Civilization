@@ -14,7 +14,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static io.github.kawaiicakes.civilization.Civilization.CHAT_HEADER;
-import static io.github.kawaiicakes.civilization.capabilities.CivGlobalDataCapability.Provider.CIV_LEVEL_CAP;
+import static io.github.kawaiicakes.civilization.capabilities.CivGlobalDataCapability.Provider.CIV_GLOBAL_CAP;
 
 /**
  * Central hub for easily accessing nation info. Also exists as a security checkpoint for packets received from clients.
@@ -38,14 +38,14 @@ public class NationManager {
      */
     public static Set<CivNation> getNations() {
         AtomicReference<Set<CivNation>> listAtomicReference = new AtomicReference<>();
-        getOverworld().getCapability(CIV_LEVEL_CAP).ifPresent(levelCap -> listAtomicReference.set(CivGlobalDataCapability.getNations()));
+        getOverworld().getCapability(CIV_GLOBAL_CAP).ifPresent(levelCap -> listAtomicReference.set(CivGlobalDataCapability.getNations()));
         return listAtomicReference.get();
     }
 
     @Nullable
     public static CivNation getNationById(UUID id) {
         AtomicReference<CivNation> nation = new AtomicReference<>();
-        getOverworld().getCapability(CIV_LEVEL_CAP).ifPresent(cap -> nation.set(CivGlobalDataCapability.getNationById(id)));
+        getOverworld().getCapability(CIV_GLOBAL_CAP).ifPresent(cap -> nation.set(CivGlobalDataCapability.getNationById(id)));
         return nation.get();
     }
 
@@ -58,7 +58,7 @@ public class NationManager {
     public static boolean createNation(CivNation civNation) {
         if (!nationCreationValid(civNation)) return false;
 
-        getOverworld().getCapability(CIV_LEVEL_CAP).ifPresent(civ -> {
+        getOverworld().getCapability(CIV_GLOBAL_CAP).ifPresent(civ -> {
             getOverworld().players().forEach(serverPlayer -> serverPlayer.sendSystemMessage(
                     CHAT_HEADER().append(Component.translatable("chat.civilization.nation_founded", civNation.name()).setStyle(Style.EMPTY))
             ));

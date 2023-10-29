@@ -53,7 +53,7 @@ public class CivGlobalDataCapability implements CivCapability<CompoundTag> {
     }
 
     public static class Provider extends CivCapabilityProvider<CivGlobalDataCapability, CompoundTag> {
-        public static Capability<CivGlobalDataCapability> CIV_LEVEL_CAP = CapabilityManager.get(new CapabilityToken<>() {});
+        public static Capability<CivGlobalDataCapability> CIV_GLOBAL_CAP = CapabilityManager.get(new CapabilityToken<>() {});
 
         protected CivGlobalDataCapability create() {
             if (this.capability == null) {
@@ -65,7 +65,7 @@ public class CivGlobalDataCapability implements CivCapability<CompoundTag> {
 
         @Override
         public Capability<CivGlobalDataCapability> getCap() {
-            return CIV_LEVEL_CAP;
+            return CIV_GLOBAL_CAP;
         }
 
         @Override
