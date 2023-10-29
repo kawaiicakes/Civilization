@@ -75,9 +75,11 @@ public class CivManager {
         hex.toChunkPos().forEach(chunk -> levelCap.ifPresent(cap -> cap.setOwner(chunk, owner)));
     }
 
-    public static boolean foundCity(ServerLevel level, CivCity civCity) {
+    public static boolean foundCity(ServerLevel level, HexTilePos tile, CivCity civCity) {
         if (!cityCreationValid(level, civCity)) return false;
 
+        // TODO: add check for territory claiming
+        tile.getAdjacent().forEach(hexTilePos -> setTileOwner(level, hexTilePos, civCity.id()));
         level.getCapability(CIV_LEVEL_CAP).ifPresent(cap -> cap.addCity(civCity));
 
         return true;
