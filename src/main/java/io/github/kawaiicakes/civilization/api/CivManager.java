@@ -3,6 +3,7 @@ package io.github.kawaiicakes.civilization.api;
 import io.github.kawaiicakes.civilization.api.level.HexTilePos;
 import io.github.kawaiicakes.civilization.capabilities.CivGlobalDataCapability;
 import io.github.kawaiicakes.civilization.capabilities.CivLevelCapability;
+import io.github.kawaiicakes.civilization.capabilities.data.CivCity;
 import io.github.kawaiicakes.civilization.capabilities.data.CivNation;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -10,8 +11,11 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.server.ServerLifecycleHooks;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
@@ -53,10 +57,30 @@ public class CivManager {
         return nation.get();
     }
 
+    /**
+     * Returns all the cities in the passed <code>ServerLevel</code>. This method has the possibility of returning
+     * an empty <code>HashSet</code>. This implies either the capability does not exist in the level, or if it exists,
+     * that no cities exist in it.
+     */
+    @NotNull
+    public static Set<CivCity> getCities(ServerLevel level) {
+        AtomicReference<Set<CivCity>> cities = new AtomicReference<>(new HashSet<>());
+        level.getCapability(CIV_LEVEL_CAP).ifPresent(cap -> cities.set(cap.getCities()));
+        return cities.get();
+    }
+
     public static void setTileOwner(ServerLevel level, HexTilePos hex, UUID owner) {
         LazyOptional<CivLevelCapability> levelCap = level.getCapability(CIV_LEVEL_CAP);
 
         hex.toChunkPos().forEach(chunk -> levelCap.ifPresent(cap -> cap.setOwner(chunk, owner)));
+    }
+
+    public static boolean foundCity(ServerLevel level, CivCity civCity) {
+        if (!cityCreationValid(level, civCity)) return false;
+
+        level.getCapability(CIV_LEVEL_CAP).ifPresent(cap -> cap.addCity(civCity));
+
+        return true;
     }
 
     /**
@@ -65,7 +89,7 @@ public class CivManager {
      *                  the client, a security check is done.
      * @return      the result of attempting to create a <code>CivNation</code>. <code>true</code> indicates success,
      */
-    public static boolean createNation(CivNation civNation) {
+    public static boolean foundNation(CivNation civNation) {
         if (!nationCreationValid(civNation)) return false;
 
         getOverworld().getCapability(CIV_GLOBAL_CAP).ifPresent(civ -> {
@@ -74,6 +98,14 @@ public class CivManager {
             ));
             CivGlobalDataCapability.addNation(civNation);
         });
+
+        return true;
+    }
+
+    public static boolean cityCreationValid(ServerLevel level, CivCity city) {
+        for (CivCity existingCity : getCities(level)) {
+            if (Objects.equals(existingCity.id(), city.id())) return false;
+        }
 
         return true;
     }

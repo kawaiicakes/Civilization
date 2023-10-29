@@ -2,6 +2,7 @@ package io.github.kawaiicakes.civilization.capabilities;
 
 import io.github.kawaiicakes.civilization.api.data.CivCapability;
 import io.github.kawaiicakes.civilization.api.data.CivCapabilityProvider;
+import io.github.kawaiicakes.civilization.capabilities.data.CivCity;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -13,9 +14,7 @@ import net.minecraftforge.common.capabilities.CapabilityToken;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * This capability is intended to store level-specific information such as who owns what chunks, and any cities in the
@@ -29,10 +28,13 @@ public class CivLevelCapability implements CivCapability<CompoundTag> {
      * should be unmapped.
      */
     private final Map<ChunkPos, UUID> chunkMap = new HashMap<>();
+    private final Map<UUID, CivCity> cityMap = new HashMap<>();
 
     public static final String CHUNK_MAP_KEY = "chunk_map";
     public static final String OWNER_KEY = "owner";
     public static final String POS_KEY = "chunks";
+
+    public static final String CITY_MAP_KEY = "cities";
 
     /**
      * Sets the owner for this chunk.
@@ -51,6 +53,14 @@ public class CivLevelCapability implements CivCapability<CompoundTag> {
     @Nullable
     public UUID owner(ChunkPos pos) {
         return this.chunkMap.get(pos);
+    }
+
+    public Set<CivCity> getCities() {
+        return new HashSet<>(this.cityMap.values());
+    }
+
+    public void addCity(CivCity city) {
+        this.cityMap.put(city.id(), city);
     }
 
     @Override

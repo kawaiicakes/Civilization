@@ -38,7 +38,7 @@ public class C2SNewNationPacket extends SimplePacket {
 
     @Override
     public void onReceipt(NetworkEvent.Context context) {
-        if (CivManager.createNation(this.civNation)) {
+        if (CivManager.foundNation(this.civNation)) {
             Objects.requireNonNull(context.getSender()).sendSystemMessage(
                     CHAT_HEADER().append(Component.translatable("chat.civilization.nation_founded_client", this.civNation.name()).setStyle(Style.EMPTY))
             );
