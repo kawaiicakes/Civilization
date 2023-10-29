@@ -6,10 +6,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraftforge.server.ServerLifecycleHooks;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static io.github.kawaiicakes.civilization.Civilization.CHAT_HEADER;
@@ -20,10 +21,8 @@ import static io.github.kawaiicakes.civilization.capabilities.CivGlobalDataCapab
  * This class is intended to work only on the serverside and should not be easily accessible from a client.
  */
 public class NationManager {
-    private static final Map<ChunkPos, UUID> CHUNK_MAP = new HashMap<>();
-
     /**
-     * Only use this when absolutely necessary and ensure that it is called on the server thread.
+     * Theoretically this will only ever return null or throw an error if called from a client.
      * Do NOT cache the return as it may cause memory leaks.
      * @return the <code>ServerLevel</code> corresponding to the Overworld on the server.
      */
@@ -41,6 +40,13 @@ public class NationManager {
         AtomicReference<Set<CivNation>> listAtomicReference = new AtomicReference<>();
         getOverworld().getCapability(CIV_LEVEL_CAP).ifPresent(levelCap -> listAtomicReference.set(CivGlobalDataCapability.getNations()));
         return listAtomicReference.get();
+    }
+
+    @Nullable
+    public static CivNation getNationById(UUID id) {
+        AtomicReference<CivNation> nation = new AtomicReference<>();
+        getOverworld().getCapability(CIV_LEVEL_CAP).ifPresent(cap -> nation.set(CivGlobalDataCapability.getNationById(id)));
+        return nation.get();
     }
 
     /**
