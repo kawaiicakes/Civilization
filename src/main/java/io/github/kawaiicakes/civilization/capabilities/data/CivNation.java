@@ -1,39 +1,36 @@
 package io.github.kawaiicakes.civilization.capabilities.data;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.kawaiicakes.civilization.api.data.CivSerializable;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.util.ExtraCodecs;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public record CivNation(
-        UUID id,
-        String name
-) implements CivSerializable<CompoundTag> {
-    public static final Codec<CivNation> CODEC = RecordCodecBuilder.create(instance ->
-            instance.group(
-                    ExtraCodecs.UUID.fieldOf("id").forGetter(CivNation::id),
-                    Codec.STRING.fieldOf("name").forGetter(CivNation::name)
-            ).apply(instance, CivNation::new)
-    );
-
+public class CivNation extends CivSerializable<CompoundTag> {
     public static final CivNation NULLARIA = new CivNation(
             Util.NIL_UUID,
             "Nullaria"
     );
 
-    @Override
-    public CompoundTag serializeNBT() {
-        return (CompoundTag) CODEC.encodeStart(NbtOps.INSTANCE, this).result().orElse(new CompoundTag());
+    public CivNation(UUID id, String name) {
+        super(id);
+        this.name = name;
     }
 
-    @Nullable
-    public static CivNation deserializeNBT(CompoundTag tag) {
-        return CODEC.parse(NbtOps.INSTANCE, tag).result().orElse(null);
+    public CivNation(CompoundTag tag) {
+        super(tag.getUUID(ID_NBT_KEY), tag);
+    }
+
+    @Override
+    public CompoundTag serializeNBT() {
+        CompoundTag toReturn = new CompoundTag();
+        toReturn.putUUID(ID_NBT_KEY, this.id());
+        toReturn.putString(NAME_NBT_KEY, this.name);
+        return toReturn;
+    }
+
+    @Override
+    public void deserializeNBT(CompoundTag tag) {
+        this.name = tag.getString(NAME_NBT_KEY);
     }
 }

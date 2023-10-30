@@ -31,7 +31,7 @@ public class C2SNewCityPacket extends SimplePacket {
     }
 
     public C2SNewCityPacket(FriendlyByteBuf buf) {
-        this.civCity = CivCity.deserializeNBT(Objects.requireNonNull(buf.readAnySizeNbt()));
+        this.civCity = new CivCity(Objects.requireNonNull(buf.readAnySizeNbt()));
     }
 
     @Override
@@ -49,7 +49,7 @@ public class C2SNewCityPacket extends SimplePacket {
         ServerPlayer player = context.getSender();
         if (CivManager.foundCity(player.getLevel(), HexTilePos.chunkToHexPos(player.chunkPosition()), this.civCity)) {
             Objects.requireNonNull(context.getSender()).sendSystemMessage(
-                    CHAT_HEADER().append(Component.translatable("chat.civilization.city_founded_client", this.civCity.name()).setStyle(Style.EMPTY))
+                    CHAT_HEADER().append(Component.translatable("chat.civilization.city_founded_client", this.civCity.name).setStyle(Style.EMPTY))
             );
         } else {
             Objects.requireNonNull(context.getSender()).sendSystemMessage(

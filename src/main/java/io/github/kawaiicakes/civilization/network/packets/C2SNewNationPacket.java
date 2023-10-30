@@ -28,7 +28,7 @@ public class C2SNewNationPacket extends SimplePacket {
     }
 
     public C2SNewNationPacket(FriendlyByteBuf buf) {
-        this.civNation = CivNation.deserializeNBT(Objects.requireNonNull(buf.readAnySizeNbt()));
+        this.civNation = new CivNation(Objects.requireNonNull(buf.readAnySizeNbt()));
     }
 
     @Override
@@ -40,7 +40,7 @@ public class C2SNewNationPacket extends SimplePacket {
     public void onReceipt(NetworkEvent.Context context) {
         if (CivManager.foundNation(this.civNation)) {
             Objects.requireNonNull(context.getSender()).sendSystemMessage(
-                    CHAT_HEADER().append(Component.translatable("chat.civilization.nation_founded_client", this.civNation.name()).setStyle(Style.EMPTY))
+                    CHAT_HEADER().append(Component.translatable("chat.civilization.nation_founded_client", this.civNation.name).setStyle(Style.EMPTY))
             );
         } else {
             Objects.requireNonNull(context.getSender()).sendSystemMessage(

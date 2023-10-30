@@ -48,7 +48,7 @@ public class CivGlobalDataCapability implements CivCapability<CompoundTag> {
         ListTag nationNBTList = tag.getList("nations", Tag.TAG_COMPOUND);
 
         nationNBTList.forEach(nbt ->
-                NATION_MAP.put(((CompoundTag) nbt).getUUID("id"), CivNation.deserializeNBT((CompoundTag) nbt))
+                NATION_MAP.put(((CompoundTag) nbt).getUUID("id"), new CivNation((CompoundTag) nbt))
         );
     }
 

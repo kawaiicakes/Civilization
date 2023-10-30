@@ -122,7 +122,7 @@ public class CivLevelCapability implements CivCapability<CompoundTag> {
         if (cityList == null) return;
 
         cityList.forEach(city -> {
-            CivCity dsCity = CivCity.deserializeNBT((CompoundTag) city);
+            CivCity dsCity = new CivCity((CompoundTag) city);
             this.cityMap.put(dsCity.id(), dsCity);
         });
     }

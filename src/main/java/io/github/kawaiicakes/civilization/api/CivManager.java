@@ -96,7 +96,7 @@ public class CivManager {
 
         getOverworld().getCapability(CIV_GLOBAL_CAP).ifPresent(civ -> {
             getOverworld().players().forEach(serverPlayer -> serverPlayer.sendSystemMessage(
-                    CHAT_HEADER().append(Component.translatable("chat.civilization.nation_founded", civNation.name()).setStyle(Style.EMPTY))
+                    CHAT_HEADER().append(Component.translatable("chat.civilization.nation_founded", civNation.name).setStyle(Style.EMPTY))
             ));
             CivGlobalDataCapability.addNation(civNation);
         });
