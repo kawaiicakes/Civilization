@@ -10,6 +10,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Implementations of this are intended to be used as the caps providers for implementations of <code>CivCapability</code>.
+ * A lot of this is likely going to be boilerplate in any implementations you see.
+ * See {@link io.github.kawaiicakes.civilization.capabilities.CivLevelCapability.Provider } for an example.
  * @param <T> the <code>CivCapability</code> subclass for which this provides.
  * @param <U> the type extending <code>Tag</code> in the type parameter for <code>T</code>.
  */
