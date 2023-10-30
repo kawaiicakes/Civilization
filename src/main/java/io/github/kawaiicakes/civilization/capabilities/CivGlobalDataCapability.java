@@ -3,23 +3,25 @@ package io.github.kawaiicakes.civilization.capabilities;
 import io.github.kawaiicakes.civilization.api.data.CivCapability;
 import io.github.kawaiicakes.civilization.api.data.CivCapabilityProvider;
 import io.github.kawaiicakes.civilization.capabilities.data.CivNation;
+import io.github.kawaiicakes.civilization.capabilities.data.NationMap;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 /**
- * This capability is intended to store, on all <code>ServerLevel</code>s, non-dimension-specific information such as
- * who is in what nation, nation flags/names, etc.
+ * This capability is intended to store and interact, on all <code>ServerLevel</code>s, non-dimension-specific
+ * information such as who is in what nation, nation flags/names, etc.
  */
 public class CivGlobalDataCapability implements CivCapability<CompoundTag> {
-    // TODO: look into Int2ObjectArrayMaps
-    private static final Map<UUID, CivNation> NATION_MAP = new HashMap<>();
+    public static final String NATION_KEY = "nations";
+
+    private static final NationMap NATION_MAP = new NationMap();
 
     public static Set<CivNation> getNations() {
         return new HashSet<>(NATION_MAP.values());
@@ -31,25 +33,17 @@ public class CivGlobalDataCapability implements CivCapability<CompoundTag> {
     }
 
     public static void addNation(CivNation nation) {
-        NATION_MAP.put(nation.id(), nation);
+        NATION_MAP.put(null, nation);
     }
 
     @Override
     public void writeNBT(CompoundTag tag) {
-        ListTag nationNBTList = new ListTag();
-
-        NATION_MAP.values().forEach(nation -> nationNBTList.add(nation.serializeNBT()));
-
-        tag.put("nations", nationNBTList);
+        tag.put(NATION_KEY, NATION_MAP.serializeNBT());
     }
 
     @Override
     public void readNBT(CompoundTag tag) {
-        ListTag nationNBTList = tag.getList("nations", Tag.TAG_COMPOUND);
-
-        nationNBTList.forEach(nbt ->
-                NATION_MAP.put(((CompoundTag) nbt).getUUID("id"), new CivNation((CompoundTag) nbt))
-        );
+        NATION_MAP.deserializeNBT(tag.getList(NATION_KEY, NATION_MAP.tagType()));
     }
 
     public static class Provider extends CivCapabilityProvider<CivGlobalDataCapability, CompoundTag> {
@@ -57,7 +51,6 @@ public class CivGlobalDataCapability implements CivCapability<CompoundTag> {
 
         protected CivGlobalDataCapability create() {
             if (this.capability == null) {
-                // TODO: proper constructor
                 this.capability =  new CivGlobalDataCapability();
             }
             return this.capability;
@@ -71,7 +64,6 @@ public class CivGlobalDataCapability implements CivCapability<CompoundTag> {
         @Override
         public CompoundTag serializeNBT() {
             CompoundTag nbt = new CompoundTag();
-            // TODO: code shit here.
             this.create().writeNBT(nbt);
             return nbt;
         }
