@@ -3,7 +3,7 @@ package io.github.kawaiicakes.civilization.network.packets;
 import io.github.kawaiicakes.civilization.api.CivManager;
 import io.github.kawaiicakes.civilization.api.level.HexTilePos;
 import io.github.kawaiicakes.civilization.api.network.SimplePacket;
-import io.github.kawaiicakes.civilization.capabilities.data.CivCity;
+import io.github.kawaiicakes.civilization.data.CivCity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;

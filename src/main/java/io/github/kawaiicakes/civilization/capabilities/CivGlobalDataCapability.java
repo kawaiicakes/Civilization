@@ -2,8 +2,8 @@ package io.github.kawaiicakes.civilization.capabilities;
 
 import io.github.kawaiicakes.civilization.api.data.CivCapability;
 import io.github.kawaiicakes.civilization.api.data.CivCapabilityProvider;
-import io.github.kawaiicakes.civilization.capabilities.data.CivNation;
-import io.github.kawaiicakes.civilization.capabilities.data.NationMap;
+import io.github.kawaiicakes.civilization.data.CivNation;
+import io.github.kawaiicakes.civilization.data.NationMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;

@@ -1,4 +1,4 @@
-package io.github.kawaiicakes.civilization.capabilities.data;
+package io.github.kawaiicakes.civilization.data;
 
 import io.github.kawaiicakes.civilization.api.data.DataMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;

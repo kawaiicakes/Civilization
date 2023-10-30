@@ -2,7 +2,7 @@ package io.github.kawaiicakes.civilization.network.packets;
 
 import io.github.kawaiicakes.civilization.api.CivManager;
 import io.github.kawaiicakes.civilization.api.network.SimplePacket;
-import io.github.kawaiicakes.civilization.capabilities.data.CivNation;
+import io.github.kawaiicakes.civilization.data.CivNation;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;

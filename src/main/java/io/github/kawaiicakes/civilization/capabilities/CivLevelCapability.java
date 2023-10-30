@@ -2,9 +2,9 @@ package io.github.kawaiicakes.civilization.capabilities;
 
 import io.github.kawaiicakes.civilization.api.data.CivCapability;
 import io.github.kawaiicakes.civilization.api.data.CivCapabilityProvider;
-import io.github.kawaiicakes.civilization.capabilities.data.ChunkMap;
-import io.github.kawaiicakes.civilization.capabilities.data.CityMap;
-import io.github.kawaiicakes.civilization.capabilities.data.CivCity;
+import io.github.kawaiicakes.civilization.data.ChunkMap;
+import io.github.kawaiicakes.civilization.data.CityMap;
+import io.github.kawaiicakes.civilization.data.CivCity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraftforge.common.capabilities.Capability;
