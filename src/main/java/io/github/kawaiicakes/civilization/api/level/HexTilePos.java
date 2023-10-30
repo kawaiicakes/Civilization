@@ -1,10 +1,8 @@
 package io.github.kawaiicakes.civilization.api.level;
 
-import io.github.kawaiicakes.civilization.api.data.CivSerializable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.world.level.ChunkPos;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,12 +16,13 @@ import java.util.Set;
  * the bottom right chunk bordering the center is arbitrarily defined as the tile's local origin;
  * (0, 0). Accordingly, the global origin is the <code>ChunkPos</code> of the tile's local origin.
  */
-public class HexTilePos implements CivSerializable<IntArrayTag> {
+public class HexTilePos {
     /**
      * Tile ZERO is the tile whose global origin is equal with its local; that is, tile (0, 0, 0). If you are unfamiliar
      * with HECS, it is recommended you read up on it so this class and tile notation makes sense.
      */
     public static final HexTilePos ZERO = new HexTilePos(true, 0, 0);
+
     private final boolean arrayZero;
     private final int row;
     private final int col;
@@ -281,11 +280,6 @@ public class HexTilePos implements CivSerializable<IntArrayTag> {
      */
     private static boolean testAgainstPattern2Skip4(int n) {
         return (((n + 1) >> 1) % 3) == 0;
-    }
-
-    @Override
-    public @NotNull IntArrayTag serializeNBT() {
-        return new IntArrayTag(this.asIntArray());
     }
 
     /*  8-BIT BINARY REFERENCE SHEET
