@@ -1,6 +1,6 @@
 package io.github.kawaiicakes.civilization.network.packets;
 
-import io.github.kawaiicakes.civilization.api.CivManager;
+import io.github.kawaiicakes.civilization.api.CityManager;
 import io.github.kawaiicakes.civilization.api.level.HexTilePos;
 import io.github.kawaiicakes.civilization.api.network.SimplePacket;
 import io.github.kawaiicakes.civilization.data.CivCity;
@@ -47,7 +47,7 @@ public class C2SNewCityPacket extends SimplePacket {
         }
 
         ServerPlayer player = context.getSender();
-        if (CivManager.foundCity(player.getLevel(), HexTilePos.chunkToHexPos(player.chunkPosition()), this.civCity)) {
+        if (CityManager.foundCity(player.getLevel(), HexTilePos.chunkToHexPos(player.chunkPosition()), this.civCity)) {
             Objects.requireNonNull(context.getSender()).sendSystemMessage(
                     CHAT_HEADER().append(Component.translatable("chat.civilization.city_founded_client", this.civCity.name).setStyle(Style.EMPTY))
             );

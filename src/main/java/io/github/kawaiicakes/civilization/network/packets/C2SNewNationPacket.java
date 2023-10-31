@@ -1,6 +1,6 @@
 package io.github.kawaiicakes.civilization.network.packets;
 
-import io.github.kawaiicakes.civilization.api.CivManager;
+import io.github.kawaiicakes.civilization.api.NationManager;
 import io.github.kawaiicakes.civilization.api.network.SimplePacket;
 import io.github.kawaiicakes.civilization.data.CivNation;
 import net.minecraft.network.FriendlyByteBuf;
@@ -38,7 +38,7 @@ public class C2SNewNationPacket extends SimplePacket {
 
     @Override
     public void onReceipt(NetworkEvent.Context context) {
-        if (CivManager.foundNation(this.civNation)) {
+        if (NationManager.foundNation(this.civNation)) {
             Objects.requireNonNull(context.getSender()).sendSystemMessage(
                     CHAT_HEADER().append(Component.translatable("chat.civilization.nation_founded_client", this.civNation.name).setStyle(Style.EMPTY))
             );
