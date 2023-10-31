@@ -34,7 +34,7 @@ public class CivManager {
      * Do NOT cache the return as it may cause memory leaks.
      * @return the <code>ServerLevel</code> corresponding to the Overworld on the server.
      */
-    public static ServerLevel getOverworld() {
+    private static ServerLevel getOverworld() {
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         return server.overworld();
     }
