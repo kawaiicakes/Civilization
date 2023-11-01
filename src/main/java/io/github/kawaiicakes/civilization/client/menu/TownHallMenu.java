@@ -1,6 +1,6 @@
 package io.github.kawaiicakes.civilization.client.menu;
 
-import io.github.kawaiicakes.civilization.registry.MenuRegistry;
+import io.github.kawaiicakes.civilization.registry.Menus;
 import io.github.kawaiicakes.civilization.registry.blocks.entity.TownHallBlockEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -10,7 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import static io.github.kawaiicakes.civilization.registry.BlockRegistry.TOWN_HALL;
+import static io.github.kawaiicakes.civilization.registry.Blocks.TOWN_HALL;
 
 public class TownHallMenu extends AbstractContainerMenu {
     public final TownHallBlockEntity entity;
@@ -22,7 +22,7 @@ public class TownHallMenu extends AbstractContainerMenu {
     }
 
     public TownHallMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
-        super(MenuRegistry.TOWN_HALL.get(), id);
+        super(Menus.TOWN_HALL.get(), id);
         checkContainerSize(inv, 0);
         this.entity = (TownHallBlockEntity) entity;
         this.level = inv.player.level;

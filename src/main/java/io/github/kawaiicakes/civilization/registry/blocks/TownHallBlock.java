@@ -17,7 +17,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
-import static io.github.kawaiicakes.civilization.registry.BlockEntityRegistry.TOWN_HALL;
+import static io.github.kawaiicakes.civilization.registry.BlockEntities.TOWN_HALL;
 
 public class TownHallBlock extends BaseEntityBlock {
     public TownHallBlock(Properties pProperties) {
