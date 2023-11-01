@@ -9,10 +9,10 @@ import net.minecraft.world.level.block.state.BlockState;
 /**
  * Subclasses are blocks that in some way may be used to claim a tile.
  */
-public abstract class AbstractClaimBlockEntity extends BlockEntity {
+public abstract class ClaimBlockEntity extends BlockEntity {
     public final HexTilePos parentTile;
 
-    public AbstractClaimBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
+    public ClaimBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
         this.parentTile = HexTilePos.blockToHexPos(pPos);
     }
