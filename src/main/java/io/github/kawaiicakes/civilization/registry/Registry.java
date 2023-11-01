@@ -31,23 +31,37 @@ public class Registry {
         MENU_REGISTRY.register(bus);
     }
 
+    static {
+        new Blocks();
+        new BlockEntities();
+        new Items();
+        new Menus();
+    }
+
     public static class Blocks {
+        protected Blocks() {}
+
         public static final RegistryObject<TownHallBlock> TOWN_HALL_BLOCK
                 = BLOCK_REGISTRY.register("town_hall", () -> new TownHallBlock(BlockBehaviour.Properties.of(Material.WOOD)));
     }
 
     public static class BlockEntities {
+        protected BlockEntities() {}
+
         public static final RegistryObject<BlockEntityType<TownHallBlockEntity>> TOWN_HALL_BLOCK_ENTITY =
                 BLOCK_ENTITY_REGISTRY.register("town_hall", () -> BlockEntityType.Builder.of(TownHallBlockEntity::new,
                         Blocks.TOWN_HALL_BLOCK.get()).build(null));
     }
 
     public static class Items {
+        protected Items() {}
+
         public static final RegistryObject<BlockItem> TOWN_HALL_BLOCK_ITEM =
                 ITEM_REGISTRY.register("town_hall", () -> new BlockItem(Blocks.TOWN_HALL_BLOCK.get(), new Item.Properties()));
     }
 
     public static class Menus {
+        protected Menus() {}
         public static final RegistryObject<MenuType<TownHallMenu>> TOWN_HALL_MENU =
                 MENU_REGISTRY.register("town_hall", () -> IForgeMenuType.create(TownHallMenu::new));
     }
