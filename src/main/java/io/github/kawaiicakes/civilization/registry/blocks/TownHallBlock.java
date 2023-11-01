@@ -17,7 +17,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
-import static io.github.kawaiicakes.civilization.registry.BlockEntities.TOWN_HALL;
+import static io.github.kawaiicakes.civilization.registry.Registry.BlockEntities.TOWN_HALL_BLOCK_ENTITY;
 
 public class TownHallBlock extends BaseEntityBlock {
     public TownHallBlock(Properties pProperties) {
@@ -53,6 +53,6 @@ public class TownHallBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        return createTickerHelper(pBlockEntityType, TOWN_HALL.get(), TownHallBlockEntity::tick);
+        return createTickerHelper(pBlockEntityType, TOWN_HALL_BLOCK_ENTITY.get(), TownHallBlockEntity::tick);
     }
 }

@@ -6,7 +6,7 @@ import io.github.kawaiicakes.civilization.client.KeyBinds;
 import io.github.kawaiicakes.civilization.client.screen.MainPlayerScreen;
 import io.github.kawaiicakes.civilization.client.screen.TownHallScreen;
 import io.github.kawaiicakes.civilization.network.CivPacketHandler;
-import io.github.kawaiicakes.civilization.registry.*;
+import io.github.kawaiicakes.civilization.registry.Registry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -25,7 +25,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
-import static io.github.kawaiicakes.civilization.registry.Menus.TOWN_HALL;
+import static io.github.kawaiicakes.civilization.registry.Registry.Menus.TOWN_HALL_MENU;
 
 @Mod(Civilization.MOD_ID)
 public class Civilization
@@ -72,7 +72,7 @@ public class Civilization
 
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-            MenuScreens.register(TOWN_HALL.get(), TownHallScreen::new);
+            MenuScreens.register(TOWN_HALL_MENU.get(), TownHallScreen::new);
         }
     }
 }

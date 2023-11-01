@@ -1,7 +1,6 @@
 package io.github.kawaiicakes.civilization.registry.blocks.entity;
 
 import io.github.kawaiicakes.civilization.client.menu.TownHallMenu;
-import io.github.kawaiicakes.civilization.registry.BlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
@@ -17,6 +16,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
+
+import static io.github.kawaiicakes.civilization.registry.Registry.BlockEntities.TOWN_HALL_BLOCK_ENTITY;
 
 public class TownHallBlockEntity extends BlockEntity implements MenuProvider {
     public final UUID cityId;
@@ -34,7 +35,7 @@ public class TownHallBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     public TownHallBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(BlockEntities.TOWN_HALL.get(), pPos, pBlockState);
+        super(TOWN_HALL_BLOCK_ENTITY.get(), pPos, pBlockState);
         this.cityId = UUID.randomUUID();
     }
 
