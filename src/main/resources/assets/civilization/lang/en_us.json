@@ -17,5 +17,7 @@
   "chat.civilization.invalid_nation": "Invalid CivNation! If you see this message contact the author!",
   "chat.civilization.invalid_city": "Invalid CivCity! If you see this message contact the author!",
   "chat.civilization.nation_founded_client": "Successfully founded nation %1$s.",
-  "chat.civilization.city_founded_client": "Successfully founded city %1$s."
+  "chat.civilization.city_founded_client": "Successfully founded city %1$s.",
+
+  "block.civilization.town_hall": "Town Hall"
 }
