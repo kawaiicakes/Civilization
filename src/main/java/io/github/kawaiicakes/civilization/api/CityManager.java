@@ -27,20 +27,28 @@ public class CityManager {
     }
 
     public static boolean foundCity(ServerLevel level, HexTilePos tile, CivCity civCity) {
-        if (!cityCreationValid(level, civCity)) return false;
+        if (!validatePassedUUID(level, civCity)) return false;
+        if (!isValidClaimSpot(tile)) return false;
 
-        // TODO: add check for territory claiming
         tile.getAdjacent().forEach(hexTilePos -> setTileOwner(level, hexTilePos, civCity.id()));
         level.getCapability(CIV_LEVEL_CAP).ifPresent(cap -> cap.addCity(civCity));
 
         return true;
     }
 
-    public static boolean cityCreationValid(ServerLevel level, CivCity city) {
+    public static boolean validatePassedUUID(ServerLevel level, CivCity city) {
         for (CivCity existingCity : getCities(level)) {
             if (Objects.equals(existingCity.id(), city.id())) return false;
         }
 
+        return true;
+    }
+
+    public static boolean isValidClaimSpot(HexTilePos tile) {
+        // TODO: check for presence of city core within 3 tiles
+        for (HexTilePos pos : tile.getAdjacent()) {
+            if (ClaimManager.tileIsOwned(pos).isPresent()) return false;
+        }
         return true;
     }
 }
